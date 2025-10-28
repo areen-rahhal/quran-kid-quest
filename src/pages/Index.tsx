@@ -1,12 +1,114 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { GoalHeader } from "@/components/GoalHeader";
+import { ProgressTracker } from "@/components/ProgressTracker";
+import { AchievementsRow } from "@/components/AchievementsRow";
+import { UnitsGrid, Unit } from "@/components/UnitsGrid";
+import { MascotMessage } from "@/components/MascotMessage";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
+  const { toast } = useToast();
+  
+  // Sample data for Juz' 30 (last juz of Quran)
+  const juz30Surahs: Unit[] = [
+    { id: 78, name: "An-Naba", arabicName: "النبأ", status: "completed" },
+    { id: 79, name: "An-Nazi'at", arabicName: "النازعات", status: "completed" },
+    { id: 80, name: "Abasa", arabicName: "عبس", status: "completed" },
+    { id: 81, name: "At-Takwir", arabicName: "التكوير", status: "in-progress" },
+    { id: 82, name: "Al-Infitar", arabicName: "الإنفطار", status: "locked" },
+    { id: 83, name: "Al-Mutaffifin", arabicName: "المطففين", status: "locked" },
+    { id: 84, name: "Al-Inshiqaq", arabicName: "الإنشقاق", status: "locked" },
+    { id: 85, name: "Al-Buruj", arabicName: "البروج", status: "locked" },
+    { id: 86, name: "At-Tariq", arabicName: "الطارق", status: "locked" },
+    { id: 87, name: "Al-A'la", arabicName: "الأعلى", status: "locked" },
+    { id: 88, name: "Al-Ghashiyah", arabicName: "الغاشية", status: "locked" },
+    { id: 89, name: "Al-Fajr", arabicName: "الفجر", status: "locked" },
+    { id: 90, name: "Al-Balad", arabicName: "البلد", status: "locked" },
+    { id: 91, name: "Ash-Shams", arabicName: "الشمس", status: "locked" },
+    { id: 92, name: "Al-Lail", arabicName: "الليل", status: "locked" },
+    { id: 93, name: "Ad-Duha", arabicName: "الضحى", status: "locked" },
+    { id: 94, name: "Ash-Sharh", arabicName: "الشرح", status: "locked" },
+    { id: 95, name: "At-Tin", arabicName: "التين", status: "locked" },
+    { id: 96, name: "Al-Alaq", arabicName: "العلق", status: "locked" },
+    { id: 97, name: "Al-Qadr", arabicName: "القدر", status: "locked" },
+    { id: 98, name: "Al-Bayyinah", arabicName: "البينة", status: "locked" },
+    { id: 99, name: "Az-Zalzalah", arabicName: "الزلزلة", status: "locked" },
+    { id: 100, name: "Al-Adiyat", arabicName: "العاديات", status: "locked" },
+    { id: 101, name: "Al-Qari'ah", arabicName: "القارعة", status: "locked" },
+    { id: 102, name: "At-Takathur", arabicName: "التكاثر", status: "locked" },
+    { id: 103, name: "Al-Asr", arabicName: "العصر", status: "locked" },
+    { id: 104, name: "Al-Humazah", arabicName: "الهمزة", status: "locked" },
+    { id: 105, name: "Al-Fil", arabicName: "الفيل", status: "locked" },
+    { id: 106, name: "Quraish", arabicName: "قريش", status: "locked" },
+    { id: 107, name: "Al-Ma'un", arabicName: "الماعون", status: "locked" },
+    { id: 108, name: "Al-Kawthar", arabicName: "الكوثر", status: "locked" },
+    { id: 109, name: "Al-Kafirun", arabicName: "الكافرون", status: "locked" },
+    { id: 110, name: "An-Nasr", arabicName: "النصر", status: "locked" },
+    { id: 111, name: "Al-Masad", arabicName: "المسد", status: "locked" },
+    { id: 112, name: "Al-Ikhlas", arabicName: "الإخلاص", status: "locked" },
+    { id: 113, name: "Al-Falaq", arabicName: "الفلق", status: "locked" },
+    { id: 114, name: "An-Nas", arabicName: "الناس", status: "locked" },
+  ];
+
+  const [completedCount] = useState(3);
+  const [stars] = useState(128);
+  const [streak] = useState(7);
+  const [recitations] = useState(45);
+
+  const motivationalMessages = [
+    "You're doing amazing! Keep going! 🌟",
+    "Almost there! You've got this! 💪",
+    "Great progress today! ✨",
+    "Every verse brings you closer! 📖",
+    "Keep up the fantastic work! 🎉",
+  ];
+
+  const [currentMessage] = useState(
+    motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)]
+  );
+
+  const handleUnitClick = (unit: Unit) => {
+    if (unit.status === "locked") {
+      toast({
+        title: "Surah Locked",
+        description: "Complete previous surahs to unlock this one!",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: `Opening ${unit.name}`,
+        description: `Let's learn ${unit.arabicName}!`,
+      });
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-gradient-soft islamic-pattern pb-32">
+      <div className="container max-w-md mx-auto p-4 pt-6">
+        <GoalHeader 
+          goalName="Juz' 30"
+          surahCount={37}
+          ayatCount={564}
+        />
+        
+        <ProgressTracker 
+          completed={completedCount}
+          total={37}
+        />
+        
+        <AchievementsRow 
+          stars={stars}
+          streak={streak}
+          recitations={recitations}
+        />
+        
+        <UnitsGrid 
+          units={juz30Surahs}
+          onUnitClick={handleUnitClick}
+        />
       </div>
+      
+      <MascotMessage message={currentMessage} />
     </div>
   );
 };
