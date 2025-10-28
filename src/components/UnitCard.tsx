@@ -27,9 +27,9 @@ export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) =
   const getIcon = () => {
     switch (status) {
       case "completed":
-        return <Check className="w-5 h-5" />;
+        return <Check className="w-3 h-3" />;
       case "locked":
-        return <Lock className="w-5 h-5" />;
+        return <Lock className="w-3 h-3" />;
       default:
         return null;
     }
@@ -40,19 +40,19 @@ export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) =
       onClick={status !== "locked" ? onClick : undefined}
       disabled={status === "locked"}
       className={cn(
-        "relative rounded-2xl p-4 border-2 transition-all duration-200 min-h-[100px] flex flex-col items-center justify-center gap-2 shadow-soft",
+        "relative rounded-full aspect-square w-full border-2 transition-all duration-200 flex flex-col items-center justify-center gap-0.5 shadow-soft p-2",
         getStatusStyles(),
         status !== "locked" && "active:scale-95"
       )}
     >
-      <div className="absolute top-2 right-2">
+      <div className="absolute top-1 right-1">
         {getIcon()}
       </div>
       
-      <p className="text-lg font-bold text-center mb-1" dir="rtl">
+      <p className="text-[10px] font-bold text-center leading-tight" dir="rtl">
         {arabicName}
       </p>
-      <p className="text-xs font-semibold text-center opacity-80">
+      <p className="text-[7px] font-semibold text-center opacity-70 leading-tight">
         {name}
       </p>
     </button>

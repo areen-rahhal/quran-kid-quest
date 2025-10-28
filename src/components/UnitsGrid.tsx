@@ -14,11 +14,11 @@ interface UnitsGridProps {
 
 export const UnitsGrid = ({ units, onUnitClick }: UnitsGridProps) => {
   return (
-    <div className="mb-6">
-      <h2 className="text-lg font-bold text-foreground mb-4">
+    <div className="mb-4">
+      <h2 className="text-base font-bold text-foreground mb-3">
         Surahs to Master
       </h2>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-5 gap-2">
         {units.map((unit) => (
           <UnitCard
             key={unit.id}
