@@ -16,7 +16,7 @@ export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) =
       case "completed":
         return "bg-success/10 border-success text-success hover:bg-success/20";
       case "in-progress":
-        return "bg-warning/10 border-warning text-warning hover:bg-warning/20";
+        return "bg-primary/10 border-primary text-primary hover:bg-primary/20";
       case "locked":
         return "bg-muted/50 border-border text-muted-foreground opacity-60 cursor-not-allowed";
       default:
@@ -28,8 +28,6 @@ export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) =
     switch (status) {
       case "completed":
         return <Check className="w-3 h-3" />;
-      case "locked":
-        return <Lock className="w-3 h-3" />;
       default:
         return null;
     }
