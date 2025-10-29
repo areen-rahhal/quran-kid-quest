@@ -3,7 +3,6 @@ import { GoalHeader } from "@/components/GoalHeader";
 import { ProgressTracker } from "@/components/ProgressTracker";
 import { AchievementsRow } from "@/components/AchievementsRow";
 import { UnitsGrid, Unit } from "@/components/UnitsGrid";
-import { MascotMessage } from "@/components/MascotMessage";
 import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
@@ -55,18 +54,6 @@ const Index = () => {
   const [streak] = useState(7);
   const [recitations] = useState(45);
 
-  const motivationalMessages = [
-    "You're doing amazing! Keep going! 🌟",
-    "Almost there! You've got this! 💪",
-    "Great progress today! ✨",
-    "Every verse brings you closer! 📖",
-    "Keep up the fantastic work! 🎉",
-  ];
-
-  const [currentMessage] = useState(
-    motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)]
-  );
-
   const handleUnitClick = (unit: Unit) => {
     toast({
       title: `Opening ${unit.name}`,
@@ -75,7 +62,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-soft islamic-pattern pb-32">
+    <div className="min-h-screen bg-gradient-soft islamic-pattern pb-8">
       <div className="container max-w-md mx-auto p-4 pt-6">
         <GoalHeader 
           goalName="Juz' 30"
@@ -99,8 +86,6 @@ const Index = () => {
           onUnitClick={handleUnitClick}
         />
       </div>
-      
-      <MascotMessage message={currentMessage} />
     </div>
   );
 };
