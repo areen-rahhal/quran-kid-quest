@@ -16,9 +16,9 @@ export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) =
       case "completed":
         return "bg-success/10 border-success text-success hover:bg-success/20";
       case "in-progress":
-        return "bg-warning/10 border-warning text-warning hover:bg-warning/20";
+        return "bg-primary/10 border-primary text-primary hover:bg-primary/20";
       case "locked":
-        return "bg-muted/50 border-border text-muted-foreground opacity-60 cursor-not-allowed";
+        return "bg-muted/10 border-border text-foreground hover:bg-muted/20";
       default:
         return "";
     }
@@ -37,12 +37,10 @@ export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) =
 
   return (
     <button
-      onClick={status !== "locked" ? onClick : undefined}
-      disabled={status === "locked"}
+      onClick={onClick}
       className={cn(
-        "relative rounded-full aspect-square w-full border-2 transition-all duration-200 flex flex-col items-center justify-center gap-0.5 shadow-soft p-2",
-        getStatusStyles(),
-        status !== "locked" && "active:scale-95"
+        "relative rounded-full aspect-square w-full border-2 transition-all duration-200 flex flex-col items-center justify-center gap-0.5 shadow-soft p-2 active:scale-95",
+        getStatusStyles()
       )}
     >
       <div className="absolute top-1 right-1">
