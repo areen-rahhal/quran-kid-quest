@@ -68,18 +68,10 @@ const Index = () => {
   );
 
   const handleUnitClick = (unit: Unit) => {
-    if (unit.status === "locked") {
-      toast({
-        title: "Surah Locked",
-        description: "Complete previous surahs to unlock this one!",
-        variant: "destructive",
-      });
-    } else {
-      toast({
-        title: `Opening ${unit.name}`,
-        description: `Let's learn ${unit.arabicName}!`,
-      });
-    }
+    toast({
+      title: `Opening ${unit.name}`,
+      description: `Let's learn ${unit.arabicName}!`,
+    });
   };
 
   return (
