@@ -63,14 +63,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-soft islamic-pattern pb-8">
-      {/* Vertical Progress Bar on the left */}
-      <VerticalProgressBar 
-        completed={completedCount}
-        total={37}
-      />
-      
-      {/* Main content with left padding to avoid overlap */}
-      <div className="container max-w-md mx-auto p-4 pt-6 pl-20">
+      <div className="container max-w-md mx-auto p-4 pt-6">
         <GoalHeader 
           goalName="Juz' 30"
           surahCount={37}
@@ -83,10 +76,20 @@ const Index = () => {
           recitations={recitations}
         />
         
-        <UnitsGrid 
-          units={juz30Surahs}
-          onUnitClick={handleUnitClick}
-        />
+        {/* Progress bar and units grid side by side */}
+        <div className="flex gap-3">
+          <VerticalProgressBar 
+            completed={completedCount}
+            total={37}
+          />
+          
+          <div className="flex-1">
+            <UnitsGrid 
+              units={juz30Surahs}
+              onUnitClick={handleUnitClick}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
