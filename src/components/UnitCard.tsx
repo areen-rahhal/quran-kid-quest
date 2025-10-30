@@ -27,7 +27,7 @@ export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) =
   const getIcon = () => {
     switch (status) {
       case "completed":
-        return <Check className="w-3 h-3" />;
+        return <Check className="w-2.5 h-2.5" />;
       default:
         return null;
     }
@@ -37,7 +37,7 @@ export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) =
     <button
       onClick={onClick}
       className={cn(
-        "relative rounded-full aspect-square w-full border-2 transition-all duration-200 flex flex-col items-center justify-center gap-0.5 shadow-soft p-2 active:scale-95",
+        "relative rounded-full aspect-square w-full border-2 transition-all duration-200 flex flex-col items-center justify-center gap-0 shadow-soft p-1.5 active:scale-95",
         getStatusStyles()
       )}
     >
@@ -45,10 +45,10 @@ export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) =
         {getIcon()}
       </div>
       
-      <p className="text-[10px] font-bold text-center leading-tight" dir="rtl">
+      <p className="text-[8px] font-bold text-center leading-tight" dir="rtl">
         {arabicName}
       </p>
-      <p className="text-[7px] font-semibold text-center opacity-70 leading-tight">
+      <p className="text-[6px] font-semibold text-center opacity-70 leading-tight">
         {name}
       </p>
     </button>
