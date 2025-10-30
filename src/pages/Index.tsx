@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { GoalHeader } from "@/components/GoalHeader";
-import { ProgressTracker } from "@/components/ProgressTracker";
+import { VerticalProgressBar } from "@/components/VerticalProgressBar";
 import { AchievementsRow } from "@/components/AchievementsRow";
 import { UnitsGrid, Unit } from "@/components/UnitsGrid";
 import { useToast } from "@/hooks/use-toast";
@@ -63,16 +63,18 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-soft islamic-pattern pb-8">
-      <div className="container max-w-md mx-auto p-4 pt-6">
+      {/* Vertical Progress Bar on the left */}
+      <VerticalProgressBar 
+        completed={completedCount}
+        total={37}
+      />
+      
+      {/* Main content with left padding to avoid overlap */}
+      <div className="container max-w-md mx-auto p-4 pt-6 pl-20">
         <GoalHeader 
           goalName="Juz' 30"
           surahCount={37}
           ayatCount={564}
-        />
-        
-        <ProgressTracker 
-          completed={completedCount}
-          total={37}
         />
         
         <AchievementsRow 

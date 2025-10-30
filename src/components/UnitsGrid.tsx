@@ -15,7 +15,7 @@ interface UnitsGridProps {
 export const UnitsGrid = ({ units, onUnitClick }: UnitsGridProps) => {
   return (
     <div className="mb-4">
-      <div className="grid grid-cols-5 gap-2">
+      <div className="grid grid-cols-4 gap-2">
         {units.map((unit) => (
           <UnitCard
             key={unit.id}
