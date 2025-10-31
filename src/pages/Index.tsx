@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { UnitsGrid, Unit } from "@/components/UnitsGrid";
-import { ProgressTracker } from "@/components/ProgressTracker";
 import { GoalHeader } from "@/components/GoalHeader";
 import { VerticalProgressBar } from "@/components/VerticalProgressBar";
+import { AchievementsRow } from "@/components/AchievementsRow";
+import { UnitsGrid, Unit } from "@/components/UnitsGrid";
 import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
@@ -49,7 +49,10 @@ const Index = () => {
     { id: 114, name: "An-Nas", arabicName: "الناس", status: "not-started" },
   ];
 
-  const [completedCount] = useState(12);
+  const [completedCount] = useState(3);
+  const [stars] = useState(128);
+  const [streak] = useState(7);
+  const [recitations] = useState(45);
 
   const handleUnitClick = (unit: Unit) => {
     toast({
@@ -59,32 +62,36 @@ const Index = () => {
   };
 
   return (
-    <>
-      <GoalHeader 
-        goalName="Juz' 30"
-        surahCount={37}
-        ayatCount={564}
-      />
-      
-      {/* Progress bar and units grid side by side */}
-      <div className="flex gap-4 mb-6">
-        <VerticalProgressBar 
-          completed={completedCount}
-          total={juz30Surahs.length}
+    <div className="min-h-screen bg-gradient-soft islamic-pattern pb-8">
+      <div className="container max-w-md mx-auto p-4 pt-6">
+        <AchievementsRow 
+          stars={stars}
+          streak={streak}
+          recitations={recitations}
         />
-        <div className="flex-1">
-          <ProgressTracker 
+        
+        <GoalHeader 
+          goalName="Juz' 30"
+          surahCount={37}
+          ayatCount={564}
+        />
+        
+        {/* Progress bar and units grid side by side */}
+        <div className="flex gap-3">
+          <VerticalProgressBar 
             completed={completedCount}
-            total={juz30Surahs.length}
+            total={37}
           />
+          
+          <div className="flex-1">
+            <UnitsGrid 
+              units={juz30Surahs}
+              onUnitClick={handleUnitClick}
+            />
+          </div>
         </div>
       </div>
-
-      <UnitsGrid 
-        units={juz30Surahs}
-        onUnitClick={handleUnitClick}
-      />
-    </>
+    </div>
   );
 };
 
