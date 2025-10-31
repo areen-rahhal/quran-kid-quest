@@ -64,16 +64,16 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-soft islamic-pattern pb-8">
       <div className="container max-w-md mx-auto p-4 pt-6">
-        <GoalHeader 
-          goalName="Juz' 30"
-          surahCount={37}
-          ayatCount={564}
-        />
-        
         <AchievementsRow 
           stars={stars}
           streak={streak}
           recitations={recitations}
+        />
+        
+        <GoalHeader 
+          goalName="Juz' 30"
+          surahCount={37}
+          ayatCount={564}
         />
         
         {/* Progress bar and units grid side by side */}
