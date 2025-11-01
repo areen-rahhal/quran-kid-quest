@@ -15,7 +15,7 @@ export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) =
       case "completed":
         return "bg-success/10 border-success text-success hover:bg-success/20";
       case "in-progress":
-        return "bg-blue-500/10 border-blue-500 text-blue-500 hover:bg-blue-500/20";
+        return "bg-blue-500/10 border-blue-500 text-blue-500 hover:bg-blue-500/20 animate-pulse shadow-[0_0_15px_rgba(59,130,246,0.5)]";
       case "not-started":
         return "bg-muted/50 border-border text-muted-foreground opacity-60";
       default:
