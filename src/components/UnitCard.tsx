@@ -1,4 +1,3 @@
-import { Check, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type UnitStatus = "completed" | "in-progress" | "not-started";
@@ -24,14 +23,6 @@ export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) =
     }
   };
 
-  const getIcon = () => {
-    switch (status) {
-      case "completed":
-        return <Check className="w-2.5 h-2.5" />;
-      default:
-        return null;
-    }
-  };
 
   return (
     <button
@@ -41,10 +32,6 @@ export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) =
         getStatusStyles()
       )}
     >
-      <div className="absolute top-1 right-1">
-        {getIcon()}
-      </div>
-      
       <p className="text-[8px] font-bold text-center leading-tight" dir="rtl">
         {arabicName}
       </p>
