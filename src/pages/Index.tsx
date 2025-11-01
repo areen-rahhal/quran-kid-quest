@@ -53,6 +53,7 @@ const Index = () => {
   const [stars] = useState(128);
   const [streak] = useState(7);
   const [recitations] = useState(45);
+  const [goalsCompleted] = useState(1);
 
   const handleUnitClick = (unit: Unit) => {
     toast({
@@ -68,6 +69,7 @@ const Index = () => {
           stars={stars}
           streak={streak}
           recitations={recitations}
+          goalsCompleted={goalsCompleted}
         />
         
         <GoalHeader 

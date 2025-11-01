@@ -1,4 +1,4 @@
-import { Star, Flame, BookOpen } from "lucide-react";
+import { Star, Flame, Diamond, Trophy } from "lucide-react";
 
 interface AchievementCardProps {
   icon: React.ReactNode;
@@ -22,9 +22,10 @@ interface AchievementsRowProps {
   stars: number;
   streak: number;
   recitations: number;
+  goalsCompleted: number;
 }
 
-export const AchievementsRow = ({ stars, streak, recitations }: AchievementsRowProps) => {
+export const AchievementsRow = ({ stars, streak, recitations, goalsCompleted }: AchievementsRowProps) => {
   return (
     <div className="flex gap-4 mb-4 justify-center">
       <AchievementCard
@@ -38,8 +39,13 @@ export const AchievementsRow = ({ stars, streak, recitations }: AchievementsRowP
         color=""
       />
       <AchievementCard
-        icon={<BookOpen className="w-4 h-4 text-secondary" />}
+        icon={<Diamond className="w-4 h-4 text-secondary" />}
         value={recitations}
+        color=""
+      />
+      <AchievementCard
+        icon={<Trophy className="w-4 h-4 text-accent" />}
+        value={goalsCompleted}
         color=""
       />
     </div>
