@@ -1,4 +1,4 @@
-import { Star, Flame, Diamond, Trophy } from "lucide-react";
+import { Star, Flame, Gem, Trophy } from "lucide-react";
 
 interface AchievementCardProps {
   icon: React.ReactNode;
@@ -39,7 +39,7 @@ export const AchievementsRow = ({ stars, streak, recitations, goalsCompleted }: 
         color=""
       />
       <AchievementCard
-        icon={<Diamond className="w-4 h-4 text-secondary" />}
+        icon={<Gem className="w-4 h-4 text-secondary" />}
         value={recitations}
         color=""
       />
