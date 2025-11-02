@@ -94,7 +94,7 @@ const Index = () => {
             />
             
             {/* Pencil Mascot - Bottom Right of units area */}
-            <div className="absolute bottom-4 right-4 w-24 h-24 pointer-events-none z-10">
+            <div className="absolute bottom-4 right-4 w-36 h-36 pointer-events-none z-10">
               <Lottie animationData={pencilMascot} loop={true} />
             </div>
           </div>
