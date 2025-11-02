@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { Gem } from "lucide-react";
 
 export type UnitStatus = "completed" | "in-progress" | "not-started";
 
@@ -7,6 +8,7 @@ interface UnitCardProps {
   arabicName: string;
   status: UnitStatus;
   onClick?: () => void;
+  isFirstCompleted?: boolean;
 }
 
 export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) => {
