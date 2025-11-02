@@ -41,8 +41,8 @@ export const UnitCard = ({ name, arabicName, status, onClick, isFirstCompleted }
       </p>
 
       {isFirstCompleted && status === "completed" && (
-        <div className="absolute inset-0 flex items-center justify-center rounded-full opacity-30 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-          <Gem className="w-5 h-5 text-secondary fill-secondary" />
+        <div className="absolute inset-0 flex items-center justify-center rounded-full pointer-events-none">
+          <Gem className="w-7 h-7 text-grey-400 fill-grey-400 opacity-30 group-hover:text-secondary group-hover:fill-secondary group-hover:opacity-100 transition-all duration-200" />
         </div>
       )}
     </button>
