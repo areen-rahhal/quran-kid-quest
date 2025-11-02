@@ -65,7 +65,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-soft islamic-pattern pb-8 relative">
+    <div className="min-h-screen bg-gradient-soft islamic-pattern pb-8">
       <div className="container max-w-md mx-auto p-4 pt-6">
         <AchievementsRow 
           stars={stars}
@@ -81,24 +81,24 @@ const Index = () => {
         />
         
         {/* Progress bar and units grid side by side */}
-        <div className="flex gap-3">
+        <div className="flex gap-3 relative">
           <VerticalProgressBar 
             completed={completedCount}
             total={37}
           />
           
-          <div className="flex-1">
+          <div className="flex-1 relative">
             <UnitsGrid 
               units={juz30Surahs}
               onUnitClick={handleUnitClick}
             />
+            
+            {/* Pencil Mascot - Bottom Right of units area */}
+            <div className="absolute bottom-4 right-4 w-24 h-24 pointer-events-none z-10">
+              <Lottie animationData={pencilMascot} loop={true} />
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Pencil Mascot - Bottom Right */}
-      <div className="fixed bottom-8 right-8 w-32 h-32 pointer-events-none z-10">
-        <Lottie animationData={pencilMascot} loop={true} />
       </div>
     </div>
   );
