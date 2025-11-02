@@ -11,7 +11,7 @@ interface UnitCardProps {
   isFirstCompleted?: boolean;
 }
 
-export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) => {
+export const UnitCard = ({ name, arabicName, status, onClick, isFirstCompleted }: UnitCardProps) => {
   const getStatusStyles = () => {
     switch (status) {
       case "completed":
@@ -25,12 +25,11 @@ export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) =
     }
   };
 
-
   return (
     <button
       onClick={onClick}
       className={cn(
-        "relative rounded-full aspect-square w-full border-2 transition-all duration-200 flex flex-col items-center justify-center gap-0 shadow-soft p-1.5 active:scale-95",
+        "relative rounded-full aspect-square w-full border-2 transition-all duration-200 flex flex-col items-center justify-center gap-0 shadow-soft p-1.5 active:scale-95 group",
         getStatusStyles()
       )}
     >
@@ -40,6 +39,12 @@ export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) =
       <p className="text-[6px] font-semibold text-center opacity-70 leading-tight">
         {name}
       </p>
+
+      {isFirstCompleted && status === "completed" && (
+        <div className="absolute inset-0 flex items-center justify-center rounded-full opacity-30 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+          <Gem className="w-5 h-5 text-secondary fill-secondary" />
+        </div>
+      )}
     </button>
   );
 };
