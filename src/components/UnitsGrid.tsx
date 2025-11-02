@@ -13,6 +13,8 @@ interface UnitsGridProps {
 }
 
 export const UnitsGrid = ({ units, onUnitClick }: UnitsGridProps) => {
+  const firstCompletedId = units.find((unit) => unit.status === "completed")?.id;
+
   return (
     <div className="mb-4">
       <div className="grid grid-cols-5 gap-2">
@@ -23,6 +25,7 @@ export const UnitsGrid = ({ units, onUnitClick }: UnitsGridProps) => {
             arabicName={unit.arabicName}
             status={unit.status}
             onClick={() => onUnitClick?.(unit)}
+            isFirstCompleted={unit.id === firstCompletedId}
           />
         ))}
       </div>
