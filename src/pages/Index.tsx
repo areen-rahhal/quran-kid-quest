@@ -93,8 +93,8 @@ const Index = () => {
               onUnitClick={handleUnitClick}
             />
             
-            {/* Pencil Mascot - Bottom Right of units area */}
-            <div className="absolute bottom-4 right-4 w-36 h-36 pointer-events-none z-10">
+            {/* Pencil Mascot - Positioned on in-progress unit (4th column, 1st row) */}
+            <div className="absolute top-0 w-36 h-36 pointer-events-none z-10" style={{ left: 'calc(60% + 0.375rem)' }}>
               <Lottie animationData={pencilMascot} loop={true} />
             </div>
           </div>
