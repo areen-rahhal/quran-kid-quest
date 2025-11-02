@@ -95,19 +95,6 @@ export default {
             height: "0",
           },
         },
-        wiggle: {
-          "0%, 100%": { transform: "rotate(-3deg)" },
-          "50%": { transform: "rotate(3deg)" },
-        },
-        "bounce-pause": {
-          "0%, 100%": { transform: "translateY(0)" },
-          "10%": { transform: "translateY(-8px)" },
-          "20%": { transform: "translateY(0)" },
-          "30%, 50%": { transform: "translateY(0)" },
-          "60%": { transform: "translateY(-8px)" },
-          "70%": { transform: "translateY(0)" },
-          "80%, 100%": { transform: "translateY(0)" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -115,7 +102,12 @@ export default {
         "bounce-gentle": "bounce 2s ease-in-out infinite",
         "pulse-soft": "pulse 3s ease-in-out infinite",
         "wiggle": "wiggle 1s ease-in-out infinite",
-        "bounce-pause": "bounce-pause 3s ease-in-out",
+      },
+      keyframes: {
+        wiggle: {
+          "0%, 100%": { transform: "rotate(-3deg)" },
+          "50%": { transform: "rotate(3deg)" },
+        },
       },
     },
   },
