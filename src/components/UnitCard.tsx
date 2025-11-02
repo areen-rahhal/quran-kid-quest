@@ -29,7 +29,8 @@ export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) =
       onClick={onClick}
       className={cn(
         "relative rounded-full aspect-square w-full border-2 transition-all duration-200 flex flex-col items-center justify-center gap-0 shadow-soft p-1.5 active:scale-95",
-        getStatusStyles()
+        getStatusStyles(),
+        status === "in-progress" && "animate-bounce-pause"
       )}
     >
       <p className="text-[8px] font-bold text-center leading-tight" dir="rtl">
