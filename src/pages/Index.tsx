@@ -1,9 +1,11 @@
 import { useState } from "react";
+import Lottie from "lottie-react";
 import { GoalHeader } from "@/components/GoalHeader";
 import { VerticalProgressBar } from "@/components/VerticalProgressBar";
 import { AchievementsRow } from "@/components/AchievementsRow";
 import { UnitsGrid, Unit } from "@/components/UnitsGrid";
 import { useToast } from "@/hooks/use-toast";
+import pencilMascot from "@/assets/pencil-mascot.json";
 
 const Index = () => {
   const { toast } = useToast();
@@ -63,7 +65,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-soft islamic-pattern pb-8">
+    <div className="min-h-screen bg-gradient-soft islamic-pattern pb-8 relative">
       <div className="container max-w-md mx-auto p-4 pt-6">
         <AchievementsRow 
           stars={stars}
@@ -92,6 +94,11 @@ const Index = () => {
             />
           </div>
         </div>
+      </div>
+
+      {/* Pencil Mascot - Bottom Right */}
+      <div className="fixed bottom-8 right-8 w-32 h-32 pointer-events-none z-10">
+        <Lottie animationData={pencilMascot} loop={true} />
       </div>
     </div>
   );
