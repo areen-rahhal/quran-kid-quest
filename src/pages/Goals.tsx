@@ -72,11 +72,10 @@ const Goals = () => {
       <div className="container max-w-md mx-auto p-4 pt-6">
         <button
           onClick={() => navigate("/")}
-          className="flex items-center gap-2 text-primary hover:text-primary/80 font-semibold mb-4 transition-colors"
+          className="p-2 text-primary hover:text-primary/80 transition-colors hover:bg-primary/10 rounded-lg"
           aria-label="Back to home"
         >
-          <ArrowLeft className="w-5 h-5" />
-          Back
+          <ArrowLeft className="w-6 h-6" />
         </button>
 
         <AchievementsRow 
