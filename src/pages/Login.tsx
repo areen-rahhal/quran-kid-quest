@@ -66,11 +66,18 @@ const Login = () => {
         </form>
       </div>
 
-      {/* Bottom Hint */}
+      {/* Test Account CTA */}
       <div className="relative z-10 text-center mt-8">
-        <p className="text-sm text-primary-foreground/70">
-          Test: Myadmin@google.com / 123
-        </p>
+        <button
+          type="button"
+          onClick={() => {
+            setEmail("Myadmin@google.com");
+            setPassword("123");
+          }}
+          className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors"
+        >
+          Use Test Account
+        </button>
       </div>
     </div>
   );
