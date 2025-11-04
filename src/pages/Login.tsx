@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen } from "lucide-react";
 
 const Login = () => {
@@ -18,52 +16,62 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-soft flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-strong">
-        <CardHeader className="space-y-4 text-center">
-          <div className="mx-auto w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center">
-            <BookOpen className="w-8 h-8 text-primary-foreground" />
+    <div className="min-h-screen bg-gradient-primary flex flex-col justify-between p-6 relative overflow-hidden">
+      {/* Islamic Pattern Background */}
+      <div className="islamic-pattern absolute inset-0 opacity-20"></div>
+      
+      {/* Content */}
+      <div className="relative z-10 flex-1 flex flex-col justify-center">
+        {/* Logo and Header */}
+        <div className="text-center mb-12">
+          <div className="mx-auto w-24 h-24 bg-white/20 backdrop-blur-sm rounded-3xl flex items-center justify-center mb-6 shadow-strong">
+            <BookOpen className="w-12 h-12 text-primary-foreground" />
           </div>
-          <div>
-            <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
-            <CardDescription className="text-base mt-2">
-              Sign in to continue your Quran journey
-            </CardDescription>
+          <h1 className="text-3xl font-bold text-primary-foreground mb-2">
+            Welcome Back
+          </h1>
+          <p className="text-primary-foreground/90 text-base">
+            Continue your Quran journey
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div className="space-y-3">
+            <Input
+              id="email"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground"
+            />
+            <Input
+              id="password"
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground"
+            />
           </div>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Myadmin@google.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="h-12"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="h-12"
-              />
-            </div>
-            <Button type="submit" className="w-full h-12 text-base" size="lg">
-              Sign In
-            </Button>
-            <p className="text-sm text-muted-foreground text-center">
-              Test: Myadmin@google.com / 123
-            </p>
-          </form>
-        </CardContent>
-      </Card>
+
+          <Button 
+            type="submit" 
+            className="w-full h-14 text-base font-semibold bg-white text-primary hover:bg-white/90 shadow-strong mt-6"
+            size="lg"
+          >
+            Sign In
+          </Button>
+        </form>
+      </div>
+
+      {/* Bottom Hint */}
+      <div className="relative z-10 text-center mt-8">
+        <p className="text-sm text-primary-foreground/70">
+          Test: Myadmin@google.com / 123
+        </p>
+      </div>
     </div>
   );
 };
