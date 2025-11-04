@@ -5,19 +5,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Target } from "lucide-react";
-
 const Onboarding = () => {
   const navigate = useNavigate();
   const [goalName, setGoalName] = useState("");
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Navigate to main screen
     navigate("/");
   };
-
-  return (
-    <div className="min-h-screen bg-gradient-soft flex items-center justify-center p-4">
+  return <div className="min-h-screen bg-gradient-soft flex items-center justify-center p-4">
       <Card className="w-full max-w-md shadow-strong">
         <CardHeader className="space-y-4 text-center">
           <div className="mx-auto w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center">
@@ -36,18 +32,8 @@ const Onboarding = () => {
               <Label htmlFor="goalName" className="text-base">
                 What's your learning goal?
               </Label>
-              <Input
-                id="goalName"
-                type="text"
-                placeholder="e.g., Complete Juz Amma"
-                value={goalName}
-                onChange={(e) => setGoalName(e.target.value)}
-                className="h-12 text-base"
-                required
-              />
-              <p className="text-sm text-muted-foreground">
-                Give your goal a meaningful name
-              </p>
+              <Input id="goalName" type="text" placeholder="e.g., Complete Juz Amma" value={goalName} onChange={e => setGoalName(e.target.value)} className="h-12 text-base" required />
+              
             </div>
             <Button type="submit" className="w-full h-12 text-base" size="lg">
               Start Learning
@@ -55,8 +41,6 @@ const Onboarding = () => {
           </form>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 };
-
 export default Onboarding;
