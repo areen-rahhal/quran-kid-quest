@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
-import { ArrowLeft } from "lucide-react";
 import { GoalHeader } from "@/components/GoalHeader";
 import { VerticalProgressBar } from "@/components/VerticalProgressBar";
 import { AchievementsRow } from "@/components/AchievementsRow";
@@ -10,7 +8,6 @@ import { useToast } from "@/hooks/use-toast";
 import pencilMascot from "@/assets/pencil-mascot.json";
 
 const Goals = () => {
-  const navigate = useNavigate();
   const { toast } = useToast();
   
   // Sample data for Juz' 30 (last juz of Quran)
@@ -70,14 +67,6 @@ const Goals = () => {
   return (
     <div className="min-h-screen bg-gradient-soft islamic-pattern pb-8">
       <div className="container max-w-md mx-auto p-4 pt-6">
-        <button
-          onClick={() => navigate("/")}
-          className="p-2 text-primary hover:text-primary/80 transition-colors hover:bg-primary/10 rounded-lg"
-          aria-label="Back to home"
-        >
-          <ArrowLeft className="w-6 h-6" />
-        </button>
-
         <AchievementsRow 
           stars={stars}
           streak={streak}
