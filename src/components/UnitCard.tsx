@@ -1,5 +1,5 @@
-import { Check, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Gem } from "lucide-react";
 
 export type UnitStatus = "completed" | "in-progress" | "not-started";
 
@@ -8,9 +8,10 @@ interface UnitCardProps {
   arabicName: string;
   status: UnitStatus;
   onClick?: () => void;
+  isFirstCompleted?: boolean;
 }
 
-export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) => {
+export const UnitCard = ({ name, arabicName, status, onClick, isFirstCompleted }: UnitCardProps) => {
   const getStatusStyles = () => {
     switch (status) {
       case "completed":
@@ -24,33 +25,26 @@ export const UnitCard = ({ name, arabicName, status, onClick }: UnitCardProps) =
     }
   };
 
-  const getIcon = () => {
-    switch (status) {
-      case "completed":
-        return <Check className="w-2.5 h-2.5" />;
-      default:
-        return null;
-    }
-  };
-
   return (
     <button
       onClick={onClick}
       className={cn(
-        "relative rounded-full aspect-square w-full border-2 transition-all duration-200 flex flex-col items-center justify-center gap-0 shadow-soft p-1.5 active:scale-95",
+        "relative rounded-full aspect-square w-full border-2 transition-all duration-200 flex flex-col items-center justify-center gap-0 shadow-soft p-1.5 active:scale-95 group",
         getStatusStyles()
       )}
     >
-      <div className="absolute top-1 right-1">
-        {getIcon()}
-      </div>
-      
       <p className="text-[8px] font-bold text-center leading-tight" dir="rtl">
         {arabicName}
       </p>
       <p className="text-[6px] font-semibold text-center opacity-70 leading-tight">
         {name}
       </p>
+
+      {isFirstCompleted && status === "completed" && (
+        <div className="absolute inset-0 flex items-center justify-center rounded-full pointer-events-none">
+          <Gem className="w-7 h-7 text-gray-400 fill-gray-400 opacity-30 group-hover:text-secondary group-hover:fill-secondary group-hover:opacity-100 transition-all duration-200" />
+        </div>
+      )}
     </button>
   );
 };
