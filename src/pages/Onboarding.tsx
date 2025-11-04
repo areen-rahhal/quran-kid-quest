@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UserPlus, Target } from "lucide-react";
 
 const Onboarding = () => {
   const navigate = useNavigate();
+  const [selectedGoal, setSelectedGoal] = useState("");
 
   return (
     <div className="min-h-screen bg-gradient-soft flex items-center justify-center p-4">
