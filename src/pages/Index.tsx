@@ -23,10 +23,10 @@ const Index = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-5xl font-bold text-emerald-600 mb-3" style={{ fontFamily: 'Arial, sans-serif' }}>
-            قرآن الأطفال
+            Children's Quran
           </h1>
           <p className="text-lg text-muted-foreground">
-            رحلة ممتعة لحفظ القرآن الكريم
+            An enjoyable journey to memorize the Holy Quran
           </p>
         </div>
 
@@ -38,10 +38,10 @@ const Index = () => {
         {/* Content */}
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-foreground mb-4">
-            هيا نتعلم ونلعب ونحفظا!
+            Let's Learn, Play and Memorize!
           </h2>
           <p className="text-base text-muted-foreground px-4 leading-relaxed">
-            انضم إلينا في رحلة شيقة لحفظ القرآن الكريم مع الألعاب والمكافآت
+            Join us on an exciting journey to memorize the Holy Quran with games and rewards
           </p>
         </div>
 
@@ -51,7 +51,7 @@ const Index = () => {
           className="flex items-center gap-2 px-12 py-4 bg-emerald-500 text-white font-bold text-lg rounded-full hover:bg-emerald-600 transition-all shadow-lg hover:shadow-xl active:scale-95"
         >
           <Star className="w-6 h-6 fill-white" />
-          هيا نبدأ
+          Let's Begin
         </button>
       </div>
     </div>
