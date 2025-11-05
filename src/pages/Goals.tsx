@@ -47,7 +47,7 @@ const Goals = () => {
     { id: 102, name: "At-Takathur", arabicName: "التكاثر", status: "not-started" },
     { id: 103, name: "Al-Asr", arabicName: "العصر", status: "not-started" },
     { id: 104, name: "Al-Humazah", arabicName: "الهمزة", status: "not-started" },
-    { id: 105, name: "Al-Fil", arabicName: "الفيل", status: "not-started" },
+    { id: 105, name: "Al-Fil", arabicName: "��لفيل", status: "not-started" },
     { id: 106, name: "Quraish", arabicName: "قريش", status: "not-started" },
     { id: 107, name: "Al-Ma'un", arabicName: "الماعون", status: "not-started" },
     { id: 108, name: "Al-Kawthar", arabicName: "الكوثر", status: "not-started" },
@@ -89,6 +89,31 @@ const Goals = () => {
 
   // Check if user has goals
   const hasGoals = currentProfile.goalsCount && currentProfile.goalsCount > 0;
+
+  // Determine which goal data to show based on current profile's goal
+  const getGoalData = () => {
+    switch (currentProfile.currentGoal) {
+      case "Juz' 29":
+        return {
+          name: "Juz' 29",
+          surahCount: 11,
+          ayatCount: 447,
+          units: juz29Surahs,
+          totalUnits: 11
+        };
+      case "Juz' 30":
+      default:
+        return {
+          name: "Juz' 30",
+          surahCount: 37,
+          ayatCount: 564,
+          units: juz30Surahs,
+          totalUnits: 37
+        };
+    }
+  };
+
+  const goalData = getGoalData();
 
   // If no goals, show empty state
   if (!hasGoals) {
