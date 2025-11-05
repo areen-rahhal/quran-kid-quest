@@ -1,10 +1,21 @@
 import { useState } from 'react';
-import { User } from 'lucide-react';
+import { Star, Flame, Gem, Trophy } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ProfileSwitcher } from '@/components/ProfileSwitcher';
 import { useProfile } from '@/contexts/ProfileContext';
 
-export const TopNavBar = () => {
+interface AchievementProps {
+  stars: number;
+  streak: number;
+  recitations: number;
+  goalsCompleted: number;
+}
+
+interface TopNavBarProps {
+  achievements?: AchievementProps;
+}
+
+export const TopNavBar = ({ achievements }: TopNavBarProps) => {
   const { currentProfile } = useProfile();
   const [isProfileSwitcherOpen, setIsProfileSwitcherOpen] = useState(false);
 
