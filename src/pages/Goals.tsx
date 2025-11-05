@@ -35,7 +35,7 @@ const Goals = () => {
     { id: 90, name: "Al-Balad", arabicName: "البلد", status: "not-started" },
     { id: 91, name: "Ash-Shams", arabicName: "الشمس", status: "not-started" },
     { id: 92, name: "Al-Lail", arabicName: "الليل", status: "not-started" },
-    { id: 93, name: "Ad-Duha", arabicName: "الضحى", status: "not-started" },
+    { id: 93, name: "Ad-Duha", arabicName: "ال��حى", status: "not-started" },
     { id: 94, name: "Ash-Sharh", arabicName: "الشرح", status: "not-started" },
     { id: 95, name: "At-Tin", arabicName: "التين", status: "not-started" },
     { id: 96, name: "Al-Alaq", arabicName: "العلق", status: "not-started" },
@@ -217,10 +217,18 @@ const Goals = () => {
               onUnitClick={handleUnitClick}
             />
 
-            {/* Pencil Mascot - Positioned on in-progress unit (4th column, 2nd row) */}
-            <div className="absolute w-36 h-36 pointer-events-none z-10" style={{ left: 'calc(60% + 0.375rem)', top: '100px' }}>
-              <Lottie animationData={pencilMascot} loop={true} />
-            </div>
+            {/* Pencil Mascot - Positioned dynamically on in-progress unit */}
+            {inProgressUnitIndex !== -1 && (
+              <div
+                className="absolute w-36 h-36 pointer-events-none z-10"
+                style={{
+                  left: `calc(${mascotLeft}% + 0.375rem)`,
+                  top: `${mascotTop}px`
+                }}
+              >
+                <Lottie animationData={pencilMascot} loop={true} />
+              </div>
+            )}
           </div>
         </div>
       </div>
