@@ -42,7 +42,7 @@ const Goals = () => {
     { id: 97, name: "Al-Qadr", arabicName: "القدر", status: "not-started" },
     { id: 98, name: "Al-Bayyinah", arabicName: "البينة", status: "not-started" },
     { id: 99, name: "Az-Zalzalah", arabicName: "الزلزلة", status: "not-started" },
-    { id: 100, name: "Al-Adiyat", arabicName: "العاديات", status: "not-started" },
+    { id: 100, name: "Al-Adiyat", arabicName: "العادي��ت", status: "not-started" },
     { id: 101, name: "Al-Qari'ah", arabicName: "القارعة", status: "not-started" },
     { id: 102, name: "At-Takathur", arabicName: "التكاثر", status: "not-started" },
     { id: 103, name: "Al-Asr", arabicName: "العصر", status: "not-started" },
@@ -72,6 +72,69 @@ const Goals = () => {
     });
   };
 
+  // Check if user has goals
+  const hasGoals = currentProfile.goalsCount && currentProfile.goalsCount > 0;
+
+  // If no goals, show empty state
+  if (!hasGoals) {
+    return (
+      <div className="min-h-screen bg-gradient-soft islamic-pattern">
+        <TopNavBar
+          achievements={{
+            stars: 0,
+            streak: 0,
+            recitations: 0,
+            goalsCompleted: 0
+          }}
+        />
+        <div className="container max-w-md mx-auto p-4 pb-8">
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <Card className="w-full max-w-md transition-all border-2 hover:border-secondary hover:shadow-strong">
+              <CardHeader className="text-center space-y-4">
+                <div className="mx-auto w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center">
+                  <Target className="w-10 h-10 text-primary-foreground" />
+                </div>
+                <div>
+                  <CardTitle className="text-2xl">Start Your Journey</CardTitle>
+                  <CardDescription className="text-base mt-2">
+                    Select your first learning goal
+                  </CardDescription>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground text-center">
+                  Begin your journey of Quranic learning and earn rewards as you progress
+                </p>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground">
+                    Choose a goal:
+                  </label>
+                  <Select value={selectedGoal} onValueChange={setSelectedGoal}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Choose a goal" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="juz-30">Juz' 30</SelectItem>
+                      <SelectItem value="juz-29">Juz' 29</SelectItem>
+                      <SelectItem value="surah-bakarah">Surah Al Bakarah</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <button
+                  onClick={() => selectedGoal && navigate("/goals")}
+                  disabled={!selectedGoal}
+                  className="w-full px-4 py-2 bg-secondary text-secondary-foreground font-semibold rounded-md hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  Start Learning
+                </button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-soft islamic-pattern">
       <TopNavBar
@@ -83,25 +146,25 @@ const Goals = () => {
         }}
       />
       <div className="container max-w-md mx-auto p-4 pb-8">
-        <GoalHeader 
+        <GoalHeader
           goalName="Juz' 30"
           surahCount={37}
           ayatCount={564}
         />
-        
+
         {/* Progress bar and units grid side by side */}
         <div className="flex gap-3 relative">
-          <VerticalProgressBar 
+          <VerticalProgressBar
             completed={completedCount}
             total={37}
           />
-          
+
           <div className="flex-1 relative">
-            <UnitsGrid 
+            <UnitsGrid
               units={juz30Surahs}
               onUnitClick={handleUnitClick}
             />
-            
+
             {/* Pencil Mascot - Positioned on in-progress unit (4th column, 1st row) */}
             <div className="absolute top-0 w-36 h-36 pointer-events-none z-10" style={{ left: 'calc(60% + 0.375rem)' }}>
               <Lottie animationData={pencilMascot} loop={true} />
