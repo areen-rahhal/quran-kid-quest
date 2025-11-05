@@ -23,7 +23,7 @@ export const TopNavBar = () => {
         <div className="container flex h-16 items-center px-4">
           <button
             onClick={() => setIsProfileSwitcherOpen(true)}
-            className="flex items-center gap-3 hover:bg-accent rounded-lg p-2 transition-colors"
+            className="hover:bg-accent rounded-full p-1 transition-colors"
           >
             <Avatar className="h-10 w-10 border-2 border-primary">
               <AvatarFallback className="bg-gradient-primary text-primary-foreground">
@@ -34,14 +34,6 @@ export const TopNavBar = () => {
                 )}
               </AvatarFallback>
             </Avatar>
-            <div className="flex flex-col items-start">
-              <span className="text-sm font-semibold text-foreground">
-                {currentProfile.name}
-              </span>
-              <span className="text-xs text-muted-foreground capitalize">
-                {currentProfile.type}
-              </span>
-            </div>
           </button>
         </div>
       </header>
