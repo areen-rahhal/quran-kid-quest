@@ -19,9 +19,9 @@ const mockProfiles: Profile[] = [
   },
   {
     id: '2',
-    name: 'Ahmad',
+    name: 'Waleed',
     type: 'child',
-    currentGoal: "Juz' 30",
+    currentGoal: "Juz' 29",
     goalsCount: 1,
   },
   {
