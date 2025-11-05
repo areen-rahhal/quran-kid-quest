@@ -47,7 +47,7 @@ const Goals = () => {
     { id: 102, name: "At-Takathur", arabicName: "التكاثر", status: "not-started" },
     { id: 103, name: "Al-Asr", arabicName: "العصر", status: "not-started" },
     { id: 104, name: "Al-Humazah", arabicName: "الهمزة", status: "not-started" },
-    { id: 105, name: "Al-Fil", arabicName: "��لفيل", status: "not-started" },
+    { id: 105, name: "Al-Fil", arabicName: "الفيل", status: "not-started" },
     { id: 106, name: "Quraish", arabicName: "قريش", status: "not-started" },
     { id: 107, name: "Al-Ma'un", arabicName: "الماعون", status: "not-started" },
     { id: 108, name: "Al-Kawthar", arabicName: "الكوثر", status: "not-started" },
@@ -187,21 +187,21 @@ const Goals = () => {
       />
       <div className="container max-w-md mx-auto p-4 pb-8">
         <GoalHeader
-          goalName="Juz' 30"
-          surahCount={37}
-          ayatCount={564}
+          goalName={goalData.name}
+          surahCount={goalData.surahCount}
+          ayatCount={goalData.ayatCount}
         />
 
         {/* Progress bar and units grid side by side */}
         <div className="flex gap-3 relative">
           <VerticalProgressBar
             completed={completedCount}
-            total={37}
+            total={goalData.totalUnits}
           />
 
           <div className="flex-1 relative">
             <UnitsGrid
-              units={juz30Surahs}
+              units={goalData.units}
               onUnitClick={handleUnitClick}
             />
 
