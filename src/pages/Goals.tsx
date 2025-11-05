@@ -16,7 +16,7 @@ const Goals = () => {
     { id: 79, name: "An-Nazi'at", arabicName: "النازعات", status: "completed" },
     { id: 80, name: "Abasa", arabicName: "عبس", status: "completed" },
     { id: 81, name: "At-Takwir", arabicName: "التكوير", status: "in-progress" },
-    { id: 82, name: "Al-Infitar", arabicName: "الإن��طار", status: "not-started" },
+    { id: 82, name: "Al-Infitar", arabicName: "الإنفطار", status: "not-started" },
     { id: 83, name: "Al-Mutaffifin", arabicName: "المطففين", status: "not-started" },
     { id: 84, name: "Al-Inshiqaq", arabicName: "الإنشقاق", status: "not-started" },
     { id: 85, name: "Al-Buruj", arabicName: "البروج", status: "not-started" },
@@ -45,7 +45,7 @@ const Goals = () => {
     { id: 108, name: "Al-Kawthar", arabicName: "الكوثر", status: "not-started" },
     { id: 109, name: "Al-Kafirun", arabicName: "الكافرون", status: "not-started" },
     { id: 110, name: "An-Nasr", arabicName: "النصر", status: "not-started" },
-    { id: 111, name: "Al-Masad", arabicName: "��لمسد", status: "not-started" },
+    { id: 111, name: "Al-Masad", arabicName: "المسد", status: "not-started" },
     { id: 112, name: "Al-Ikhlas", arabicName: "الإخلاص", status: "not-started" },
     { id: 113, name: "Al-Falaq", arabicName: "الفلق", status: "not-started" },
     { id: 114, name: "An-Nas", arabicName: "الناس", status: "not-started" },
@@ -66,15 +66,15 @@ const Goals = () => {
 
   return (
     <div className="min-h-screen bg-gradient-soft islamic-pattern">
-      <TopNavBar />
+      <TopNavBar
+        achievements={{
+          stars,
+          streak,
+          recitations,
+          goalsCompleted
+        }}
+      />
       <div className="container max-w-md mx-auto p-4 pb-8">
-        <AchievementsRow 
-          stars={stars}
-          streak={streak}
-          recitations={recitations}
-          goalsCompleted={goalsCompleted}
-        />
-        
         <GoalHeader 
           goalName="Juz' 30"
           surahCount={37}
