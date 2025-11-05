@@ -1,14 +1,22 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
 import { TopNavBar } from "@/components/TopNavBar";
 import { GoalHeader } from "@/components/GoalHeader";
 import { VerticalProgressBar } from "@/components/VerticalProgressBar";
 import { UnitsGrid, Unit } from "@/components/UnitsGrid";
 import { useToast } from "@/hooks/use-toast";
+import { useProfile } from "@/contexts/ProfileContext";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Target } from "lucide-react";
 import pencilMascot from "@/assets/pencil-mascot.json";
 
 const Goals = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { currentProfile } = useProfile();
+  const [selectedGoal, setSelectedGoal] = useState("");
   
   // Sample data for Juz' 30 (last juz of Quran)
   const juz30Surahs: Unit[] = [
