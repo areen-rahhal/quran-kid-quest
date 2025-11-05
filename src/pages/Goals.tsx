@@ -125,7 +125,12 @@ const Goals = () => {
 
   // Calculate mascot position (each unit ~80px + 8px gap)
   const mascotTop = unitRow * 88;
-  const mascotLeft = unitColumn * 25 + 10; // percentage based positioning
+  const isLastColumn = unitColumn === 3;
+
+  // Position mascot on the right for columns 0-2, on the left for column 3
+  const mascotPositioning = isLastColumn
+    ? { right: '10%' }  // Position on the left side when in last column
+    : { left: `calc(${unitColumn * 25 + 10}% + 0.375rem)` };  // Position on the right for other columns
 
   // If no goals, show empty state
   if (!hasGoals) {
