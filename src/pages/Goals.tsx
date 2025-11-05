@@ -207,8 +207,8 @@ const Goals = () => {
               onUnitClick={handleUnitClick}
             />
 
-            {/* Pencil Mascot - Positioned on in-progress unit (4th column, 1st row) */}
-            <div className="absolute top-0 w-36 h-36 pointer-events-none z-10" style={{ left: 'calc(60% + 0.375rem)' }}>
+            {/* Pencil Mascot - Positioned on in-progress unit (4th column, 2nd row) */}
+            <div className="absolute w-36 h-36 pointer-events-none z-10" style={{ left: 'calc(60% + 0.375rem)', top: '100px' }}>
               <Lottie animationData={pencilMascot} loop={true} />
             </div>
           </div>
