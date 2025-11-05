@@ -117,6 +117,16 @@ const Goals = () => {
   // Calculate completed count dynamically from goal data
   const completedCount = goalData.units.filter(unit => unit.status === "completed").length;
 
+  // Find in-progress unit and calculate its position
+  const inProgressUnitIndex = goalData.units.findIndex(unit => unit.status === "in-progress");
+  const columnsPerRow = 4;
+  const unitRow = Math.floor(inProgressUnitIndex / columnsPerRow);
+  const unitColumn = inProgressUnitIndex % columnsPerRow;
+
+  // Calculate mascot position (each unit ~80px + 8px gap)
+  const mascotTop = unitRow * 88;
+  const mascotLeft = unitColumn * 25 + 10; // percentage based positioning
+
   // If no goals, show empty state
   if (!hasGoals) {
     return (
