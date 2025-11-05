@@ -59,6 +59,21 @@ const Goals = () => {
     { id: 114, name: "An-Nas", arabicName: "الناس", status: "not-started" },
   ];
 
+  // Sample data for Juz' 29 (Tabaarak) - 11 Surahs
+  const juz29Surahs: Unit[] = [
+    { id: 67, name: "Al-Mulk", arabicName: "الملك", status: "completed" },
+    { id: 68, name: "Al-Qalam", arabicName: "القلم", status: "completed" },
+    { id: 69, name: "Al-Haqqah", arabicName: "الحاقة", status: "in-progress" },
+    { id: 70, name: "Al-Ma'arij", arabicName: "المعارج", status: "not-started" },
+    { id: 71, name: "Nuh", arabicName: "نوح", status: "not-started" },
+    { id: 72, name: "Al-Jinn", arabicName: "الجن", status: "not-started" },
+    { id: 73, name: "Al-Muzzammil", arabicName: "المزمل", status: "not-started" },
+    { id: 74, name: "Al-Muddathir", arabicName: "المدثر", status: "not-started" },
+    { id: 75, name: "Al-Qiyamah", arabicName: "القيامة", status: "not-started" },
+    { id: 76, name: "Al-Insan", arabicName: "الإنسان", status: "not-started" },
+    { id: 77, name: "Al-Mursalat", arabicName: "المرسلات", status: "not-started" },
+  ];
+
   const [completedCount] = useState(3);
   const [stars] = useState(128);
   const [streak] = useState(7);
