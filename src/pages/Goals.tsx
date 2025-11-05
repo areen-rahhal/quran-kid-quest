@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Lottie from "lottie-react";
+import { TopNavBar } from "@/components/TopNavBar";
 import { GoalHeader } from "@/components/GoalHeader";
 import { VerticalProgressBar } from "@/components/VerticalProgressBar";
 import { AchievementsRow } from "@/components/AchievementsRow";
@@ -65,8 +66,9 @@ const Goals = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-soft islamic-pattern pb-8">
-      <div className="container max-w-md mx-auto p-4 pt-6">
+    <div className="min-h-screen bg-gradient-soft islamic-pattern">
+      <TopNavBar />
+      <div className="container max-w-md mx-auto p-4 pb-8">
         <AchievementsRow 
           stars={stars}
           streak={streak}
