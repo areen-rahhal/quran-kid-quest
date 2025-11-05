@@ -74,7 +74,6 @@ const Goals = () => {
     { id: 77, name: "Al-Mursalat", arabicName: "المرسلات", status: "not-started" },
   ];
 
-  const [completedCount] = useState(7);
   const [stars] = useState(128);
   const [streak] = useState(7);
   const [recitations] = useState(45);
@@ -114,6 +113,9 @@ const Goals = () => {
   };
 
   const goalData = getGoalData();
+
+  // Calculate completed count dynamically from goal data
+  const completedCount = goalData.units.filter(unit => unit.status === "completed").length;
 
   // If no goals, show empty state
   if (!hasGoals) {
