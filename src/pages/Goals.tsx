@@ -227,7 +227,7 @@ const Goals = () => {
               <div
                 className="absolute w-36 h-36 pointer-events-none z-10"
                 style={{
-                  left: `calc(${mascotLeft}% + 0.375rem)`,
+                  ...mascotPositioning,
                   top: `${mascotTop}px`
                 }}
               >
