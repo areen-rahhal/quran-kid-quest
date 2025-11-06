@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UserPlus, Target } from "lucide-react";
 
 const Onboarding = () => {
   const navigate = useNavigate();
+  const [selectedGoal, setSelectedGoal] = useState("");
 
   return (
     <div className="min-h-screen bg-gradient-soft flex items-center justify-center p-4">
@@ -40,9 +43,8 @@ const Onboarding = () => {
           </Card>
 
           {/* Start Learning Card */}
-          <Card 
-            className="cursor-pointer transition-all hover:shadow-strong hover:scale-105 border-2 hover:border-secondary"
-            onClick={() => navigate("/goals")}
+          <Card
+            className="transition-all border-2 hover:border-secondary hover:shadow-strong"
           >
             <CardHeader className="text-center space-y-4">
               <div className="mx-auto w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center">
@@ -55,10 +57,32 @@ const Onboarding = () => {
                 </CardDescription>
               </div>
             </CardHeader>
-            <CardContent className="text-center">
+            <CardContent className="space-y-4">
               <p className="text-sm text-muted-foreground">
                 Begin your own journey of Quranic knowledge
               </p>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">
+                  Select your first goal:
+                </label>
+                <Select value={selectedGoal} onValueChange={setSelectedGoal}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Choose a goal" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="juz-30">Juz' 30</SelectItem>
+                    <SelectItem value="juz-29">Juz' 29</SelectItem>
+                    <SelectItem value="surah-bakarah">Surah Al Bakarah</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <button
+                onClick={() => selectedGoal && navigate("/goals")}
+                disabled={!selectedGoal}
+                className="w-full px-4 py-2 bg-secondary text-secondary-foreground font-semibold rounded-md hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              >
+                Continue
+              </button>
             </CardContent>
           </Card>
         </div>
