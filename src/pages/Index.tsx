@@ -46,13 +46,21 @@ const Index = () => {
         </div>
 
         {/* CTA Button */}
-        <button
-          onClick={() => navigate("/login")}
-          className="flex items-center gap-2 px-12 py-4 bg-emerald-500 text-white font-bold text-lg rounded-full hover:bg-emerald-600 transition-all shadow-lg hover:shadow-xl active:scale-95"
-        >
-          <Star className="w-6 h-6 fill-white" />
-          Let's Begin
-        </button>
+        <div className="flex flex-col gap-3">
+          <button
+            onClick={() => navigate("/register")}
+            className="flex items-center justify-center gap-2 px-12 py-4 bg-emerald-500 text-white font-bold text-lg rounded-full hover:bg-emerald-600 transition-all shadow-lg hover:shadow-xl active:scale-95"
+          >
+            <Star className="w-6 h-6 fill-white" />
+            Create Account
+          </button>
+          <button
+            onClick={() => navigate("/login")}
+            className="px-12 py-3 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors underline underline-offset-2"
+          >
+            Already have an account? Sign in
+          </button>
+        </div>
       </div>
     </div>
   );
