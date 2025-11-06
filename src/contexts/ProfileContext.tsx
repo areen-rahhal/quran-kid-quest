@@ -1,10 +1,20 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Profile } from '@/types/profile';
 
+interface RegistrationData {
+  email: string;
+  password: string;
+  parentName: string;
+  avatar: string;
+}
+
 interface ProfileContextType {
   currentProfile: Profile;
   profiles: Profile[];
   switchProfile: (profileId: string) => void;
+  registerParent: (data: RegistrationData) => Profile;
+  isRegistrationComplete: boolean;
+  parentProfile: Profile | null;
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
@@ -16,6 +26,8 @@ const mockProfiles: Profile[] = [
     name: 'Aya',
     type: 'parent',
     goalsCount: 0,
+    email: 'aya@example.com',
+    avatar: 'avatar-1',
   },
   {
     id: '2',
@@ -34,9 +46,8 @@ const mockProfiles: Profile[] = [
 ];
 
 export function ProfileProvider({ children }: { children: ReactNode }) {
-  const [profiles] = useState<Profile[]>(mockProfiles);
+  const [profiles, setProfiles] = useState<Profile[]>(mockProfiles);
   const [currentProfile, setCurrentProfile] = useState<Profile>(() => {
-    // Try to load from localStorage
     const saved = localStorage.getItem('currentProfile');
     if (saved) {
       const savedProfile = JSON.parse(saved);
@@ -44,11 +55,27 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     }
     return profiles[0];
   });
+  const [isRegistrationComplete, setIsRegistrationComplete] = useState<boolean>(() => {
+    return localStorage.getItem('isRegistrationComplete') === 'true';
+  });
+  const [parentProfile, setParentProfile] = useState<Profile | null>(() => {
+    const saved = localStorage.getItem('parentProfile');
+    return saved ? JSON.parse(saved) : null;
+  });
 
   useEffect(() => {
-    // Persist current profile to localStorage
     localStorage.setItem('currentProfile', JSON.stringify(currentProfile));
   }, [currentProfile]);
+
+  useEffect(() => {
+    localStorage.setItem('isRegistrationComplete', String(isRegistrationComplete));
+  }, [isRegistrationComplete]);
+
+  useEffect(() => {
+    if (parentProfile) {
+      localStorage.setItem('parentProfile', JSON.stringify(parentProfile));
+    }
+  }, [parentProfile]);
 
   const switchProfile = (profileId: string) => {
     const profile = profiles.find(p => p.id === profileId);
@@ -57,8 +84,36 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const registerParent = (data: RegistrationData): Profile => {
+    const newParentProfile: Profile = {
+      id: Date.now().toString(),
+      name: data.parentName,
+      type: 'parent',
+      email: data.email,
+      avatar: data.avatar,
+      goalsCount: 0,
+    };
+
+    const updatedProfiles = [...profiles, newParentProfile];
+    setProfiles(updatedProfiles);
+    setCurrentProfile(newParentProfile);
+    setParentProfile(newParentProfile);
+    setIsRegistrationComplete(true);
+
+    return newParentProfile;
+  };
+
   return (
-    <ProfileContext.Provider value={{ currentProfile, profiles, switchProfile }}>
+    <ProfileContext.Provider
+      value={{
+        currentProfile,
+        profiles,
+        switchProfile,
+        registerParent,
+        isRegistrationComplete,
+        parentProfile,
+      }}
+    >
       {children}
     </ProfileContext.Provider>
   );

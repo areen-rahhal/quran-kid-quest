@@ -5,4 +5,9 @@ export interface Profile {
   avatar?: string;
   currentGoal?: string;
   goalsCount: number;
+  email?: string;
+  age?: number;
+  arabicProficiency?: boolean;
+  arabicAccent?: string;
+  tajweedLevel?: 'beginner' | 'intermediate' | 'advanced';
 }
