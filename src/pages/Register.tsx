@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, ArrowLeft } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useProfile } from '@/contexts/ProfileContext';
 import { AVATAR_OPTIONS } from '@/utils/avatars';
 import { useToast } from '@/hooks/use-toast';
@@ -104,104 +102,96 @@ const Register = () => {
     }));
   };
 
-  const handleBack = () => {
-    navigate('/');
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-soft islamic-pattern flex flex-col p-6 relative overflow-hidden">
-      <div className="absolute inset-0 opacity-20 islamic-pattern" />
+    <div className="min-h-screen bg-gradient-primary flex flex-col justify-between p-6 relative overflow-hidden">
+      {/* Islamic Pattern Background */}
+      <div className="islamic-pattern absolute inset-0 opacity-20"></div>
 
-      <div className="flex items-center mb-8 relative z-10">
-        <button
-          onClick={handleBack}
-          className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="w-5 h-5" />
-          <span className="text-sm font-medium">Back</span>
-        </button>
+      {/* Content */}
+      <div className="relative z-10 flex-1 flex flex-col justify-center">
+        {/* Logo and Header */}
+        <div className="text-center mb-12">
+          <div className="mx-auto w-24 h-24 bg-white/20 backdrop-blur-sm rounded-3xl flex items-center justify-center mb-6 shadow-strong">
+            <BookOpen className="w-12 h-12 text-primary-foreground" />
+          </div>
+          <h1 className="text-3xl font-bold text-primary-foreground mb-2">
+            Create Account
+          </h1>
+          <p className="text-primary-foreground/90 text-base">
+            Enter your information to get started
+          </p>
+        </div>
+
+        {/* Form */}
+        <form className="space-y-3">
+          <div className="space-y-3">
+            <Input
+              id="parentName"
+              name="parentName"
+              type="text"
+              placeholder="Your Name"
+              value={formData.parentName}
+              onChange={handleInputChange}
+              className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground"
+            />
+            {errors.parentName && <p className="text-sm text-destructive px-1">{errors.parentName}</p>}
+
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleInputChange}
+              className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground"
+            />
+            {errors.email && <p className="text-sm text-destructive px-1">{errors.email}</p>}
+
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleInputChange}
+              className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground"
+            />
+            {errors.password && <p className="text-sm text-destructive px-1">{errors.password}</p>}
+
+            <Input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              placeholder="Confirm Password"
+              value={formData.confirmPassword}
+              onChange={handleInputChange}
+              className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground"
+            />
+            {errors.confirmPassword && (
+              <p className="text-sm text-destructive px-1">{errors.confirmPassword}</p>
+            )}
+          </div>
+
+          <Button
+            onClick={handleRegister}
+            disabled={isLoading}
+            className="w-full h-14 text-base font-semibold bg-white text-primary hover:bg-white/90 shadow-strong mt-6"
+            size="lg"
+          >
+            {isLoading ? 'Creating Account...' : 'Create Account'}
+          </Button>
+        </form>
       </div>
 
-      <div className="flex-1 flex items-center justify-center relative z-10">
-        <div className="w-full max-w-md">
-          <Card className="shadow-strong">
-            <CardHeader className="space-y-2">
-              <div className="w-16 h-16 bg-gradient-primary rounded-2xl flex items-center justify-center mb-4">
-                <BookOpen className="w-8 h-8 text-primary-foreground" />
-              </div>
-              <CardTitle className="text-2xl">Create Account</CardTitle>
-              <CardDescription>Enter your information to get started</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-5">
-              <div className="space-y-2">
-                <Label htmlFor="parentName">Your Name</Label>
-                <Input
-                  id="parentName"
-                  name="parentName"
-                  type="text"
-                  placeholder="e.g., Fatima"
-                  value={formData.parentName}
-                  onChange={handleInputChange}
-                  className={errors.parentName ? 'border-destructive' : ''}
-                />
-                {errors.parentName && <p className="text-sm text-destructive">{errors.parentName}</p>}
-                <p className="text-xs text-muted-foreground">2–20 characters (Arabic or English)</p>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email">Email Address</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="your@email.com"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className={errors.email ? 'border-destructive' : ''}
-                />
-                {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="••••••"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  className={errors.password ? 'border-destructive' : ''}
-                />
-                {errors.password && <p className="text-sm text-destructive">{errors.password}</p>}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
-                <Input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  placeholder="••••••"
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  className={errors.confirmPassword ? 'border-destructive' : ''}
-                />
-                {errors.confirmPassword && (
-                  <p className="text-sm text-destructive">{errors.confirmPassword}</p>
-                )}
-              </div>
-
-              <Button
-                onClick={handleRegister}
-                disabled={isLoading}
-                className="w-full h-12 font-semibold bg-primary hover:bg-primary/90"
-              >
-                {isLoading ? 'Creating Account...' : 'Create Account'}
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+      {/* Back Button */}
+      <div className="relative z-10 text-center mt-8">
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors"
+        >
+          Back to Login
+        </button>
       </div>
     </div>
   );
