@@ -27,31 +27,29 @@ const Onboarding = () => {
     <div className="min-h-screen bg-gradient-soft islamic-pattern flex flex-col p-4 relative overflow-hidden">
       <div className="absolute inset-0 opacity-20 islamic-pattern" />
 
-      {/* Parent Profile Header - Option A */}
-      {isRegistrationComplete && parentProfile && (
-        <div className="relative z-10 mb-8">
-          <div className="flex items-center justify-between bg-white/50 backdrop-blur-sm rounded-xl p-4 border border-border">
-            <div className="flex items-center gap-4">
-              <Avatar className="h-12 w-12 border-2 border-primary">
-                <AvatarFallback className="bg-gradient-primary text-primary-foreground text-lg">
-                  {getAvatarEmoji(parentProfile.avatar)}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="text-xs font-medium text-muted-foreground">Welcome back</p>
-                <h2 className="text-lg font-bold text-foreground">{parentProfile.name}</h2>
-              </div>
+      {/* Parent Profile Header */}
+      <div className="relative z-10 mb-8">
+        <div className="flex items-center justify-between bg-white/50 backdrop-blur-sm rounded-xl p-4 border border-border">
+          <div className="flex items-center gap-4">
+            <Avatar className="h-12 w-12 border-2 border-primary">
+              <AvatarFallback className="bg-gradient-primary text-primary-foreground text-lg">
+                {getAvatarEmoji(parentProfile?.avatar)}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="text-xs font-medium text-muted-foreground">Welcome back</p>
+              <h2 className="text-lg font-bold text-foreground">{parentProfile?.name}</h2>
             </div>
-            <button
-              onClick={handleLogout}
-              className="p-2 hover:bg-accent rounded-lg transition-colors"
-              title="Logout"
-            >
-              <LogOut className="w-5 h-5 text-muted-foreground hover:text-foreground" />
-            </button>
           </div>
+          <button
+            onClick={handleLogout}
+            className="p-2 hover:bg-accent rounded-lg transition-colors"
+            title="Logout"
+          >
+            <LogOut className="w-5 h-5 text-muted-foreground hover:text-foreground" />
+          </button>
         </div>
-      )}
+      </div>
 
       <div className="flex-1 flex items-center justify-center relative z-10">
         <div className="w-full max-w-2xl space-y-8">
