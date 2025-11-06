@@ -2,89 +2,132 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { UserPlus, Target } from "lucide-react";
+import { UserPlus, Target, LogOut } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { useProfile } from "@/contexts/ProfileContext";
+import { AVATAR_OPTIONS } from "@/utils/avatars";
 
 const Onboarding = () => {
   const navigate = useNavigate();
+  const { parentProfile, isRegistrationComplete } = useProfile();
   const [selectedGoal, setSelectedGoal] = useState("");
 
+  const handleLogout = () => {
+    navigate("/");
+  };
+
+  const getAvatarEmoji = (avatarId?: string) => {
+    if (!avatarId) return "👤";
+    const avatar = AVATAR_OPTIONS.find(a => a.id === avatarId);
+    return avatar?.emoji || "👤";
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-soft flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl space-y-8">
-        {/* Welcome Header */}
-        <div className="text-center space-y-3">
-          <h1 className="text-4xl font-bold text-foreground">Welcome to Your Quran Journey</h1>
-          <p className="text-lg text-muted-foreground">Choose how you'd like to get started</p>
+    <div className="min-h-screen bg-gradient-soft islamic-pattern flex flex-col p-4 relative overflow-hidden">
+      <div className="absolute inset-0 opacity-20 islamic-pattern" />
+
+      {/* Parent Profile Header - Option A */}
+      {isRegistrationComplete && parentProfile && (
+        <div className="relative z-10 mb-8">
+          <div className="flex items-center justify-between bg-white/50 backdrop-blur-sm rounded-xl p-4 border border-border">
+            <div className="flex items-center gap-4">
+              <Avatar className="h-12 w-12 border-2 border-primary">
+                <AvatarFallback className="bg-gradient-primary text-primary-foreground text-lg">
+                  {getAvatarEmoji(parentProfile.avatar)}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="text-xs font-medium text-muted-foreground">Welcome back</p>
+                <h2 className="text-lg font-bold text-foreground">{parentProfile.name}</h2>
+              </div>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="p-2 hover:bg-accent rounded-lg transition-colors"
+              title="Logout"
+            >
+              <LogOut className="w-5 h-5 text-muted-foreground hover:text-foreground" />
+            </button>
+          </div>
         </div>
+      )}
 
-        {/* Action Cards */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Add Child Profile Card */}
-          <Card 
-            className="cursor-pointer transition-all hover:shadow-strong hover:scale-105 border-2 hover:border-primary"
-            onClick={() => navigate("/goals")}
-          >
-            <CardHeader className="text-center space-y-4">
-              <div className="mx-auto w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center">
-                <UserPlus className="w-10 h-10 text-primary-foreground" />
-              </div>
-              <div>
-                <CardTitle className="text-2xl">Add Child Profile</CardTitle>
-                <CardDescription className="text-base mt-2">
-                  Create a learning profile for your child
-                </CardDescription>
-              </div>
-            </CardHeader>
-            <CardContent className="text-center">
-              <p className="text-sm text-muted-foreground">
-                Track their progress and customize their learning experience
-              </p>
-            </CardContent>
-          </Card>
+      <div className="flex-1 flex items-center justify-center relative z-10">
+        <div className="w-full max-w-2xl space-y-8">
+          {/* Welcome Header */}
+          <div className="text-center space-y-3">
+            <h1 className="text-4xl font-bold text-foreground">Welcome to Your Quran Journey</h1>
+            <p className="text-lg text-muted-foreground">Choose how you'd like to get started</p>
+          </div>
 
-          {/* Start Learning Card */}
-          <Card
-            className="transition-all border-2 hover:border-secondary hover:shadow-strong"
-          >
-            <CardHeader className="text-center space-y-4">
-              <div className="mx-auto w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center">
-                <Target className="w-10 h-10 text-primary-foreground" />
-              </div>
-              <div>
-                <CardTitle className="text-2xl">Start Learning</CardTitle>
-                <CardDescription className="text-base mt-2">
-                  Set your personal learning goal
-                </CardDescription>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground">
-                Begin your own journey of Quranic knowledge
-              </p>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">
-                  Select your first goal:
-                </label>
-                <Select value={selectedGoal} onValueChange={setSelectedGoal}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Choose a goal" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="juz-30">Juz' 30</SelectItem>
-                    <SelectItem value="juz-29">Juz' 29</SelectItem>
-                    <SelectItem value="surah-bakarah">Surah Al Bakarah</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <button
-                onClick={() => selectedGoal && navigate("/goals")}
-                disabled={!selectedGoal}
-                className="w-full px-4 py-2 bg-secondary text-secondary-foreground font-semibold rounded-md hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-              >
-                Continue
-              </button>
-            </CardContent>
-          </Card>
+          {/* Action Cards */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Add Child Profile Card */}
+            <Card
+              className="cursor-pointer transition-all hover:shadow-strong hover:scale-105 border-2 hover:border-primary"
+              onClick={() => navigate("/goals")}
+            >
+              <CardHeader className="text-center space-y-4">
+                <div className="mx-auto w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center">
+                  <UserPlus className="w-10 h-10 text-primary-foreground" />
+                </div>
+                <div>
+                  <CardTitle className="text-2xl">Add Child Profile</CardTitle>
+                  <CardDescription className="text-base mt-2">
+                    Create a learning profile for your child
+                  </CardDescription>
+                </div>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-sm text-muted-foreground">
+                  Track their progress and customize their learning experience
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Start Learning Card */}
+            <Card className="transition-all border-2 hover:border-secondary hover:shadow-strong">
+              <CardHeader className="text-center space-y-4">
+                <div className="mx-auto w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center">
+                  <Target className="w-10 h-10 text-primary-foreground" />
+                </div>
+                <div>
+                  <CardTitle className="text-2xl">Start Learning</CardTitle>
+                  <CardDescription className="text-base mt-2">
+                    Set your personal learning goal
+                  </CardDescription>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Begin your own journey of Quranic knowledge
+                </p>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground">
+                    Select your first goal:
+                  </label>
+                  <Select value={selectedGoal} onValueChange={setSelectedGoal}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Choose a goal" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="juz-30">Juz' 30</SelectItem>
+                      <SelectItem value="juz-29">Juz' 29</SelectItem>
+                      <SelectItem value="surah-bakarah">Surah Al Bakarah</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button
+                  onClick={() => selectedGoal && navigate("/goals")}
+                  disabled={!selectedGoal}
+                  className="w-full bg-secondary text-secondary-foreground font-semibold hover:bg-secondary/90"
+                >
+                  Continue
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
