@@ -20,7 +20,7 @@ const Register = () => {
     password: '',
     confirmPassword: '',
     parentName: '',
-    avatar: AVATAR_OPTIONS[0].id,
+    avatar: AVATAR_OPTIONS[0].id, // Default avatar, will be set in onboarding
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -61,21 +61,9 @@ const Register = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const validateStep2 = (): boolean => {
-    // Avatar step has no validation needed
-    return true;
-  };
-
   const handleStep1Next = () => {
     if (validateStep1()) {
       setStep(2);
-      setErrors({});
-    }
-  };
-
-  const handleStep2Next = () => {
-    if (validateStep2()) {
-      setStep(3);
       setErrors({});
     }
   };
@@ -140,7 +128,7 @@ const Register = () => {
           <ArrowLeft className="w-5 h-5" />
           <span className="text-sm font-medium">Back</span>
         </button>
-        <span className="text-sm font-medium text-muted-foreground">Step {step} of 3</span>
+        <span className="text-sm font-medium text-muted-foreground">Step {step} of 2</span>
       </div>
 
       <div className="flex-1 flex items-center justify-center relative z-10">
@@ -225,57 +213,8 @@ const Register = () => {
             </Card>
           )}
 
-          {/* Step 2: Parent Name & Avatar */}
+          {/* Step 2: Review & Confirm */}
           {step === 2 && (
-            <Card className="shadow-strong">
-              <CardHeader className="space-y-2">
-                <CardTitle className="text-2xl">Choose Your Avatar</CardTitle>
-                <CardDescription>Pick an avatar that represents you</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-
-                <div className="space-y-3">
-                  <div className="grid grid-cols-3 gap-3">
-                    {AVATAR_OPTIONS.map(avatar => (
-                      <button
-                        key={avatar.id}
-                        onClick={() => setFormData(prev => ({ ...prev, avatar: avatar.id }))}
-                        className={`p-4 rounded-xl transition-all border-2 flex flex-col items-center gap-2 ${
-                          formData.avatar === avatar.id
-                            ? 'border-primary bg-primary/5'
-                            : 'border-border hover:border-primary/50'
-                        }`}
-                      >
-                        <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-2xl ${avatar.color}`}>
-                          {avatar.emoji}
-                        </div>
-                        <span className="text-xs font-medium text-foreground">{avatar.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex gap-3 pt-4">
-                  <Button
-                    onClick={() => setStep(1)}
-                    variant="outline"
-                    className="flex-1 h-12 font-semibold"
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    onClick={handleStep2Next}
-                    className="flex-1 h-12 font-semibold bg-primary hover:bg-primary/90"
-                  >
-                    Continue
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Step 3: Review & Confirm */}
-          {step === 3 && (
             <Card className="shadow-strong">
               <CardHeader className="space-y-2">
                 <CardTitle className="text-2xl">Review Your Details</CardTitle>
@@ -291,17 +230,11 @@ const Register = () => {
                     <p className="text-xs font-medium text-muted-foreground">Parent Name</p>
                     <p className="text-sm font-semibold text-foreground">{formData.parentName}</p>
                   </div>
-                  <div className="pt-2 border-t">
-                    <p className="text-xs font-medium text-muted-foreground mb-3">Avatar</p>
-                    <div className="w-16 h-16 rounded-lg flex items-center justify-center text-4xl bg-primary/10">
-                      {AVATAR_OPTIONS.find(a => a.id === formData.avatar)?.emoji}
-                    </div>
-                  </div>
                 </div>
 
                 <div className="flex gap-3 pt-4">
                   <Button
-                    onClick={() => setStep(2)}
+                    onClick={() => setStep(1)}
                     variant="outline"
                     className="flex-1 h-12 font-semibold"
                   >
