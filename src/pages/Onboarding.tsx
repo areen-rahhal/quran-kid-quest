@@ -10,7 +10,7 @@ import { AVATAR_OPTIONS } from "@/utils/avatars";
 
 const Onboarding = () => {
   const navigate = useNavigate();
-  const { parentProfile, isRegistrationComplete } = useProfile();
+  const { parentProfile } = useProfile();
   const [selectedGoal, setSelectedGoal] = useState("");
 
   const handleLogout = () => {
