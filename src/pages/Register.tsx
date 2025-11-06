@@ -33,6 +33,14 @@ const Register = () => {
   const validateStep1 = (): boolean => {
     const newErrors: Record<string, string> = {};
 
+    if (!formData.parentName.trim()) {
+      newErrors.parentName = 'Name is required';
+    } else if (formData.parentName.trim().length < 2) {
+      newErrors.parentName = 'Name must be at least 2 characters';
+    } else if (formData.parentName.trim().length > 20) {
+      newErrors.parentName = 'Name must not exceed 20 characters';
+    }
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!validateEmail(formData.email)) {
@@ -54,18 +62,8 @@ const Register = () => {
   };
 
   const validateStep2 = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.parentName.trim()) {
-      newErrors.parentName = 'Name is required';
-    } else if (formData.parentName.trim().length < 2) {
-      newErrors.parentName = 'Name must be at least 2 characters';
-    } else if (formData.parentName.trim().length > 20) {
-      newErrors.parentName = 'Name must not exceed 20 characters';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    // Avatar step has no validation needed
+    return true;
   };
 
   const handleStep1Next = () => {
@@ -155,9 +153,24 @@ const Register = () => {
                   <BookOpen className="w-8 h-8 text-primary-foreground" />
                 </div>
                 <CardTitle className="text-2xl">Create Account</CardTitle>
-                <CardDescription>Enter your email and create a secure password</CardDescription>
+                <CardDescription>Enter your information to get started</CardDescription>
               </CardHeader>
               <CardContent className="space-y-5">
+                <div className="space-y-2">
+                  <Label htmlFor="parentName">Your Name</Label>
+                  <Input
+                    id="parentName"
+                    name="parentName"
+                    type="text"
+                    placeholder="e.g., Fatima"
+                    value={formData.parentName}
+                    onChange={handleInputChange}
+                    className={errors.parentName ? 'border-destructive' : ''}
+                  />
+                  {errors.parentName && <p className="text-sm text-destructive">{errors.parentName}</p>}
+                  <p className="text-xs text-muted-foreground">2–20 characters (Arabic or English)</p>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address</Label>
                   <Input
@@ -216,27 +229,12 @@ const Register = () => {
           {step === 2 && (
             <Card className="shadow-strong">
               <CardHeader className="space-y-2">
-                <CardTitle className="text-2xl">Set Up Your Profile</CardTitle>
-                <CardDescription>Choose a name and avatar for your parent profile</CardDescription>
+                <CardTitle className="text-2xl">Choose Your Avatar</CardTitle>
+                <CardDescription>Pick an avatar that represents you</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="parentName">Your Name</Label>
-                  <Input
-                    id="parentName"
-                    name="parentName"
-                    type="text"
-                    placeholder="e.g., Fatima"
-                    value={formData.parentName}
-                    onChange={handleInputChange}
-                    className={errors.parentName ? 'border-destructive' : ''}
-                  />
-                  {errors.parentName && <p className="text-sm text-destructive">{errors.parentName}</p>}
-                  <p className="text-xs text-muted-foreground mt-1">2–20 characters (Arabic or English)</p>
-                </div>
 
                 <div className="space-y-3">
-                  <Label>Choose Your Avatar</Label>
                   <div className="grid grid-cols-3 gap-3">
                     {AVATAR_OPTIONS.map(avatar => (
                       <button
