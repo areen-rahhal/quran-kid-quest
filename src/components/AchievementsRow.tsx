@@ -34,7 +34,7 @@ export const AchievementsRow = ({ stars, streak, recitations, goalsCompleted }: 
         color=""
       />
       <AchievementCard
-        icon={<Flame className="w-4 h-4 text-warning" />}
+        icon={<Flame className="w-4 h-4 text-warning fill-warning" />}
         value={streak}
         color=""
       />

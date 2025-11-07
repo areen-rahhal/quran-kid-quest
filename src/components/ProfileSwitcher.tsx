@@ -93,6 +93,19 @@ export const ProfileSwitcher = ({ open, onOpenChange }: ProfileSwitcherProps) =>
             );
           })}
         </div>
+
+        {/* Manage Profiles Button */}
+        <div className="mt-6 pt-4 border-t border-border">
+          <button
+            onClick={() => {
+              onOpenChange(false);
+              window.location.href = '/learners-profiles';
+            }}
+            className="w-full flex items-center justify-center gap-2 p-4 rounded-xl border-2 border-border hover:border-primary/50 hover:bg-accent transition-all"
+          >
+            <span className="font-semibold text-foreground">Manage Profiles</span>
+          </button>
+        </div>
       </SheetContent>
     </Sheet>
   );
