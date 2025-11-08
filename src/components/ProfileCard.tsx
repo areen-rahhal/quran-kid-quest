@@ -66,8 +66,8 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
               </span>
               <span className="text-muted-foreground">·</span>
               <Badge
-                variant="secondary"
-                className="text-xs capitalize font-medium"
+                variant="outline"
+                className="text-xs capitalize font-medium border-muted-foreground/30 text-muted-foreground"
               >
                 {profile.type}
               </Badge>
