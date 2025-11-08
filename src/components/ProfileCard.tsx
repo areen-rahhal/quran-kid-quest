@@ -115,12 +115,12 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
             </div>
 
             {/* Goals List */}
-            <div className="space-y-2">
+            <div className="grid grid-cols-2 gap-2">
               {profile.goals.map((goal) => (
-                <Card key={goal.id} className="p-3 bg-gradient-soft border border-border hover:border-primary/30 transition-all cursor-pointer">
-                  <div className="space-y-1.5">
+                <Card key={goal.id} className="p-2.5 bg-gradient-soft border border-border hover:border-primary/30 transition-all cursor-pointer">
+                  <div className="space-y-1">
                     {/* Goal Name */}
-                    <span className="text-sm font-semibold text-foreground block">
+                    <span className="text-xs font-semibold text-foreground block line-clamp-1">
                       {goal.name}
                     </span>
 
@@ -128,7 +128,7 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
                     {goal.totalSurahs && goal.totalSurahs > 0 && (
                       <Progress
                         value={goal.completedSurahs ? (goal.completedSurahs / goal.totalSurahs) * 100 : 0}
-                        className="h-1.5"
+                        className="h-1"
                       />
                     )}
                   </div>
