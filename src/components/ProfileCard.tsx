@@ -38,9 +38,12 @@ const mockProgress = {
 };
 
 export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) => {
-  const progressPercentage = profile.type === 'child' && mockProgress.total > 0
+  const progressPercentage = mockProgress.total > 0
     ? (mockProgress.completed / mockProgress.total) * 100
     : 0;
+
+  // Check if profile has active goals
+  const hasActiveGoals = profile.currentGoal || profile.goalsCount > 0;
 
   return (
     <Card className="p-6 space-y-4 transition-all hover:shadow-medium">
@@ -62,8 +65,8 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
                 {profile.name}
               </span>
               <span className="text-muted-foreground">·</span>
-              <Badge 
-                variant="secondary" 
+              <Badge
+                variant="secondary"
                 className="text-xs capitalize font-medium"
               >
                 {profile.type}
@@ -81,8 +84,8 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
         </Button>
       </div>
 
-      {/* Achievements (only for parent) */}
-      {profile.type === 'parent' && (
+      {/* Achievements (for any profile with active goals) */}
+      {hasActiveGoals && (
         <div className="pt-2">
           <AchievementsRow
             stars={mockAchievements.stars}
@@ -93,67 +96,65 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
         </div>
       )}
 
-      {/* Goals Section (only for child) */}
-      {profile.type === 'child' && (
-        <div className="space-y-3">
-          {profile.currentGoal ? (
-            <>
-              {/* Goal Badge */}
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-semibold text-foreground">Current Goal</label>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 gap-1.5 text-muted-foreground hover:text-foreground"
-                  onClick={() => onAddGoal?.(profile.id)}
-                >
-                  <Plus className="h-4 w-4" />
-                  <span className="text-xs">Add Goal</span>
-                </Button>
-              </div>
-              
-              <Card className="p-4 bg-gradient-soft border-2 border-border hover:border-primary/30 transition-all cursor-pointer">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-base font-bold text-foreground">
-                      {profile.currentGoal}
-                    </span>
-                    <Badge variant="outline" className="text-xs font-semibold border-success text-success bg-success/10">
-                      In Progress
-                    </Badge>
-                  </div>
-                  
-                  {/* Progress Bar */}
-                  <div className="space-y-2">
-                    <Progress value={progressPercentage} className="h-2" />
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-muted-foreground font-medium">
-                        {mockProgress.completed} of {mockProgress.total} Surahs
-                      </span>
-                      <span className="text-foreground font-bold">
-                        {Math.round(progressPercentage)}%
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            </>
-          ) : (
-            // Empty state
-            <div className="text-center py-6">
-              <p className="text-sm text-muted-foreground mb-3">No goals yet</p>
+      {/* Goals Section (for all profile types) */}
+      <div className="space-y-3">
+        {profile.currentGoal ? (
+          <>
+            {/* Goal Header */}
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-semibold text-foreground">Current Goal</label>
               <Button
-                variant="outline"
-                className="gap-2 border-2 hover:border-primary/50 hover:bg-accent"
+                variant="ghost"
+                size="sm"
+                className="h-8 gap-1.5 text-muted-foreground hover:text-foreground"
                 onClick={() => onAddGoal?.(profile.id)}
               >
                 <Plus className="h-4 w-4" />
-                Add First Goal
+                <span className="text-xs">Add Goal</span>
               </Button>
             </div>
-          )}
-        </div>
-      )}
+
+            <Card className="p-4 bg-gradient-soft border-2 border-border hover:border-primary/30 transition-all cursor-pointer">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-base font-bold text-foreground">
+                    {profile.currentGoal}
+                  </span>
+                  <Badge variant="outline" className="text-xs font-semibold border-success text-success bg-success/10">
+                    In Progress
+                  </Badge>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="space-y-2">
+                  <Progress value={progressPercentage} className="h-2" />
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-muted-foreground font-medium">
+                      {mockProgress.completed} of {mockProgress.total} Surahs
+                    </span>
+                    <span className="text-foreground font-bold">
+                      {Math.round(progressPercentage)}%
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </>
+        ) : (
+          // Empty state - prominent Add Goal button for any profile without goals
+          <div className="text-center py-6">
+            <p className="text-sm text-muted-foreground mb-3">No goals yet</p>
+            <Button
+              variant="outline"
+              className="gap-2 border-2 hover:border-primary/50 hover:bg-accent"
+              onClick={() => onAddGoal?.(profile.id)}
+            >
+              <Plus className="h-4 w-4" />
+              Add First Goal
+            </Button>
+          </div>
+        )}
+      </div>
     </Card>
   );
 };
