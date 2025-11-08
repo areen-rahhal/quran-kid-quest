@@ -34,7 +34,23 @@ const mockProfiles: Profile[] = [
     name: 'Waleed',
     type: 'child',
     currentGoal: "Juz' 29",
-    goalsCount: 1,
+    goalsCount: 2,
+    goals: [
+      {
+        id: 'goal-1',
+        name: "Juz' 29",
+        status: 'in-progress',
+        completedSurahs: 4,
+        totalSurahs: 37,
+      },
+      {
+        id: 'goal-2',
+        name: "Juz' 30",
+        status: 'in-progress',
+        completedSurahs: 0,
+        totalSurahs: 6,
+      },
+    ],
   },
   {
     id: '3',
@@ -42,6 +58,15 @@ const mockProfiles: Profile[] = [
     type: 'child',
     currentGoal: "Juz' 30",
     goalsCount: 1,
+    goals: [
+      {
+        id: 'goal-3',
+        name: "Juz' 30",
+        status: 'in-progress',
+        completedSurahs: 2,
+        totalSurahs: 6,
+      },
+    ],
   },
 ];
 
