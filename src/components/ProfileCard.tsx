@@ -119,15 +119,10 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
               {profile.goals.map((goal) => (
                 <Card key={goal.id} className="p-3 bg-gradient-soft border border-border hover:border-primary/30 transition-all cursor-pointer">
                   <div className="space-y-1.5">
-                    {/* Goal Name and Status */}
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-sm font-semibold text-foreground">
-                        {goal.name}
-                      </span>
-                      <Badge variant="outline" className="text-xs font-semibold border-success text-success bg-success/10 flex-shrink-0 capitalize">
-                        {goal.status.replace('-', ' ')}
-                      </Badge>
-                    </div>
+                    {/* Goal Name */}
+                    <span className="text-sm font-semibold text-foreground block">
+                      {goal.name}
+                    </span>
 
                     {/* Thin Progress Bar */}
                     {goal.totalSurahs && goal.totalSurahs > 0 && (
