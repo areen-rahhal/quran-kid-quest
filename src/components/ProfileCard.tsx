@@ -101,12 +101,11 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
         {profile.goals && profile.goals.length > 0 ? (
           <>
             {/* Goal Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2">
               <label className="text-sm font-semibold text-foreground">Goals</label>
               <Button
-                variant="ghost"
                 size="sm"
-                className="h-8 gap-1.5 text-muted-foreground hover:text-foreground"
+                className="h-8 gap-1.5 px-3"
                 onClick={() => onAddGoal?.(profile.id)}
               >
                 <Plus className="h-4 w-4" />
