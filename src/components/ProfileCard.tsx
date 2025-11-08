@@ -137,8 +137,11 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
             </div>
           </>
         ) : (
-          // Empty state - prominent Add Goal button for any profile without goals
-          <div className="text-center py-6">
+          // Empty state - compact for parent without goals
+          <div className={`text-center ${profile.type === 'parent' ? 'py-3' : 'py-6'}`}>
+            {profile.type === 'parent' && (
+              <p className="text-xs text-muted-foreground mb-2">Set up the first goal to begin learning</p>
+            )}
             <Button
               variant="outline"
               className="gap-2 border-2 hover:border-primary/50 hover:bg-accent"
