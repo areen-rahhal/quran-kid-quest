@@ -52,11 +52,7 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
         <div className="flex items-center gap-4">
           <Avatar className="h-16 w-16 border-2 border-border">
             <AvatarFallback className="bg-gradient-primary text-primary-foreground text-xl font-semibold">
-              {profile.avatar ? (
-                <img src={profile.avatar} alt={profile.name} />
-              ) : (
-                getInitials(profile.name)
-              )}
+              {getInitials(profile.name)}
             </AvatarFallback>
           </Avatar>
           <div>
