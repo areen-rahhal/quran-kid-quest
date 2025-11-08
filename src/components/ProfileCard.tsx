@@ -97,7 +97,7 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
       )}
 
       {/* Goals Section (for all profile types) */}
-      <div className="space-y-3">
+      <div className="space-y-2">
         {profile.currentGoal ? (
           <>
             {/* Goal Header */}
@@ -114,29 +114,21 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
               </Button>
             </div>
 
-            <Card className="p-4 bg-gradient-soft border-2 border-border hover:border-primary/30 transition-all cursor-pointer">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-base font-bold text-foreground">
+            {/* Minimal Goal Card */}
+            <Card className="p-3 bg-gradient-soft border border-border hover:border-primary/30 transition-all cursor-pointer">
+              <div className="space-y-1.5">
+                {/* Goal Name and Status */}
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-semibold text-foreground">
                     {profile.currentGoal}
                   </span>
-                  <Badge variant="outline" className="text-xs font-semibold border-success text-success bg-success/10">
+                  <Badge variant="outline" className="text-xs font-semibold border-success text-success bg-success/10 flex-shrink-0">
                     In Progress
                   </Badge>
                 </div>
 
-                {/* Progress Bar */}
-                <div className="space-y-2">
-                  <Progress value={progressPercentage} className="h-2" />
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted-foreground font-medium">
-                      {mockProgress.completed} of {mockProgress.total} Surahs
-                    </span>
-                    <span className="text-foreground font-bold">
-                      {Math.round(progressPercentage)}%
-                    </span>
-                  </div>
-                </div>
+                {/* Thin Progress Bar */}
+                <Progress value={progressPercentage} className="h-1.5" />
               </div>
             </Card>
           </>
