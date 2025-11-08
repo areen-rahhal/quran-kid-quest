@@ -98,11 +98,11 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
 
       {/* Goals Section (for all profile types) */}
       <div className="space-y-2">
-        {profile.currentGoal ? (
+        {profile.goals && profile.goals.length > 0 ? (
           <>
             {/* Goal Header */}
             <div className="flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Current Goal</label>
+              <label className="text-sm font-semibold text-foreground">Goals</label>
               <Button
                 variant="ghost"
                 size="sm"
@@ -114,28 +114,36 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
               </Button>
             </div>
 
-            {/* Minimal Goal Card */}
-            <Card className="p-3 bg-gradient-soft border border-border hover:border-primary/30 transition-all cursor-pointer">
-              <div className="space-y-1.5">
-                {/* Goal Name and Status */}
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-sm font-semibold text-foreground">
-                    {profile.currentGoal}
-                  </span>
-                  <Badge variant="outline" className="text-xs font-semibold border-success text-success bg-success/10 flex-shrink-0">
-                    In Progress
-                  </Badge>
-                </div>
+            {/* Goals List */}
+            <div className="space-y-2">
+              {profile.goals.map((goal) => (
+                <Card key={goal.id} className="p-3 bg-gradient-soft border border-border hover:border-primary/30 transition-all cursor-pointer">
+                  <div className="space-y-1.5">
+                    {/* Goal Name and Status */}
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-sm font-semibold text-foreground">
+                        {goal.name}
+                      </span>
+                      <Badge variant="outline" className="text-xs font-semibold border-success text-success bg-success/10 flex-shrink-0 capitalize">
+                        {goal.status.replace('-', ' ')}
+                      </Badge>
+                    </div>
 
-                {/* Thin Progress Bar */}
-                <Progress value={progressPercentage} className="h-1.5" />
-              </div>
-            </Card>
+                    {/* Thin Progress Bar */}
+                    {goal.totalSurahs && goal.totalSurahs > 0 && (
+                      <Progress
+                        value={goal.completedSurahs ? (goal.completedSurahs / goal.totalSurahs) * 100 : 0}
+                        className="h-1.5"
+                      />
+                    )}
+                  </div>
+                </Card>
+              ))}
+            </div>
           </>
         ) : (
           // Empty state - prominent Add Goal button for any profile without goals
           <div className="text-center py-6">
-            <p className="text-sm text-muted-foreground mb-3">No goals yet</p>
             <Button
               variant="outline"
               className="gap-2 border-2 hover:border-primary/50 hover:bg-accent"
