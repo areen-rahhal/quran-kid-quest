@@ -86,7 +86,7 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
 
       {/* Achievements (for any profile with active goals) */}
       {hasActiveGoals && (
-        <div className="pt-2">
+        <div className="pt-1">
           <AchievementsRow
             stars={mockAchievements.stars}
             streak={mockAchievements.streak}
@@ -113,11 +113,11 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
                       {goal.name}
                     </span>
 
-                    {/* Thin Progress Bar */}
+                    {/* Progress Bar */}
                     {goal.totalSurahs && goal.totalSurahs > 0 && (
                       <Progress
                         value={goal.completedSurahs ? (goal.completedSurahs / goal.totalSurahs) * 100 : 0}
-                        className="h-0.5"
+                        className="h-1.5"
                       />
                     )}
                   </div>
