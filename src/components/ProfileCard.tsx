@@ -100,24 +100,14 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
       <div className="space-y-2">
         {profile.goals && profile.goals.length > 0 ? (
           <>
-            {/* Goal Header */}
-            <div className="flex items-center justify-between gap-2">
-              <label className="text-sm font-semibold text-foreground">Goals</label>
-              <Button
-                size="sm"
-                className="h-8 gap-1.5 px-3"
-                onClick={() => onAddGoal?.(profile.id)}
-              >
-                <Plus className="h-4 w-4" />
-                <span className="text-xs">Add Goal</span>
-              </Button>
-            </div>
+            {/* Goal Label */}
+            <label className="text-sm font-semibold text-foreground block">Goals</label>
 
-            {/* Goals List */}
-            <div className="grid grid-cols-2 gap-2">
+            {/* Goals List with Add Button */}
+            <div className="grid grid-cols-3 gap-2">
               {profile.goals.map((goal) => (
-                <Card key={goal.id} className="p-2.5 bg-gradient-soft border border-border hover:border-primary/30 transition-all cursor-pointer">
-                  <div className="space-y-1">
+                <Card key={goal.id} className="p-2 bg-gradient-soft border border-border hover:border-primary/30 transition-all cursor-pointer">
+                  <div className="space-y-0.5">
                     {/* Goal Name */}
                     <span className="text-xs font-semibold text-foreground block line-clamp-1">
                       {goal.name}
@@ -127,12 +117,21 @@ export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) =>
                     {goal.totalSurahs && goal.totalSurahs > 0 && (
                       <Progress
                         value={goal.completedSurahs ? (goal.completedSurahs / goal.totalSurahs) * 100 : 0}
-                        className="h-1"
+                        className="h-0.5"
                       />
                     )}
                   </div>
                 </Card>
               ))}
+
+              {/* Add Goal Button */}
+              <Button
+                size="icon"
+                className="h-auto aspect-square"
+                onClick={() => onAddGoal?.(profile.id)}
+              >
+                <Plus className="h-5 w-5" />
+              </Button>
             </div>
           </>
         ) : (
