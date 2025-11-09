@@ -6,7 +6,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { AvatarImage } from '@/components/AvatarImage';
 import { Badge } from '@/components/ui/badge';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Profile } from '@/types/profile';
