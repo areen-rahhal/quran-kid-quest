@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Star, Flame, Gem, Trophy } from 'lucide-react';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { AvatarImage } from '@/components/AvatarImage';
 import { ProfileSwitcher } from '@/components/ProfileSwitcher';
 import { useProfile } from '@/contexts/ProfileContext';
 
