@@ -28,6 +28,7 @@ const mockProfiles: Profile[] = [
     goalsCount: 0,
     email: 'aya@example.com',
     avatar: 'avatar-1',
+    streak: 0,
   },
   {
     id: '2',
@@ -35,6 +36,7 @@ const mockProfiles: Profile[] = [
     type: 'child',
     currentGoal: "Juz' 29",
     goalsCount: 2,
+    streak: 12,
     goals: [
       {
         id: 'goal-1',
@@ -58,6 +60,7 @@ const mockProfiles: Profile[] = [
     type: 'child',
     currentGoal: "Juz' 30",
     goalsCount: 1,
+    streak: 7,
     goals: [
       {
         id: 'goal-3',
