@@ -19,7 +19,21 @@ const Goals = () => {
   const { currentProfile } = useProfile();
   const [selectedGoal, setSelectedGoal] = useState("");
   const [currentGoalIndex, setCurrentGoalIndex] = useState(0);
-  
+
+  // Sync currentGoalIndex with active goal when profile changes
+  useEffect(() => {
+    if (currentProfile.goals && currentProfile.goals.length > 0) {
+      const activeGoalIndex = currentProfile.goals.findIndex(
+        goal => goal.name === currentProfile.currentGoal
+      );
+      if (activeGoalIndex !== -1) {
+        setCurrentGoalIndex(activeGoalIndex);
+      } else {
+        setCurrentGoalIndex(0);
+      }
+    }
+  }, [currentProfile.id]);
+
   // Sample data for Juz' 30 (last juz of Quran)
   const juz30Surahs: Unit[] = [
     { id: 78, name: "An-Naba", arabicName: "النبأ", status: "completed" },
