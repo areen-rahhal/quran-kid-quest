@@ -52,7 +52,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal }: ProfileCardProps
     >
       {/* Profile Header */}
       <div className="flex items-center gap-4">
-        <Avatar className="h-16 w-16 border-2 border-border/50 shadow-medium hover:shadow-medium hover:border-border transition-all duration-200">
+        <Avatar className="h-16 w-16 border-[2.5px] border-border shadow-medium ring-2 ring-border/20 hover:shadow-strong hover:ring-border/40 transition-all duration-200">
           {profile.avatar && profile.avatar.startsWith('http') ? (
             <img
               src={profile.avatar}
