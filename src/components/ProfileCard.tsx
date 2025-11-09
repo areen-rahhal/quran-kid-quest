@@ -116,9 +116,11 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal }: ProfileCardProps
               {/* Add Goal Button */}
               <Button
                 size="icon"
-                variant="outline"
-                className="h-auto aspect-square border-muted-foreground/30 text-muted-foreground hover:text-foreground hover:border-muted-foreground/50"
-                onClick={() => onAddGoal?.(profile.id)}
+                className="h-auto aspect-square bg-primary/10 text-primary hover:bg-primary/20"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onAddGoal?.(profile.id);
+                }}
               >
                 <Plus className="h-5 w-5" />
               </Button>
