@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Plus } from "lucide-react";
+import { Plus, Trophy } from "lucide-react";
 import { AchievementsRow } from "./AchievementsRow";
 import { AvatarImage } from "./AvatarImage";
 import { Profile } from "@/types/profile";
