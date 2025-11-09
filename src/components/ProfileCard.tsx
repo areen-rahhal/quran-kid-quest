@@ -24,10 +24,6 @@ const getInitials = (name: string) => {
 
 
 export const ProfileCard = ({ profile, onNavigate, onAddGoal }: ProfileCardProps) => {
-  const progressPercentage = mockProgress.total > 0
-    ? (mockProgress.completed / mockProgress.total) * 100
-    : 0;
-
   // Check if profile has active goals
   const hasActiveGoals = profile.currentGoal || profile.goalsCount > 0;
 
@@ -61,13 +57,13 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal }: ProfileCardProps
       </div>
 
       {/* Achievements (for any profile with active goals) */}
-      {hasActiveGoals && (
+      {hasActiveGoals && profile.achievements && (
         <div className="pt-1">
           <AchievementsRow
-            stars={mockAchievements.stars}
-            streak={mockAchievements.streak}
-            recitations={mockAchievements.recitations}
-            goalsCompleted={mockAchievements.goalsCompleted}
+            stars={profile.achievements.stars}
+            streak={profile.achievements.streak}
+            recitations={profile.achievements.recitations}
+            goalsCompleted={profile.achievements.goalsCompleted}
           />
         </div>
       )}
