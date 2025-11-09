@@ -1,17 +1,36 @@
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { useProfile } from "@/contexts/ProfileContext";
-import { Plus, ChevronLeft, UserPlus } from "lucide-react";
+import { ChevronLeft, UserPlus, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProfileCard } from "@/components/ProfileCard";
+import { useState } from "react";
 
 const LearnersProfiles = () => {
   const navigate = useNavigate();
   const { profiles } = useProfile();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const handleEditProfile = (profileId: string) => {
-    // TODO: Navigate to edit profile page
-    console.log('Edit profile:', profileId);
+  // Sort profiles by streak (descending) - most active first
+  const sortedProfiles = [...profiles].sort((a, b) => {
+    const streakA = a.streak || 0;
+    const streakB = b.streak || 0;
+    return streakB - streakA;
+  });
+
+  // Update Zain's profile with cat avatar
+  const profilesWithCatAvatar = sortedProfiles.map((profile) => {
+    if (profile.id === '3') {
+      return {
+        ...profile,
+        avatar: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fa3cffb81fbde4015ad8bedfb2e19a16e?format=webp&width=800',
+      };
+    }
+    return profile;
+  });
+
+  const handleNavigateToProfile = (profileId: string) => {
+    navigate(`/learner/${profileId}`);
   };
 
   const handleAddGoal = (profileId: string) => {
@@ -22,6 +41,14 @@ const LearnersProfiles = () => {
   const handleAddLearner = () => {
     // TODO: Navigate to add learner page
     console.log('Add new learner');
+  };
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    // Simulate refresh delay
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 800);
   };
 
   return (
