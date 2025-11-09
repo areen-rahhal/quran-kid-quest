@@ -139,7 +139,10 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal }: ProfileCardProps
             <Button
               variant="outline"
               className="gap-2 border-2 hover:border-primary/50 hover:bg-accent"
-              onClick={() => onAddGoal?.(profile.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onAddGoal?.(profile.id);
+              }}
             >
               <Plus className="h-4 w-4" />
               Add First Goal
