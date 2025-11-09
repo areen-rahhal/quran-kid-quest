@@ -90,10 +90,11 @@ const Goals = () => {
     { id: 77, name: "Al-Mursalat", arabicName: "المرسلات", status: "not-started" },
   ];
 
-  const [stars] = useState(128);
-  const [streak] = useState(7);
-  const [recitations] = useState(45);
-  const [goalsCompleted] = useState(1);
+  // Use achievements from current profile
+  const [stars] = useState(currentProfile.achievements?.stars || 0);
+  const [streak] = useState(currentProfile.achievements?.streak || 0);
+  const [recitations] = useState(currentProfile.achievements?.recitations || 0);
+  const [goalsCompleted] = useState(currentProfile.achievements?.goalsCompleted || 0);
 
   const handleUnitClick = (unit: Unit) => {
     toast({
