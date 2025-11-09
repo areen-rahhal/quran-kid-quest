@@ -40,14 +40,14 @@ const mockProfiles: Profile[] = [
     id: '2',
     name: 'Waleed',
     type: 'child',
-    currentGoal: "Juz' 30",
+    currentGoal: "Juz' 29",
     goalsCount: 2,
     streak: 12,
     goals: [
       {
         id: 'goal-1',
         name: "Juz' 29",
-        status: 'completed',
+        status: 'in-progress',
         completedSurahs: 4,
         totalSurahs: 37,
       },
