@@ -91,12 +91,27 @@ const Goals = () => {
   // Check if user has goals
   const hasGoals = currentProfile.goalsCount && currentProfile.goalsCount > 0;
 
+  // Generate unit statuses based on learner's progress
+  const generateUnitsWithProgress = (units: Unit[], completedCount: number, totalCount: number) => {
+    return units.map((unit, index) => {
+      if (index < completedCount) {
+        return { ...unit, status: "completed" as const };
+      } else if (index === completedCount) {
+        return { ...unit, status: "in-progress" as const };
+      } else {
+        return { ...unit, status: "not-started" as const };
+      }
+    });
+  };
+
   // Get the goal to display based on currentGoalIndex
   const getGoalData = () => {
     const goals = currentProfile.goals || [];
     if (goals.length === 0) return null;
 
     const goal = goals[currentGoalIndex % goals.length];
+    const completedCount = goal.completedSurahs || 0;
+    const totalCount = goal.totalSurahs || 0;
 
     switch (goal.name) {
       case "Juz' 29":
@@ -104,7 +119,7 @@ const Goals = () => {
           name: "Juz' 29",
           surahCount: 11,
           ayatCount: 447,
-          units: juz29Surahs,
+          units: generateUnitsWithProgress(juz29Surahs, completedCount, totalCount),
           totalUnits: 11,
           goalId: goal.id
         };
@@ -113,7 +128,7 @@ const Goals = () => {
           name: "Juz' 30",
           surahCount: 37,
           ayatCount: 564,
-          units: juz30Surahs,
+          units: generateUnitsWithProgress(juz30Surahs, completedCount, totalCount),
           totalUnits: 37,
           goalId: goal.id
         };
