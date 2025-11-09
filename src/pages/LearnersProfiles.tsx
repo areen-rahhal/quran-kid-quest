@@ -72,7 +72,7 @@ const LearnersProfiles = () => {
 
       {/* Content */}
       <div className="container max-w-2xl mx-auto p-4 pb-8 space-y-4 flex-1">
-        {profilesWithCatAvatar.map((profile) => (
+        {sortedProfiles.map((profile) => (
           <ProfileCard
             key={profile.id}
             profile={profile}
