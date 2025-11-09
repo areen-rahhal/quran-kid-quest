@@ -46,38 +46,31 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal }: ProfileCardProps
   const hasActiveGoals = profile.currentGoal || profile.goalsCount > 0;
 
   return (
-    <Card className="p-6 space-y-4 transition-all hover:shadow-medium">
+    <Card
+      className="p-6 space-y-4 transition-all hover:shadow-medium cursor-pointer"
+      onClick={() => onNavigate?.(profile.id)}
+    >
       {/* Profile Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Avatar className="h-16 w-16 border-2 border-border">
-            <AvatarFallback className="bg-gradient-primary text-primary-foreground text-xl font-semibold">
-              {getInitials(profile.name)}
-            </AvatarFallback>
-          </Avatar>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xl font-bold text-foreground">
-                {profile.name}
-              </span>
-              <span className="text-muted-foreground">·</span>
-              <Badge
-                variant="outline"
-                className="text-xs capitalize font-medium border-muted-foreground/30 text-muted-foreground"
-              >
-                {profile.type}
-              </Badge>
-            </div>
+      <div className="flex items-center gap-4">
+        <Avatar className="h-16 w-16 border-2 border-border">
+          <AvatarFallback className="bg-gradient-primary text-primary-foreground text-xl font-semibold">
+            {getInitials(profile.name)}
+          </AvatarFallback>
+        </Avatar>
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="text-xl font-bold text-foreground">
+              {profile.name}
+            </span>
+            <span className="text-muted-foreground">·</span>
+            <Badge
+              variant="outline"
+              className="text-xs capitalize font-medium border-muted-foreground/30 text-muted-foreground"
+            >
+              {profile.type}
+            </Badge>
           </div>
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-10 w-10 hover:bg-accent"
-          onClick={() => onEdit?.(profile.id)}
-        >
-          <Pencil className="h-5 w-5 text-muted-foreground" />
-        </Button>
       </div>
 
       {/* Achievements (for any profile with active goals) */}
