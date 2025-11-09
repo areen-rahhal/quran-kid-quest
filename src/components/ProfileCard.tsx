@@ -22,20 +22,6 @@ const getInitials = (name: string) => {
     .slice(0, 2);
 };
 
-// Mock data - in real app this would come from profile data
-const mockAchievements = {
-  stars: 128,
-  streak: 7,
-  recitations: 45,
-  goalsCompleted: 1,
-};
-
-// Mock progress data - in real app this would come from profile data
-const mockProgress = {
-  completed: 4,
-  total: 37,
-  currentGoal: "Juz' 30"
-};
 
 export const ProfileCard = ({ profile, onNavigate, onAddGoal }: ProfileCardProps) => {
   const progressPercentage = mockProgress.total > 0
