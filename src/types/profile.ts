@@ -6,6 +6,13 @@ export interface Goal {
   totalSurahs?: number;
 }
 
+export interface Achievements {
+  stars: number;
+  streak: number;
+  recitations: number;
+  goalsCompleted: number;
+}
+
 export interface Profile {
   id: string;
   name: string;
@@ -20,4 +27,5 @@ export interface Profile {
   arabicAccent?: string;
   tajweedLevel?: 'beginner' | 'intermediate' | 'advanced';
   streak?: number;
+  achievements?: Achievements;
 }
