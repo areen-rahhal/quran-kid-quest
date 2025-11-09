@@ -57,15 +57,12 @@ export const ProfileSwitcher = ({ open, onOpenChange }: ProfileSwitcherProps) =>
                     : 'border-border hover:border-primary/50'
                 }`}
               >
-                <Avatar className="h-12 w-12 border-2 border-primary">
-                  <AvatarFallback className="bg-gradient-primary text-primary-foreground">
-                    {profile.avatar ? (
-                      <img src={profile.avatar} alt={profile.name} />
-                    ) : (
-                      getInitials(profile.name)
-                    )}
-                  </AvatarFallback>
-                </Avatar>
+                <AvatarImage
+                  src={profile.avatar}
+                  initials={getInitials(profile.name)}
+                  name={profile.name}
+                  size="sm"
+                />
 
                 <div className="flex-1 text-left">
                   <div className="flex items-center gap-2">
