@@ -52,25 +52,12 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal }: ProfileCardProps
     >
       {/* Profile Header */}
       <div className="flex items-center gap-4">
-        <Avatar className="h-16 w-16 border-[2.5px] border-border shadow-medium ring-2 ring-border/20 hover:shadow-strong hover:ring-border/40 transition-all duration-200">
-          {profile.avatar && profile.avatar.startsWith('http') ? (
-            <img
-              src={profile.avatar}
-              alt={profile.name}
-              className="w-full h-full object-cover object-center antialiased transition-transform duration-300 hover:scale-105"
-              style={{
-                imageRendering: 'smooth',
-                WebkitFontSmoothing: 'antialiased',
-                WebkitBackfaceVisibility: 'hidden',
-                backfaceVisibility: 'hidden',
-              }}
-            />
-          ) : (
-            <AvatarFallback className="bg-gradient-primary text-primary-foreground text-xl font-semibold">
-              {getInitials(profile.name)}
-            </AvatarFallback>
-          )}
-        </Avatar>
+        <AvatarImage
+          src={profile.avatar}
+          initials={getInitials(profile.name)}
+          name={profile.name}
+          size="md"
+        />
         <div>
           <div className="flex items-center gap-2">
             <span className="text-xl font-bold text-foreground">
