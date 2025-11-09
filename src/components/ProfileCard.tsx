@@ -37,7 +37,7 @@ const mockProgress = {
   currentGoal: "Juz' 30"
 };
 
-export const ProfileCard = ({ profile, onEdit, onAddGoal }: ProfileCardProps) => {
+export const ProfileCard = ({ profile, onNavigate, onAddGoal }: ProfileCardProps) => {
   const progressPercentage = mockProgress.total > 0
     ? (mockProgress.completed / mockProgress.total) * 100
     : 0;
