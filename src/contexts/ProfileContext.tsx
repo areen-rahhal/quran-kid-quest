@@ -28,20 +28,49 @@ const mockProfiles: Profile[] = [
     goalsCount: 0,
     email: 'aya@example.com',
     avatar: 'avatar-1',
+    streak: 0,
   },
   {
     id: '2',
     name: 'Waleed',
     type: 'child',
     currentGoal: "Juz' 29",
-    goalsCount: 1,
+    goalsCount: 2,
+    streak: 12,
+    goals: [
+      {
+        id: 'goal-1',
+        name: "Juz' 29",
+        status: 'in-progress',
+        completedSurahs: 4,
+        totalSurahs: 37,
+      },
+      {
+        id: 'goal-2',
+        name: "Juz' 30",
+        status: 'in-progress',
+        completedSurahs: 0,
+        totalSurahs: 6,
+      },
+    ],
   },
   {
     id: '3',
     name: 'Zain',
     type: 'child',
+    avatar: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fa3cffb81fbde4015ad8bedfb2e19a16e?format=webp&width=800',
     currentGoal: "Juz' 30",
     goalsCount: 1,
+    streak: 7,
+    goals: [
+      {
+        id: 'goal-3',
+        name: "Juz' 30",
+        status: 'in-progress',
+        completedSurahs: 2,
+        totalSurahs: 6,
+      },
+    ],
   },
 ];
 

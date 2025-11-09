@@ -1,17 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { useProfile } from "@/contexts/ProfileContext";
-import { Plus, ChevronLeft, UserPlus } from "lucide-react";
+import { ChevronLeft, UserPlus, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProfileCard } from "@/components/ProfileCard";
+import { useState } from "react";
 
 const LearnersProfiles = () => {
   const navigate = useNavigate();
   const { profiles } = useProfile();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const handleEditProfile = (profileId: string) => {
-    // TODO: Navigate to edit profile page
-    console.log('Edit profile:', profileId);
+  // Sort profiles by streak (descending) - most active first
+  const sortedProfiles = [...profiles].sort((a, b) => {
+    const streakA = a.streak || 0;
+    const streakB = b.streak || 0;
+    return streakB - streakA;
+  });
+
+  const handleNavigateToProfile = (profileId: string) => {
+    navigate(`/learner/${profileId}`);
   };
 
   const handleAddGoal = (profileId: string) => {
@@ -24,38 +32,57 @@ const LearnersProfiles = () => {
     console.log('Add new learner');
   };
 
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    // Simulate refresh delay
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 800);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-soft islamic-pattern">
+    <div className="min-h-screen bg-gradient-soft islamic-pattern flex flex-col">
       {/* Header */}
       <div className="bg-card border-b border-border sticky top-0 z-10 shadow-soft">
         <div className="container max-w-2xl mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate(-1)}
+                className="h-10 w-10"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </Button>
+              <h1 className="text-2xl font-bold text-foreground">Learners Profiles</h1>
+            </div>
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => navigate(-1)}
+              onClick={handleRefresh}
               className="h-10 w-10"
+              disabled={isRefreshing}
             >
-              <ChevronLeft className="h-5 w-5" />
+              <RefreshCw className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
             </Button>
-            <h1 className="text-2xl font-bold text-foreground">Learners Profiles</h1>
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="container max-w-2xl mx-auto p-4 pb-8 space-y-4">
-        {profiles.map((profile) => (
+      <div className="container max-w-2xl mx-auto p-4 pb-8 space-y-4 flex-1">
+        {sortedProfiles.map((profile) => (
           <ProfileCard
             key={profile.id}
             profile={profile}
-            onEdit={handleEditProfile}
+            onNavigate={handleNavigateToProfile}
             onAddGoal={handleAddGoal}
           />
         ))}
 
         {/* Add New Learner Card */}
-        <Card 
+        <Card
           className="p-6 border-2 border-dashed border-border hover:border-primary/50 hover:bg-accent/30 transition-all cursor-pointer group"
           onClick={handleAddLearner}
         >
