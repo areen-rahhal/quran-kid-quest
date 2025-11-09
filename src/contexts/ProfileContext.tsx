@@ -40,6 +40,7 @@ const mockProfiles: Profile[] = [
     id: '2',
     name: 'Waleed',
     type: 'child',
+    avatar: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fcc50a4fcacab42d49c80a89631bc6bec?format=webp&width=800',
     currentGoal: "Juz' 29",
     goalsCount: 2,
     streak: 12,
