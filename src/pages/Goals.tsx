@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
 import { TopNavBar } from "@/components/TopNavBar";
