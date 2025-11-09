@@ -18,17 +18,6 @@ const LearnersProfiles = () => {
     return streakB - streakA;
   });
 
-  // Update Zain's profile with cat avatar
-  const profilesWithCatAvatar = sortedProfiles.map((profile) => {
-    if (profile.id === '3') {
-      return {
-        ...profile,
-        avatar: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fa3cffb81fbde4015ad8bedfb2e19a16e?format=webp&width=800',
-      };
-    }
-    return profile;
-  });
-
   const handleNavigateToProfile = (profileId: string) => {
     navigate(`/learner/${profileId}`);
   };
