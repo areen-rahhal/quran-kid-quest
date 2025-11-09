@@ -90,11 +90,11 @@ const Goals = () => {
     { id: 77, name: "Al-Mursalat", arabicName: "المرسلات", status: "not-started" },
   ];
 
-  // Use achievements from current profile
-  const [stars] = useState(currentProfile.achievements?.stars || 0);
-  const [streak] = useState(currentProfile.achievements?.streak || 0);
-  const [recitations] = useState(currentProfile.achievements?.recitations || 0);
-  const [goalsCompleted] = useState(currentProfile.achievements?.goalsCompleted || 0);
+  // Get achievements directly from current profile
+  const stars = currentProfile.achievements?.stars || 0;
+  const streak = currentProfile.achievements?.streak || 0;
+  const recitations = currentProfile.achievements?.recitations || 0;
+  const goalsCompleted = currentProfile.achievements?.goalsCompleted || 0;
 
   const handleUnitClick = (unit: Unit) => {
     toast({
