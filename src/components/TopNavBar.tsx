@@ -36,15 +36,12 @@ export const TopNavBar = ({ achievements }: TopNavBarProps) => {
             onClick={() => setIsProfileSwitcherOpen(true)}
             className="hover:bg-accent rounded-full p-1 transition-colors"
           >
-            <Avatar className="h-10 w-10 border-2 border-primary">
-              <AvatarFallback className="bg-gradient-primary text-primary-foreground">
-                {currentProfile.avatar ? (
-                  <img src={currentProfile.avatar} alt={currentProfile.name} />
-                ) : (
-                  getInitials(currentProfile.name)
-                )}
-              </AvatarFallback>
-            </Avatar>
+            <AvatarImage
+              src={currentProfile.avatar}
+              initials={getInitials(currentProfile.name)}
+              name={currentProfile.name}
+              size="sm"
+            />
           </button>
 
           {achievements && (
