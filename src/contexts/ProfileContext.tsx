@@ -29,30 +29,42 @@ const mockProfiles: Profile[] = [
     email: 'aya@example.com',
     avatar: 'avatar-1',
     streak: 0,
+    achievements: {
+      stars: 128,
+      streak: 0,
+      recitations: 45,
+      goalsCompleted: 0,
+    },
   },
   {
     id: '2',
     name: 'Waleed',
     type: 'child',
-    currentGoal: "Juz' 29",
+    currentGoal: "Juz' 30",
     goalsCount: 2,
     streak: 12,
     goals: [
       {
         id: 'goal-1',
         name: "Juz' 29",
-        status: 'in-progress',
+        status: 'completed',
         completedSurahs: 4,
         totalSurahs: 37,
       },
       {
         id: 'goal-2',
         name: "Juz' 30",
-        status: 'in-progress',
-        completedSurahs: 0,
+        status: 'completed',
+        completedSurahs: 6,
         totalSurahs: 6,
       },
     ],
+    achievements: {
+      stars: 42,
+      streak: 12,
+      recitations: 45,
+      goalsCompleted: 1,
+    },
   },
   {
     id: '3',
@@ -71,6 +83,12 @@ const mockProfiles: Profile[] = [
         totalSurahs: 6,
       },
     ],
+    achievements: {
+      stars: 3,
+      streak: 7,
+      recitations: 3,
+      goalsCompleted: 0,
+    },
   },
 ];
 
