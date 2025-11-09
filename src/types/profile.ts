@@ -19,4 +19,5 @@ export interface Profile {
   arabicProficiency?: boolean;
   arabicAccent?: string;
   tajweedLevel?: 'beginner' | 'intermediate' | 'advanced';
+  streak?: number;
 }
