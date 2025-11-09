@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Plus } from "lucide-react";
 import { AchievementsRow } from "./AchievementsRow";
+import { AvatarImage } from "./AvatarImage";
 import { Profile } from "@/types/profile";
 
 interface ProfileCardProps {
