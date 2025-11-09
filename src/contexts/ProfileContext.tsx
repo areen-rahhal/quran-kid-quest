@@ -80,7 +80,7 @@ const mockProfiles: Profile[] = [
         id: 'goal-3',
         name: "Juz' 30",
         status: 'in-progress',
-        completedSurahs: 2,
+        completedSurahs: 3,
         totalSurahs: 6,
       },
     ],
