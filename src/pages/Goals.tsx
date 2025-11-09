@@ -293,22 +293,24 @@ const Goals = () => {
 
             {/* Goal Navigation - Prev/Next Buttons */}
             {hasMultipleGoals && (
-              <div className="flex gap-4 justify-between mt-8 mb-4">
+              <div className="flex items-center justify-center gap-12 mt-12 pt-6 border-t border-border/30">
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={handlePrevGoal}
-                  className="h-12 w-12 rounded-full border-2 border-border hover:border-primary/50 hover:bg-accent/20"
+                  className="h-14 w-14 rounded-full border-2 border-foreground/50 hover:border-primary hover:bg-primary/10 transition-all"
+                  aria-label="Previous goal"
                 >
-                  <ChevronLeft className="h-6 w-6" />
+                  <ChevronLeft className="h-7 w-7" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={handleNextGoal}
-                  className="h-12 w-12 rounded-full border-2 border-border hover:border-primary/50 hover:bg-accent/20"
+                  className="h-14 w-14 rounded-full border-2 border-foreground/50 hover:border-primary hover:bg-primary/10 transition-all"
+                  aria-label="Next goal"
                 >
-                  <ChevronRight className="h-6 w-6" />
+                  <ChevronRight className="h-7 w-7" />
                 </Button>
               </div>
             )}
