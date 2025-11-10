@@ -73,19 +73,31 @@ const Goals = () => {
 
   // Sync currentGoalIndex when profile changes (use active goal if not set from URL)
   useEffect(() => {
-    if (!currentProfile.goals || currentProfile.goals.length === 0) return;
+    console.log('[ACTIVE-GOAL-EFFECT] Running for profile:', currentProfile.name, 'hasAppliedUrlParams:', hasAppliedUrlParams);
+
+    if (!currentProfile.goals || currentProfile.goals.length === 0) {
+      console.log('[ACTIVE-GOAL-EFFECT] No goals found, returning');
+      return;
+    }
 
     // If we applied URL params, the index is already set - don't override it
-    if (hasAppliedUrlParams) return;
+    if (hasAppliedUrlParams) {
+      console.log('[ACTIVE-GOAL-EFFECT] URL params were applied, skipping active goal sync');
+      return;
+    }
 
     // Find the active goal
+    console.log('[ACTIVE-GOAL-EFFECT] Finding active goal. currentGoal:', currentProfile.currentGoal, 'available goals:', currentProfile.goals.map(g => ({ id: g.id, name: g.name })));
     const activeGoalIndex = currentProfile.goals.findIndex(
       goal => goal.name === currentProfile.currentGoal
     );
 
+    console.log('[ACTIVE-GOAL-EFFECT] Active goal index:', activeGoalIndex);
     if (activeGoalIndex !== -1) {
+      console.log('[ACTIVE-GOAL-EFFECT] Setting currentGoalIndex to:', activeGoalIndex);
       setCurrentGoalIndex(activeGoalIndex);
     } else {
+      console.log('[ACTIVE-GOAL-EFFECT] Active goal not found, defaulting to 0');
       setCurrentGoalIndex(0);
     }
   }, [currentProfile.id, hasAppliedUrlParams]);
