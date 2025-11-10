@@ -61,7 +61,7 @@ describe('Login Page', () => {
   describe('Form Interactions', () => {
     it('should update email input when user types', async () => {
       const user = userEvent.setup();
-      renderWithRouter(<Login />);
+      renderWithRouter();
 
       const emailInput = screen.getByPlaceholderText(/Email/i) as HTMLInputElement;
       await user.type(emailInput, 'test@example.com');
@@ -71,7 +71,7 @@ describe('Login Page', () => {
 
     it('should update password input when user types', async () => {
       const user = userEvent.setup();
-      renderWithRouter(<Login />);
+      renderWithRouter();
 
       const passwordInput = screen.getByPlaceholderText(/Password/i) as HTMLInputElement;
       await user.type(passwordInput, 'password123');
