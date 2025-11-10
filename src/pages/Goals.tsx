@@ -21,19 +21,46 @@ const Goals = () => {
   const [selectedGoal, setSelectedGoal] = useState("");
   const [currentGoalIndex, setCurrentGoalIndex] = useState(0);
 
-  // Sync currentGoalIndex with active goal when profile changes
+  // Handle URL parameters - set profile and goal from URL if provided
   useEffect(() => {
-    if (currentProfile.goals && currentProfile.goals.length > 0) {
-      const activeGoalIndex = currentProfile.goals.findIndex(
-        goal => goal.name === currentProfile.currentGoal
-      );
-      if (activeGoalIndex !== -1) {
-        setCurrentGoalIndex(activeGoalIndex);
-      } else {
-        setCurrentGoalIndex(0);
+    const profileId = searchParams.get('profileId');
+    const goalId = searchParams.get('goalId');
+
+    // If profileId is provided, set the current profile
+    if (profileId && profiles) {
+      const profile = profiles.find(p => p.id === profileId);
+      if (profile) {
+        setCurrentProfile(profile);
       }
     }
-  }, [currentProfile.id]);
+  }, [searchParams, profiles, setCurrentProfile]);
+
+  // Sync currentGoalIndex with goal from URL or active goal
+  useEffect(() => {
+    if (currentProfile.goals && currentProfile.goals.length > 0) {
+      const goalId = searchParams.get('goalId');
+
+      if (goalId) {
+        // Find the goal by ID if provided in URL
+        const goalIndex = currentProfile.goals.findIndex(goal => goal.id === goalId);
+        if (goalIndex !== -1) {
+          setCurrentGoalIndex(goalIndex);
+        } else {
+          setCurrentGoalIndex(0);
+        }
+      } else {
+        // Otherwise use the active goal
+        const activeGoalIndex = currentProfile.goals.findIndex(
+          goal => goal.name === currentProfile.currentGoal
+        );
+        if (activeGoalIndex !== -1) {
+          setCurrentGoalIndex(activeGoalIndex);
+        } else {
+          setCurrentGoalIndex(0);
+        }
+      }
+    }
+  }, [currentProfile.id, searchParams]);
 
   // Sample data for Juz' 30 (last juz of Quran)
   const juz30Surahs: Unit[] = [
@@ -50,7 +77,7 @@ const Goals = () => {
     { id: 88, name: "Al-Ghashiyah", arabicName: "الغاشية", status: "completed" },
     { id: 89, name: "Al-Fajr", arabicName: "الفجر", status: "completed" },
     { id: 90, name: "Al-Balad", arabicName: "البلد", status: "completed" },
-    { id: 91, name: "Ash-Shams", arabicName: "الشمس", status: "completed" },
+    { id: 91, name: "Ash-Shams", arabicName: "الشم��", status: "completed" },
     { id: 92, name: "Al-Lail", arabicName: "الليل", status: "completed" },
     { id: 93, name: "Ad-Duha", arabicName: "الضحى", status: "completed" },
     { id: 94, name: "Ash-Sharh", arabicName: "الشرح", status: "completed" },
