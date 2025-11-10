@@ -11,8 +11,14 @@ const Login = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // No actual authentication - just navigate to onboarding
-    navigate("/onboarding");
+    // Navigate based on user type
+    // Aya (parent with existing goals) goes to goals page
+    if (email.toLowerCase() === "aya@testmail.com") {
+      navigate("/goals");
+    } else {
+      // Other users go to onboarding
+      navigate("/onboarding");
+    }
   };
 
   return (
