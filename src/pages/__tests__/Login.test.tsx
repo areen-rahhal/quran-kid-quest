@@ -298,13 +298,13 @@ describe('Login Page', () => {
   describe('Visual & Layout', () => {
     it('should have gradient background', () => {
       const { container } = renderWithRouter(<Login />);
-      const mainDiv = container.firstChild;
+      const mainDiv = container.querySelector('[class*="bg-gradient-primary"]');
       expect(mainDiv).toHaveClass('bg-gradient-primary');
     });
 
     it('should have min-height screen', () => {
       const { container } = renderWithRouter(<Login />);
-      const mainDiv = container.firstChild;
+      const mainDiv = container.querySelector('[class*="min-h-screen"]');
       expect(mainDiv).toHaveClass('min-h-screen');
     });
 
@@ -315,8 +315,7 @@ describe('Login Page', () => {
     });
 
     it('should display BookOpen icon in header', () => {
-      renderWithRouter(<Login />);
-      const { container } = render(<BrowserRouter><Login /></BrowserRouter>);
+      const { container } = renderWithRouter(<Login />);
       expect(container.querySelector('svg')).toBeInTheDocument();
     });
   });
