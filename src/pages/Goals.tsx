@@ -20,6 +20,7 @@ const Goals = () => {
   const { currentProfile, profiles, switchProfile } = useProfile();
   const [selectedGoal, setSelectedGoal] = useState("");
   const [currentGoalIndex, setCurrentGoalIndex] = useState(0);
+  const [hasAppliedUrlParams, setHasAppliedUrlParams] = useState(false);
 
   // Handle URL parameters - set profile and goal from URL if provided
   useEffect(() => {
@@ -74,7 +75,7 @@ const Goals = () => {
     { id: 89, name: "Al-Fajr", arabicName: "الفجر", status: "completed" },
     { id: 90, name: "Al-Balad", arabicName: "البلد", status: "completed" },
     { id: 91, name: "Ash-Shams", arabicName: "الشمس", status: "completed" },
-    { id: 92, name: "Al-Lail", arabicName: "اللي��", status: "completed" },
+    { id: 92, name: "Al-Lail", arabicName: "الليل", status: "completed" },
     { id: 93, name: "Ad-Duha", arabicName: "الضحى", status: "completed" },
     { id: 94, name: "Ash-Sharh", arabicName: "الشرح", status: "completed" },
     { id: 95, name: "At-Tin", arabicName: "التين", status: "completed" },
