@@ -253,6 +253,21 @@ describe('Login Page', () => {
       });
     });
 
+    it('should navigate to /onboarding when Ahmad logs in', async () => {
+      const user = userEvent.setup();
+      renderWithMemoryRouter();
+
+      const ahmadButton = screen.getByRole('button', { name: /Use Ahmad \(New User\)/i });
+      await user.click(ahmadButton);
+
+      const signInButton = screen.getByRole('button', { name: /Sign In/i });
+      await user.click(signInButton);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('onboarding-page')).toBeInTheDocument();
+      });
+    });
+
     it('should navigate to /onboarding when admin logs in', async () => {
       const user = userEvent.setup();
       renderWithMemoryRouter();
