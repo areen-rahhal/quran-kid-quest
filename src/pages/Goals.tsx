@@ -80,9 +80,10 @@ const Goals = () => {
       return;
     }
 
-    // If we applied URL params, the index is already set - don't override it
-    if (hasAppliedUrlParams) {
-      console.log('[ACTIVE-GOAL-EFFECT] URL params were applied, skipping active goal sync');
+    // Check if URL params exist (more reliable than the flag due to state batching)
+    const hasUrlGoalId = searchParams.get('goalId');
+    if (hasUrlGoalId || hasAppliedUrlParams) {
+      console.log('[ACTIVE-GOAL-EFFECT] URL params exist or were applied, skipping active goal sync');
       return;
     }
 
@@ -100,7 +101,7 @@ const Goals = () => {
       console.log('[ACTIVE-GOAL-EFFECT] Active goal not found, defaulting to 0');
       setCurrentGoalIndex(0);
     }
-  }, [currentProfile.id, hasAppliedUrlParams]);
+  }, [currentProfile.id, hasAppliedUrlParams, searchParams]);
 
   // Track when currentGoalIndex changes
   useEffect(() => {
@@ -142,7 +143,7 @@ const Goals = () => {
     { id: 108, name: "Al-Kawthar", arabicName: "الكوثر", status: "completed" },
     { id: 109, name: "Al-Kafirun", arabicName: "الكافرون", status: "completed" },
     { id: 110, name: "An-Nasr", arabicName: "النصر", status: "completed" },
-    { id: 111, name: "Al-Masad", arabicName: "��لمسد", status: "completed" },
+    { id: 111, name: "Al-Masad", arabicName: "المسد", status: "completed" },
     { id: 112, name: "Al-Ikhlas", arabicName: "الإخلاص", status: "completed" },
     { id: 113, name: "Al-Falaq", arabicName: "الفلق", status: "completed" },
     { id: 114, name: "An-Nas", arabicName: "الناس", status: "completed" },
