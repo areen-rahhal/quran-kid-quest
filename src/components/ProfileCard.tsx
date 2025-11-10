@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Plus } from "lucide-react";
+import { Plus, Trophy } from "lucide-react";
 import { AchievementsRow } from "./AchievementsRow";
 import { AvatarImage } from "./AvatarImage";
 import { Profile } from "@/types/profile";
@@ -11,6 +11,7 @@ interface ProfileCardProps {
   profile: Profile;
   onNavigate?: (profileId: string) => void;
   onAddGoal?: (profileId: string) => void;
+  onGoalClick?: (profileId: string, goalId: string) => void;
 }
 
 const getInitials = (name: string) => {
@@ -22,26 +23,8 @@ const getInitials = (name: string) => {
     .slice(0, 2);
 };
 
-// Mock data - in real app this would come from profile data
-const mockAchievements = {
-  stars: 128,
-  streak: 7,
-  recitations: 45,
-  goalsCompleted: 1,
-};
 
-// Mock progress data - in real app this would come from profile data
-const mockProgress = {
-  completed: 4,
-  total: 37,
-  currentGoal: "Juz' 30"
-};
-
-export const ProfileCard = ({ profile, onNavigate, onAddGoal }: ProfileCardProps) => {
-  const progressPercentage = mockProgress.total > 0
-    ? (mockProgress.completed / mockProgress.total) * 100
-    : 0;
-
+export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: ProfileCardProps) => {
   // Check if profile has active goals
   const hasActiveGoals = profile.currentGoal || profile.goalsCount > 0;
 
@@ -75,13 +58,13 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal }: ProfileCardProps
       </div>
 
       {/* Achievements (for any profile with active goals) */}
-      {hasActiveGoals && (
+      {hasActiveGoals && profile.achievements && (
         <div className="pt-1">
           <AchievementsRow
-            stars={mockAchievements.stars}
-            streak={mockAchievements.streak}
-            recitations={mockAchievements.recitations}
-            goalsCompleted={mockAchievements.goalsCompleted}
+            stars={profile.achievements.stars}
+            streak={profile.achievements.streak}
+            recitations={profile.achievements.recitations}
+            goalsCompleted={profile.achievements.goalsCompleted}
           />
         </div>
       )}
@@ -96,12 +79,24 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal }: ProfileCardProps
             {/* Goals List with Add Button */}
             <div className="grid grid-cols-3 gap-2">
               {profile.goals.map((goal) => (
-                <Card key={goal.id} className="p-2 bg-gradient-soft border border-border hover:border-primary/30 transition-all cursor-pointer">
+                <Card
+                  key={goal.id}
+                  className="p-2 bg-gradient-soft border border-border hover:border-primary/30 transition-all cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onGoalClick?.(profile.id, goal.id);
+                  }}
+                >
                   <div className="space-y-0.5">
-                    {/* Goal Name */}
-                    <span className="text-xs font-semibold text-foreground block line-clamp-1">
-                      {goal.name}
-                    </span>
+                    {/* Goal Name with Trophy Icon for Completed Goals */}
+                    <div className="flex items-center justify-between gap-1">
+                      <span className="text-xs font-semibold text-foreground line-clamp-1">
+                        {goal.name}
+                      </span>
+                      {goal.status === 'completed' && (
+                        <Trophy className="w-3 h-3 text-accent flex-shrink-0" />
+                      )}
+                    </div>
 
                     {/* Progress Bar */}
                     {goal.totalSurahs && goal.totalSurahs > 0 && (

@@ -27,6 +27,10 @@ const LearnersProfiles = () => {
     console.log('Add goal for profile:', profileId);
   };
 
+  const handleGoalClick = (profileId: string, goalId: string) => {
+    navigate(`/goals?profileId=${profileId}&goalId=${goalId}`);
+  };
+
   const handleAddLearner = () => {
     // TODO: Navigate to add learner page
     console.log('Add new learner');
@@ -78,6 +82,7 @@ const LearnersProfiles = () => {
             profile={profile}
             onNavigate={handleNavigateToProfile}
             onAddGoal={handleAddGoal}
+            onGoalClick={handleGoalClick}
           />
         ))}
 
