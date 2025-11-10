@@ -102,6 +102,11 @@ const Goals = () => {
     }
   }, [currentProfile.id, hasAppliedUrlParams]);
 
+  // Track when currentGoalIndex changes
+  useEffect(() => {
+    console.log('[GOAL-INDEX-CHANGE] currentGoalIndex is now:', currentGoalIndex);
+  }, [currentGoalIndex]);
+
   // Sample data for Juz' 30 (last juz of Quran)
   const juz30Surahs: Unit[] = [
     { id: 78, name: "An-Naba", arabicName: "النبأ", status: "completed" },
