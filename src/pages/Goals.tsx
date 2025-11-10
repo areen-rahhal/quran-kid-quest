@@ -67,7 +67,7 @@ const Goals = () => {
     } else {
       setCurrentGoalIndex(0);
     }
-  }, [currentProfile.id]);
+  }, [currentProfile.id, hasAppliedUrlParams]);
 
   // Sample data for Juz' 30 (last juz of Quran)
   const juz30Surahs: Unit[] = [
