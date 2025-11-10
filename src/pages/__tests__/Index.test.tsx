@@ -70,7 +70,7 @@ describe('Index Page', () => {
       const createAccountBtn = screen.getByRole('button', { name: /Create Account/i });
       expect(createAccountBtn).not.toBeDisabled();
       await user.click(createAccountBtn);
-      expect(createAccountBtn).toHaveBeenClicked?.() || expect(createAccountBtn).toBeInTheDocument();
+      expect(createAccountBtn).toBeInTheDocument();
     });
 
     it('should have Sign in button that is clickable', async () => {
