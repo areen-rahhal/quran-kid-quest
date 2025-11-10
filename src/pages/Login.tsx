@@ -67,17 +67,30 @@ const Login = () => {
       </div>
 
       {/* Test Account CTA */}
-      <div className="relative z-10 text-center mt-8">
-        <button
-          type="button"
-          onClick={() => {
-            setEmail("Myadmin@google.com");
-            setPassword("123");
-          }}
-          className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors"
-        >
-          Use Test Account
-        </button>
+      <div className="relative z-10 text-center mt-8 space-y-3">
+        <p className="text-sm text-primary-foreground/80 mb-3">Quick Login:</p>
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              setEmail("Aya@testmail.com");
+              setPassword("123456");
+            }}
+            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors"
+          >
+            Use Aya (Parent)
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setEmail("Myadmin@google.com");
+              setPassword("123");
+            }}
+            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors"
+          >
+            Use Admin Account
+          </button>
+        </div>
       </div>
     </div>
   );
