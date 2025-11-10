@@ -24,16 +24,12 @@ const Goals = () => {
   // Handle URL parameters - set profile and goal from URL if provided
   useEffect(() => {
     const profileId = searchParams.get('profileId');
-    const goalId = searchParams.get('goalId');
 
-    // If profileId is provided, set the current profile
-    if (profileId && profiles) {
-      const profile = profiles.find(p => p.id === profileId);
-      if (profile) {
-        setCurrentProfile(profile);
-      }
+    // If profileId is provided, switch to that profile
+    if (profileId) {
+      switchProfile(profileId);
     }
-  }, [searchParams, profiles, setCurrentProfile]);
+  }, [searchParams, switchProfile]);
 
   // Sync currentGoalIndex with goal from URL or active goal
   useEffect(() => {
@@ -78,7 +74,7 @@ const Goals = () => {
     { id: 89, name: "Al-Fajr", arabicName: "الفجر", status: "completed" },
     { id: 90, name: "Al-Balad", arabicName: "البلد", status: "completed" },
     { id: 91, name: "Ash-Shams", arabicName: "الشمس", status: "completed" },
-    { id: 92, name: "Al-Lail", arabicName: "الليل", status: "completed" },
+    { id: 92, name: "Al-Lail", arabicName: "اللي��", status: "completed" },
     { id: 93, name: "Ad-Duha", arabicName: "الضحى", status: "completed" },
     { id: 94, name: "Ash-Sharh", arabicName: "الشرح", status: "completed" },
     { id: 95, name: "At-Tin", arabicName: "التين", status: "completed" },
