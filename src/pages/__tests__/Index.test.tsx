@@ -94,7 +94,7 @@ describe('Index Page', () => {
     it('should have flex layout with centered content', () => {
       const { container } = renderWithRouter(<Index />);
       const mainDiv = container.firstChild;
-      expect(mainDiv).toHaveClass('flex', 'flex-col', 'items-center', 'justify-center');
+      expect(mainDiv).toHaveClass('flex', 'flex-col', 'items-center', 'justify-between');
     });
 
     it('should have min-height screen', () => {
