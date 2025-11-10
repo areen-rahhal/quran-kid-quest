@@ -9,7 +9,15 @@ const MockGoalsPage = () => <div data-testid="goals-page">Goals Page</div>;
 const MockOnboardingPage = () => <div data-testid="onboarding-page">Onboarding Page</div>;
 
 const renderWithRouter = (component: React.ReactElement) => {
-  return render(<BrowserRouter>{component}</BrowserRouter>);
+  return render(
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={component} />
+        <Route path="/goals" element={<MockGoalsPage />} />
+        <Route path="/onboarding" element={<MockOnboardingPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 };
 
 describe('Login Page', () => {
