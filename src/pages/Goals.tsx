@@ -24,29 +24,50 @@ const Goals = () => {
 
   // Handle URL parameters - set profile and goal from URL if provided (only once on initial load)
   useEffect(() => {
-    if (hasAppliedUrlParams) return; // Only apply once
+    console.log('[URL-PARAMS-EFFECT] Running, hasAppliedUrlParams:', hasAppliedUrlParams);
+
+    if (hasAppliedUrlParams) {
+      console.log('[URL-PARAMS-EFFECT] Already applied, returning early');
+      return;
+    }
 
     const profileId = searchParams.get('profileId');
     const goalId = searchParams.get('goalId');
 
+    console.log('[URL-PARAMS-EFFECT] Extracted from URL - profileId:', profileId, 'goalId:', goalId);
+
     // Only process if we have a profileId
     if (profileId) {
       const selectedProfile = profiles.find(p => p.id === profileId);
+      console.log('[URL-PARAMS-EFFECT] Found profile:', selectedProfile?.name, 'Goals:', selectedProfile?.goals?.map(g => ({ id: g.id, name: g.name })));
+
       if (selectedProfile) {
         // Find and set the goal index if goalId is provided, BEFORE switching
         if (goalId && selectedProfile.goals) {
+          console.log('[URL-PARAMS-EFFECT] Looking for goalId:', goalId, 'in goals:', selectedProfile.goals.map(g => g.id));
           const goalIndex = selectedProfile.goals.findIndex(goal => goal.id === goalId);
+          console.log('[URL-PARAMS-EFFECT] Found goalIndex:', goalIndex);
+
           // Only set if found, otherwise will default to active goal
           if (goalIndex !== -1) {
+            console.log('[URL-PARAMS-EFFECT] Setting currentGoalIndex to:', goalIndex);
             setCurrentGoalIndex(goalIndex);
+          } else {
+            console.log('[URL-PARAMS-EFFECT] Goal ID not found! defaulting to 0');
           }
         }
 
+        console.log('[URL-PARAMS-EFFECT] Switching profile to:', profileId);
         switchProfile(profileId);
+        console.log('[URL-PARAMS-EFFECT] Setting hasAppliedUrlParams to true');
         setHasAppliedUrlParams(true);
+
         // Clean up URL parameters so menu switches work properly
+        console.log('[URL-PARAMS-EFFECT] Cleaning up URL');
         navigate('/goals', { replace: true });
       }
+    } else {
+      console.log('[URL-PARAMS-EFFECT] No profileId in URL');
     }
   }, []);
 
