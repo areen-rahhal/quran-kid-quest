@@ -377,10 +377,12 @@ describe('Login Page', () => {
       renderWithRouter();
 
       const ayaButton = screen.getByRole('button', { name: /Use Aya \(Parent\)/i });
+      const ahmadButton = screen.getByRole('button', { name: /Use Ahmad \(New User\)/i });
       const adminButton = screen.getByRole('button', { name: /Use Admin Account/i });
       const signInButton = screen.getByRole('button', { name: /Sign In/i });
 
       expect(ayaButton).not.toBeDisabled();
+      expect(ahmadButton).not.toBeDisabled();
       expect(adminButton).not.toBeDisabled();
       expect(signInButton).not.toBeDisabled();
     });
