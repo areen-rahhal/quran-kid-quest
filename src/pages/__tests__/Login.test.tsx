@@ -179,8 +179,8 @@ describe('Login Page', () => {
     });
   });
 
-  describe('Form Submission', () => {
-    it('should submit form with Aya credentials', async () => {
+  describe('Form Submission & Navigation', () => {
+    it('should navigate to /goals when Aya logs in', async () => {
       const user = userEvent.setup();
       renderWithRouter(<Login />);
 
@@ -190,10 +190,12 @@ describe('Login Page', () => {
       const signInButton = screen.getByRole('button', { name: /Sign In/i });
       await user.click(signInButton);
 
-      expect(signInButton).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('goals-page')).toBeInTheDocument();
+      });
     });
 
-    it('should submit form with admin credentials', async () => {
+    it('should navigate to /onboarding when admin logs in', async () => {
       const user = userEvent.setup();
       renderWithRouter(<Login />);
 
@@ -203,7 +205,63 @@ describe('Login Page', () => {
       const signInButton = screen.getByRole('button', { name: /Sign In/i });
       await user.click(signInButton);
 
-      expect(signInButton).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('onboarding-page')).toBeInTheDocument();
+      });
+    });
+
+    it('should navigate to /goals when Aya email is entered and form is submitted', async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<Login />);
+
+      const emailInput = screen.getByPlaceholderText(/Email/i);
+      const passwordInput = screen.getByPlaceholderText(/Password/i);
+
+      await user.type(emailInput, 'Aya@testmail.com');
+      await user.type(passwordInput, '123456');
+
+      const signInButton = screen.getByRole('button', { name: /Sign In/i });
+      await user.click(signInButton);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('goals-page')).toBeInTheDocument();
+      });
+    });
+
+    it('should navigate to /onboarding for other email addresses', async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<Login />);
+
+      const emailInput = screen.getByPlaceholderText(/Email/i);
+      const passwordInput = screen.getByPlaceholderText(/Password/i);
+
+      await user.type(emailInput, 'newuser@example.com');
+      await user.type(passwordInput, 'password123');
+
+      const signInButton = screen.getByRole('button', { name: /Sign In/i });
+      await user.click(signInButton);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('onboarding-page')).toBeInTheDocument();
+      });
+    });
+
+    it('should be case-insensitive for Aya email comparison', async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<Login />);
+
+      const emailInput = screen.getByPlaceholderText(/Email/i);
+      const passwordInput = screen.getByPlaceholderText(/Password/i);
+
+      await user.type(emailInput, 'aya@testmail.com');
+      await user.type(passwordInput, 'password');
+
+      const signInButton = screen.getByRole('button', { name: /Sign In/i });
+      await user.click(signInButton);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('goals-page')).toBeInTheDocument();
+      });
     });
   });
 
