@@ -142,7 +142,7 @@ const Goals = () => {
     { id: 108, name: "Al-Kawthar", arabicName: "الكوثر", status: "completed" },
     { id: 109, name: "Al-Kafirun", arabicName: "الكافرون", status: "completed" },
     { id: 110, name: "An-Nasr", arabicName: "النصر", status: "completed" },
-    { id: 111, name: "Al-Masad", arabicName: "المسد", status: "completed" },
+    { id: 111, name: "Al-Masad", arabicName: "��لمسد", status: "completed" },
     { id: 112, name: "Al-Ikhlas", arabicName: "الإخلاص", status: "completed" },
     { id: 113, name: "Al-Falaq", arabicName: "الفلق", status: "completed" },
     { id: 114, name: "An-Nas", arabicName: "الناس", status: "completed" },
@@ -234,6 +234,8 @@ const Goals = () => {
 
   const goalData = getGoalData();
   const hasMultipleGoals = currentProfile.goals && currentProfile.goals.length > 1;
+
+  console.log('[RENDER] Current profile:', currentProfile.name, 'Goal being displayed:', goalData?.name, 'hasMultipleGoals:', hasMultipleGoals);
 
   const handlePrevGoal = () => {
     if (currentProfile.goals && currentProfile.goals.length > 0) {
