@@ -22,7 +22,7 @@ const Goals = () => {
   const [currentGoalIndex, setCurrentGoalIndex] = useState(0);
   const [hasAppliedUrlParams, setHasAppliedUrlParams] = useState(false);
 
-  // Handle URL parameters - set profile and goal from URL if provided (only once)
+  // Handle URL parameters - set profile and goal from URL if provided (only once on initial load)
   useEffect(() => {
     if (hasAppliedUrlParams) return; // Only apply once
 
@@ -32,38 +32,40 @@ const Goals = () => {
     // If profileId is provided, switch to that profile
     if (profileId) {
       switchProfile(profileId);
+
+      // Find and set the goal index if goalId is provided
+      if (goalId) {
+        const profile = profiles.find(p => p.id === profileId);
+        if (profile && profile.goals) {
+          const goalIndex = profile.goals.findIndex(goal => goal.id === goalId);
+          if (goalIndex !== -1) {
+            setCurrentGoalIndex(goalIndex);
+          }
+        }
+      }
+
       setHasAppliedUrlParams(true);
       // Clean up URL parameters so menu switches work properly
       navigate('/goals', { replace: true });
     }
   }, []);
 
-  // Sync currentGoalIndex with goal from URL or active goal
+  // Sync currentGoalIndex with active goal (when not coming from URL params)
   useEffect(() => {
-    if (currentProfile.goals && currentProfile.goals.length > 0) {
-      const goalId = searchParams.get('goalId');
+    if (hasAppliedUrlParams) return; // Skip if we already set the goal from URL
 
-      if (goalId) {
-        // Find the goal by ID if provided in URL
-        const goalIndex = currentProfile.goals.findIndex(goal => goal.id === goalId);
-        if (goalIndex !== -1) {
-          setCurrentGoalIndex(goalIndex);
-        } else {
-          setCurrentGoalIndex(0);
-        }
+    if (currentProfile.goals && currentProfile.goals.length > 0) {
+      // Use the active goal
+      const activeGoalIndex = currentProfile.goals.findIndex(
+        goal => goal.name === currentProfile.currentGoal
+      );
+      if (activeGoalIndex !== -1) {
+        setCurrentGoalIndex(activeGoalIndex);
       } else {
-        // Otherwise use the active goal
-        const activeGoalIndex = currentProfile.goals.findIndex(
-          goal => goal.name === currentProfile.currentGoal
-        );
-        if (activeGoalIndex !== -1) {
-          setCurrentGoalIndex(activeGoalIndex);
-        } else {
-          setCurrentGoalIndex(0);
-        }
+        setCurrentGoalIndex(0);
       }
     }
-  }, [currentProfile.id, searchParams]);
+  }, [currentProfile.id, hasAppliedUrlParams]);
 
   // Sample data for Juz' 30 (last juz of Quran)
   const juz30Surahs: Unit[] = [
