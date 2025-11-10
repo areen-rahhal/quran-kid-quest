@@ -82,6 +82,7 @@ const LearnersProfiles = () => {
             profile={profile}
             onNavigate={handleNavigateToProfile}
             onAddGoal={handleAddGoal}
+            onGoalClick={handleGoalClick}
           />
         ))}
 
