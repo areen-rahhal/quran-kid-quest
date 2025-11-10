@@ -79,7 +79,14 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
             {/* Goals List with Add Button */}
             <div className="grid grid-cols-3 gap-2">
               {profile.goals.map((goal) => (
-                <Card key={goal.id} className="p-2 bg-gradient-soft border border-border hover:border-primary/30 transition-all cursor-pointer">
+                <Card
+                  key={goal.id}
+                  className="p-2 bg-gradient-soft border border-border hover:border-primary/30 transition-all cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onGoalClick?.(profile.id, goal.id);
+                  }}
+                >
                   <div className="space-y-0.5">
                     {/* Goal Name with Trophy Icon for Completed Goals */}
                     <div className="flex items-center justify-between gap-1">
