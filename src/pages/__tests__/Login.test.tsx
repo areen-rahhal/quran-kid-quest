@@ -196,7 +196,7 @@ describe('Login Page', () => {
   describe('Form Submission & Navigation', () => {
     it('should navigate to /goals when Aya logs in', async () => {
       const user = userEvent.setup();
-      renderWithRouter();
+      renderWithMemoryRouter();
 
       const ayaButton = screen.getByRole('button', { name: /Use Aya \(Parent\)/i });
       await user.click(ayaButton);
@@ -211,7 +211,7 @@ describe('Login Page', () => {
 
     it('should navigate to /onboarding when admin logs in', async () => {
       const user = userEvent.setup();
-      renderWithRouter();
+      renderWithMemoryRouter();
 
       const adminButton = screen.getByRole('button', { name: /Use Admin Account/i });
       await user.click(adminButton);
@@ -226,7 +226,7 @@ describe('Login Page', () => {
 
     it('should navigate to /goals when Aya email is entered and form is submitted', async () => {
       const user = userEvent.setup();
-      renderWithRouter();
+      renderWithMemoryRouter();
 
       const emailInput = screen.getByPlaceholderText(/Email/i);
       const passwordInput = screen.getByPlaceholderText(/Password/i);
@@ -244,7 +244,7 @@ describe('Login Page', () => {
 
     it('should navigate to /onboarding for other email addresses', async () => {
       const user = userEvent.setup();
-      renderWithRouter();
+      renderWithMemoryRouter();
 
       const emailInput = screen.getByPlaceholderText(/Email/i);
       const passwordInput = screen.getByPlaceholderText(/Password/i);
@@ -262,7 +262,7 @@ describe('Login Page', () => {
 
     it('should be case-insensitive for Aya email comparison', async () => {
       const user = userEvent.setup();
-      renderWithRouter();
+      renderWithMemoryRouter();
 
       const emailInput = screen.getByPlaceholderText(/Email/i);
       const passwordInput = screen.getByPlaceholderText(/Password/i);
