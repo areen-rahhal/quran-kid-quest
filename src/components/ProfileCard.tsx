@@ -11,6 +11,7 @@ interface ProfileCardProps {
   profile: Profile;
   onNavigate?: (profileId: string) => void;
   onAddGoal?: (profileId: string) => void;
+  onGoalClick?: (profileId: string, goalId: string) => void;
 }
 
 const getInitials = (name: string) => {
