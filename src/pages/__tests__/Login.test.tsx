@@ -23,36 +23,36 @@ const renderWithRouter = () => {
 describe('Login Page', () => {
   describe('Rendering', () => {
     it('should render the welcome heading', () => {
-      renderWithRouter(<Login />);
+      renderWithRouter();
       expect(screen.getByRole('heading', { name: /Welcome Back/i })).toBeInTheDocument();
     });
 
     it('should render the subtitle', () => {
-      renderWithRouter(<Login />);
+      renderWithRouter();
       expect(screen.getByText(/Continue your Quran journey/i)).toBeInTheDocument();
     });
 
     it('should render email input field', () => {
-      renderWithRouter(<Login />);
+      renderWithRouter();
       const emailInput = screen.getByPlaceholderText(/Email/i);
       expect(emailInput).toBeInTheDocument();
       expect(emailInput).toHaveAttribute('type', 'email');
     });
 
     it('should render password input field', () => {
-      renderWithRouter(<Login />);
+      renderWithRouter();
       const passwordInput = screen.getByPlaceholderText(/Password/i);
       expect(passwordInput).toBeInTheDocument();
       expect(passwordInput).toHaveAttribute('type', 'password');
     });
 
     it('should render Sign In button', () => {
-      renderWithRouter(<Login />);
+      renderWithRouter();
       expect(screen.getByRole('button', { name: /Sign In/i })).toBeInTheDocument();
     });
 
     it('should render test account quick login options', () => {
-      renderWithRouter(<Login />);
+      renderWithRouter();
       expect(screen.getByRole('button', { name: /Use Aya \(Parent\)/i })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /Use Admin Account/i })).toBeInTheDocument();
     });
