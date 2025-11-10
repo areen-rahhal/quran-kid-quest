@@ -31,15 +31,18 @@ const Goals = () => {
 
     // If profileId is provided, switch to that profile
     if (profileId) {
-      switchProfile(profileId);
+      const selectedProfile = profiles.find(p => p.id === profileId);
+      if (selectedProfile) {
+        switchProfile(profileId);
 
-      // Find and set the goal index if goalId is provided
-      if (goalId) {
-        const profile = profiles.find(p => p.id === profileId);
-        if (profile && profile.goals) {
-          const goalIndex = profile.goals.findIndex(goal => goal.id === goalId);
+        // Find and set the goal index if goalId is provided
+        if (goalId && selectedProfile.goals) {
+          const goalIndex = selectedProfile.goals.findIndex(goal => goal.id === goalId);
           if (goalIndex !== -1) {
-            setCurrentGoalIndex(goalIndex);
+            // Defer setting the goal index to ensure context updates first
+            setTimeout(() => {
+              setCurrentGoalIndex(goalIndex);
+            }, 0);
           }
         }
       }
