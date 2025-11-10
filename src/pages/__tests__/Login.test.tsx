@@ -68,6 +68,7 @@ describe('Login Page', () => {
     it('should render test account quick login options', () => {
       renderWithRouter();
       expect(screen.getByRole('button', { name: /Use Aya \(Parent\)/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Use Ahmad \(New User\)/i })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /Use Admin Account/i })).toBeInTheDocument();
     });
   });
