@@ -301,6 +301,24 @@ describe('Login Page', () => {
       });
     });
 
+    it('should navigate to /onboarding when Ahmad email is entered and form is submitted', async () => {
+      const user = userEvent.setup();
+      renderWithMemoryRouter();
+
+      const emailInput = screen.getByPlaceholderText(/Email/i);
+      const passwordInput = screen.getByPlaceholderText(/Password/i);
+
+      await user.type(emailInput, 'Ahmad@testmail.com');
+      await user.type(passwordInput, 'TestPass');
+
+      const signInButton = screen.getByRole('button', { name: /Sign In/i });
+      await user.click(signInButton);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('onboarding-page')).toBeInTheDocument();
+      });
+    });
+
     it('should navigate to /onboarding for other email addresses', async () => {
       const user = userEvent.setup();
       renderWithMemoryRouter();
