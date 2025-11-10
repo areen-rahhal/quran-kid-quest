@@ -55,7 +55,12 @@ const Goals = () => {
 
   // Sync currentGoalIndex with active goal (when not coming from URL params)
   useEffect(() => {
-    if (hasAppliedUrlParams) return; // Skip if we already set the goal from URL
+    // Skip if we already set the goal from URL params
+    if (hasAppliedUrlParams) return;
+
+    // Also skip if there are URL params (they'll be handled by the first effect)
+    const goalId = searchParams.get('goalId');
+    if (goalId) return;
 
     if (currentProfile.goals && currentProfile.goals.length > 0) {
       // Use the active goal
@@ -68,7 +73,7 @@ const Goals = () => {
         setCurrentGoalIndex(0);
       }
     }
-  }, [currentProfile.id, hasAppliedUrlParams]);
+  }, [currentProfile.id, hasAppliedUrlParams, searchParams]);
 
   // Sample data for Juz' 30 (last juz of Quran)
   const juz30Surahs: Unit[] = [
