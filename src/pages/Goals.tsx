@@ -167,16 +167,12 @@ const Goals = () => {
   // Get the goal to display based on currentGoalIndex
   const getGoalData = () => {
     const goals = currentProfile.goals || [];
-    console.log('[GET-GOAL-DATA] currentGoalIndex:', currentGoalIndex, 'total goals:', goals.length, 'goals:', goals.map(g => ({ id: g.id, name: g.name })));
 
     if (goals.length === 0) {
-      console.log('[GET-GOAL-DATA] No goals available');
       return null;
     }
 
     const goal = goals[currentGoalIndex % goals.length];
-    console.log('[GET-GOAL-DATA] Selected goal:', goal.name, 'with id:', goal.id);
-
     const completedCount = goal.completedSurahs || 0;
     const totalCount = goal.totalSurahs || 0;
 
