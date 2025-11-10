@@ -24,7 +24,7 @@ const getInitials = (name: string) => {
 };
 
 
-export const ProfileCard = ({ profile, onNavigate, onAddGoal }: ProfileCardProps) => {
+export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: ProfileCardProps) => {
   // Check if profile has active goals
   const hasActiveGoals = profile.currentGoal || profile.goalsCount > 0;
 
