@@ -89,6 +89,16 @@ const Login = () => {
           <button
             type="button"
             onClick={() => {
+              setEmail("Ahmad@testmail.com");
+              setPassword("TestPass");
+            }}
+            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors"
+          >
+            Use Ahmad (New User)
+          </button>
+          <button
+            type="button"
+            onClick={() => {
               setEmail("Myadmin@google.com");
               setPassword("123");
             }}
