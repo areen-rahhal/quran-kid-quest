@@ -48,27 +48,24 @@ const Goals = () => {
     }
   }, [profiles]);
 
-  // Sync currentGoalIndex with active goal (when not coming from URL params)
+  // Sync currentGoalIndex when profile changes (use active goal if not set from URL)
   useEffect(() => {
-    // Skip if we already set the goal from URL params
+    if (!currentProfile.goals || currentProfile.goals.length === 0) return;
+
+    // If we applied URL params, the index is already set - don't override it
     if (hasAppliedUrlParams) return;
 
-    // Also skip if there are URL params (they'll be handled by the first effect)
-    const goalId = searchParams.get('goalId');
-    if (goalId) return;
+    // Find the active goal
+    const activeGoalIndex = currentProfile.goals.findIndex(
+      goal => goal.name === currentProfile.currentGoal
+    );
 
-    if (currentProfile.goals && currentProfile.goals.length > 0) {
-      // Use the active goal
-      const activeGoalIndex = currentProfile.goals.findIndex(
-        goal => goal.name === currentProfile.currentGoal
-      );
-      if (activeGoalIndex !== -1) {
-        setCurrentGoalIndex(activeGoalIndex);
-      } else {
-        setCurrentGoalIndex(0);
-      }
+    if (activeGoalIndex !== -1) {
+      setCurrentGoalIndex(activeGoalIndex);
+    } else {
+      setCurrentGoalIndex(0);
     }
-  }, [currentProfile.id, hasAppliedUrlParams, searchParams]);
+  }, [currentProfile.id]);
 
   // Sample data for Juz' 30 (last juz of Quran)
   const juz30Surahs: Unit[] = [
