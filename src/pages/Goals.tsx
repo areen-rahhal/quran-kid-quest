@@ -17,7 +17,7 @@ const Goals = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { currentProfile, profiles, setCurrentProfile } = useProfile();
+  const { currentProfile, profiles, switchProfile } = useProfile();
   const [selectedGoal, setSelectedGoal] = useState("");
   const [currentGoalIndex, setCurrentGoalIndex] = useState(0);
 
@@ -77,7 +77,7 @@ const Goals = () => {
     { id: 88, name: "Al-Ghashiyah", arabicName: "الغاشية", status: "completed" },
     { id: 89, name: "Al-Fajr", arabicName: "الفجر", status: "completed" },
     { id: 90, name: "Al-Balad", arabicName: "البلد", status: "completed" },
-    { id: 91, name: "Ash-Shams", arabicName: "الشم��", status: "completed" },
+    { id: 91, name: "Ash-Shams", arabicName: "الشمس", status: "completed" },
     { id: 92, name: "Al-Lail", arabicName: "الليل", status: "completed" },
     { id: 93, name: "Ad-Duha", arabicName: "الضحى", status: "completed" },
     { id: 94, name: "Ash-Sharh", arabicName: "الشرح", status: "completed" },
