@@ -24,11 +24,13 @@ const Goals = () => {
 
   // Handle URL parameters - set profile and goal from URL if provided (only once on initial load)
   useEffect(() => {
+    if (hasAppliedUrlParams) return; // Only apply once
+
     const profileId = searchParams.get('profileId');
     const goalId = searchParams.get('goalId');
 
-    // Only process if we have a profileId AND haven't processed URL params yet
-    if (profileId && !hasAppliedUrlParams) {
+    // Only process if we have a profileId
+    if (profileId) {
       const selectedProfile = profiles.find(p => p.id === profileId);
       if (selectedProfile) {
         switchProfile(profileId);
@@ -46,7 +48,7 @@ const Goals = () => {
         navigate('/goals', { replace: true });
       }
     }
-  }, [profiles]);
+  }, []);
 
   // Sync currentGoalIndex when profile changes (use active goal if not set from URL)
   useEffect(() => {
