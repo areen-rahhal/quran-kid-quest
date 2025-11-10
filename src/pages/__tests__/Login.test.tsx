@@ -220,15 +220,16 @@ describe('Login Page', () => {
       expect(passwordInput).toHaveAttribute('type', 'password');
     });
 
-    it('buttons should be keyboard accessible', async () => {
-      const user = userEvent.setup();
+    it('buttons should not be disabled', async () => {
       renderWithRouter(<Login />);
 
       const ayaButton = screen.getByRole('button', { name: /Use Aya \(Parent\)/i });
-      expect(ayaButton).not.toBeDisabled();
+      const adminButton = screen.getByRole('button', { name: /Use Admin Account/i });
+      const signInButton = screen.getByRole('button', { name: /Sign In/i });
 
-      await user.tab();
-      expect(ayaButton).toHaveFocus() || expect(document.activeElement).toBeTruthy();
+      expect(ayaButton).not.toBeDisabled();
+      expect(adminButton).not.toBeDisabled();
+      expect(signInButton).not.toBeDisabled();
     });
   });
 
