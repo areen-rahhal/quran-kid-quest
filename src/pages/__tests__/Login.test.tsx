@@ -133,6 +133,44 @@ describe('Login Page', () => {
     });
   });
 
+  describe('Test Account: Ahmad (New User)', () => {
+    it('should pre-fill Ahmad email when clicking Use Ahmad button', async () => {
+      const user = userEvent.setup();
+      renderWithRouter();
+
+      const ahmadButton = screen.getByRole('button', { name: /Use Ahmad \(New User\)/i });
+      await user.click(ahmadButton);
+
+      const emailInput = screen.getByPlaceholderText(/Email/i) as HTMLInputElement;
+      expect(emailInput.value).toBe('Ahmad@testmail.com');
+    });
+
+    it('should pre-fill Ahmad password when clicking Use Ahmad button', async () => {
+      const user = userEvent.setup();
+      renderWithRouter();
+
+      const ahmadButton = screen.getByRole('button', { name: /Use Ahmad \(New User\)/i });
+      await user.click(ahmadButton);
+
+      const passwordInput = screen.getByPlaceholderText(/Password/i) as HTMLInputElement;
+      expect(passwordInput.value).toBe('TestPass');
+    });
+
+    it('should have correct Ahmad credentials (email: Ahmad@testmail.com, password: TestPass)', async () => {
+      const user = userEvent.setup();
+      renderWithRouter();
+
+      const ahmadButton = screen.getByRole('button', { name: /Use Ahmad \(New User\)/i });
+      await user.click(ahmadButton);
+
+      const emailInput = screen.getByPlaceholderText(/Email/i) as HTMLInputElement;
+      const passwordInput = screen.getByPlaceholderText(/Password/i) as HTMLInputElement;
+
+      expect(emailInput.value).toBe('Ahmad@testmail.com');
+      expect(passwordInput.value).toBe('TestPass');
+    });
+  });
+
   describe('Test Account: Admin', () => {
     it('should pre-fill admin email when clicking Use Admin Account button', async () => {
       const user = userEvent.setup();
