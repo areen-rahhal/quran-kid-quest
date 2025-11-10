@@ -16,7 +16,8 @@ import pencilMascot from "@/assets/pencil-mascot.json";
 const Goals = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { currentProfile } = useProfile();
+  const [searchParams] = useSearchParams();
+  const { currentProfile, profiles, setCurrentProfile } = useProfile();
   const [selectedGoal, setSelectedGoal] = useState("");
   const [currentGoalIndex, setCurrentGoalIndex] = useState(0);
 
