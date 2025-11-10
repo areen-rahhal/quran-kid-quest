@@ -57,40 +57,27 @@ const Goals = () => {
 
   // Sync currentGoalIndex when profile changes (use active goal if not set from URL)
   useEffect(() => {
-    console.log('[ACTIVE-GOAL-EFFECT] Running for profile:', currentProfile.name, 'hasAppliedUrlParams:', hasAppliedUrlParams);
-
     if (!currentProfile.goals || currentProfile.goals.length === 0) {
-      console.log('[ACTIVE-GOAL-EFFECT] No goals found, returning');
       return;
     }
 
     // Check if URL params exist (more reliable than the flag due to state batching)
     const hasUrlGoalId = searchParams.get('goalId');
     if (hasUrlGoalId || hasAppliedUrlParams) {
-      console.log('[ACTIVE-GOAL-EFFECT] URL params exist or were applied, skipping active goal sync');
       return;
     }
 
     // Find the active goal
-    console.log('[ACTIVE-GOAL-EFFECT] Finding active goal. currentGoal:', currentProfile.currentGoal, 'available goals:', currentProfile.goals.map(g => ({ id: g.id, name: g.name })));
     const activeGoalIndex = currentProfile.goals.findIndex(
       goal => goal.name === currentProfile.currentGoal
     );
 
-    console.log('[ACTIVE-GOAL-EFFECT] Active goal index:', activeGoalIndex);
     if (activeGoalIndex !== -1) {
-      console.log('[ACTIVE-GOAL-EFFECT] Setting currentGoalIndex to:', activeGoalIndex);
       setCurrentGoalIndex(activeGoalIndex);
     } else {
-      console.log('[ACTIVE-GOAL-EFFECT] Active goal not found, defaulting to 0');
       setCurrentGoalIndex(0);
     }
   }, [currentProfile.id, hasAppliedUrlParams, searchParams]);
-
-  // Track when currentGoalIndex changes
-  useEffect(() => {
-    console.log('[GOAL-INDEX-CHANGE] currentGoalIndex is now:', currentGoalIndex);
-  }, [currentGoalIndex]);
 
   // Sample data for Juz' 30 (last juz of Quran)
   const juz30Surahs: Unit[] = [
