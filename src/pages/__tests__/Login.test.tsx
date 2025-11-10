@@ -83,7 +83,7 @@ describe('Login Page', () => {
   describe('Test Account: Aya (Parent)', () => {
     it('should pre-fill Aya email when clicking Use Aya button', async () => {
       const user = userEvent.setup();
-      renderWithRouter(<Login />);
+      renderWithRouter();
 
       const ayaButton = screen.getByRole('button', { name: /Use Aya \(Parent\)/i });
       await user.click(ayaButton);
@@ -94,7 +94,7 @@ describe('Login Page', () => {
 
     it('should pre-fill Aya password when clicking Use Aya button', async () => {
       const user = userEvent.setup();
-      renderWithRouter(<Login />);
+      renderWithRouter();
 
       const ayaButton = screen.getByRole('button', { name: /Use Aya \(Parent\)/i });
       await user.click(ayaButton);
@@ -105,7 +105,7 @@ describe('Login Page', () => {
 
     it('should have correct Aya credentials (email: Aya@testmail.com, password: 123456)', async () => {
       const user = userEvent.setup();
-      renderWithRouter(<Login />);
+      renderWithRouter();
 
       const ayaButton = screen.getByRole('button', { name: /Use Aya \(Parent\)/i });
       await user.click(ayaButton);
@@ -121,7 +121,7 @@ describe('Login Page', () => {
   describe('Test Account: Admin', () => {
     it('should pre-fill admin email when clicking Use Admin Account button', async () => {
       const user = userEvent.setup();
-      renderWithRouter(<Login />);
+      renderWithRouter();
 
       const adminButton = screen.getByRole('button', { name: /Use Admin Account/i });
       await user.click(adminButton);
@@ -132,7 +132,7 @@ describe('Login Page', () => {
 
     it('should pre-fill admin password when clicking Use Admin Account button', async () => {
       const user = userEvent.setup();
-      renderWithRouter(<Login />);
+      renderWithRouter();
 
       const adminButton = screen.getByRole('button', { name: /Use Admin Account/i });
       await user.click(adminButton);
@@ -143,7 +143,7 @@ describe('Login Page', () => {
 
     it('should have correct admin credentials (email: Myadmin@google.com, password: 123)', async () => {
       const user = userEvent.setup();
-      renderWithRouter(<Login />);
+      renderWithRouter();
 
       const adminButton = screen.getByRole('button', { name: /Use Admin Account/i });
       await user.click(adminButton);
@@ -159,7 +159,7 @@ describe('Login Page', () => {
   describe('Test Account Switching', () => {
     it('should allow switching between test accounts', async () => {
       const user = userEvent.setup();
-      renderWithRouter(<Login />);
+      renderWithRouter();
 
       const ayaButton = screen.getByRole('button', { name: /Use Aya \(Parent\)/i });
       const adminButton = screen.getByRole('button', { name: /Use Admin Account/i });
@@ -182,7 +182,7 @@ describe('Login Page', () => {
   describe('Form Submission & Navigation', () => {
     it('should navigate to /goals when Aya logs in', async () => {
       const user = userEvent.setup();
-      renderWithRouter(<Login />);
+      renderWithRouter();
 
       const ayaButton = screen.getByRole('button', { name: /Use Aya \(Parent\)/i });
       await user.click(ayaButton);
@@ -197,7 +197,7 @@ describe('Login Page', () => {
 
     it('should navigate to /onboarding when admin logs in', async () => {
       const user = userEvent.setup();
-      renderWithRouter(<Login />);
+      renderWithRouter();
 
       const adminButton = screen.getByRole('button', { name: /Use Admin Account/i });
       await user.click(adminButton);
@@ -212,7 +212,7 @@ describe('Login Page', () => {
 
     it('should navigate to /goals when Aya email is entered and form is submitted', async () => {
       const user = userEvent.setup();
-      renderWithRouter(<Login />);
+      renderWithRouter();
 
       const emailInput = screen.getByPlaceholderText(/Email/i);
       const passwordInput = screen.getByPlaceholderText(/Password/i);
@@ -230,7 +230,7 @@ describe('Login Page', () => {
 
     it('should navigate to /onboarding for other email addresses', async () => {
       const user = userEvent.setup();
-      renderWithRouter(<Login />);
+      renderWithRouter();
 
       const emailInput = screen.getByPlaceholderText(/Email/i);
       const passwordInput = screen.getByPlaceholderText(/Password/i);
@@ -248,7 +248,7 @@ describe('Login Page', () => {
 
     it('should be case-insensitive for Aya email comparison', async () => {
       const user = userEvent.setup();
-      renderWithRouter(<Login />);
+      renderWithRouter();
 
       const emailInput = screen.getByPlaceholderText(/Email/i);
       const passwordInput = screen.getByPlaceholderText(/Password/i);
@@ -267,13 +267,13 @@ describe('Login Page', () => {
 
   describe('Accessibility', () => {
     it('should have proper heading hierarchy', () => {
-      renderWithRouter(<Login />);
+      renderWithRouter();
       const heading = screen.getByRole('heading', { level: 1 });
       expect(heading).toBeInTheDocument();
     });
 
     it('should have accessible input fields with proper types', () => {
-      renderWithRouter(<Login />);
+      renderWithRouter();
       
       const emailInput = screen.getByPlaceholderText(/Email/i);
       const passwordInput = screen.getByPlaceholderText(/Password/i);
@@ -283,7 +283,7 @@ describe('Login Page', () => {
     });
 
     it('buttons should not be disabled', async () => {
-      renderWithRouter(<Login />);
+      renderWithRouter();
 
       const ayaButton = screen.getByRole('button', { name: /Use Aya \(Parent\)/i });
       const adminButton = screen.getByRole('button', { name: /Use Admin Account/i });
@@ -297,25 +297,25 @@ describe('Login Page', () => {
 
   describe('Visual & Layout', () => {
     it('should have gradient background', () => {
-      const { container } = renderWithRouter(<Login />);
+      const { container } = renderWithRouter();
       const mainDiv = container.querySelector('[class*="bg-gradient-primary"]');
       expect(mainDiv).toHaveClass('bg-gradient-primary');
     });
 
     it('should have min-height screen', () => {
-      const { container } = renderWithRouter(<Login />);
+      const { container } = renderWithRouter();
       const mainDiv = container.querySelector('[class*="min-h-screen"]');
       expect(mainDiv).toHaveClass('min-h-screen');
     });
 
     it('should have islamic pattern background decoration', () => {
-      const { container } = renderWithRouter(<Login />);
+      const { container } = renderWithRouter();
       const pattern = container.querySelector('.islamic-pattern');
       expect(pattern).toBeInTheDocument();
     });
 
     it('should display BookOpen icon in header', () => {
-      const { container } = renderWithRouter(<Login />);
+      const { container } = renderWithRouter();
       expect(container.querySelector('svg')).toBeInTheDocument();
     });
   });
