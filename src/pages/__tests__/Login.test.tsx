@@ -215,12 +215,17 @@ describe('Login Page', () => {
       renderWithRouter();
 
       const ayaButton = screen.getByRole('button', { name: /Use Aya \(Parent\)/i });
+      const ahmadButton = screen.getByRole('button', { name: /Use Ahmad \(New User\)/i });
       const adminButton = screen.getByRole('button', { name: /Use Admin Account/i });
       const emailInput = screen.getByPlaceholderText(/Email/i) as HTMLInputElement;
 
       // Click Aya
       await user.click(ayaButton);
       expect(emailInput.value).toBe('Aya@testmail.com');
+
+      // Switch to Ahmad
+      await user.click(ahmadButton);
+      expect(emailInput.value).toBe('Ahmad@testmail.com');
 
       // Switch to Admin
       await user.click(adminButton);
