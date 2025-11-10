@@ -33,16 +33,16 @@ const Goals = () => {
     if (profileId) {
       const selectedProfile = profiles.find(p => p.id === profileId);
       if (selectedProfile) {
-        switchProfile(profileId);
-
-        // Find and set the goal index if goalId is provided
+        // Find and set the goal index if goalId is provided, BEFORE switching
         if (goalId && selectedProfile.goals) {
           const goalIndex = selectedProfile.goals.findIndex(goal => goal.id === goalId);
+          // Only set if found, otherwise will default to active goal
           if (goalIndex !== -1) {
             setCurrentGoalIndex(goalIndex);
           }
         }
 
+        switchProfile(profileId);
         setHasAppliedUrlParams(true);
         // Clean up URL parameters so menu switches work properly
         navigate('/goals', { replace: true });
