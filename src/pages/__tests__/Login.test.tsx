@@ -9,7 +9,8 @@ const MockGoalsPage = () => <div data-testid="goals-page">Goals Page</div>;
 const MockOnboardingPage = () => <div data-testid="onboarding-page">Onboarding Page</div>;
 
 const renderWithRouter = (component: React.ReactElement) => {
-  return render(
+  // Create a fresh router instance for each test to avoid history pollution
+  const wrapper = ({ children }: { children: React.ReactNode }) => (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={component} />
@@ -18,6 +19,7 @@ const renderWithRouter = (component: React.ReactElement) => {
       </Routes>
     </BrowserRouter>
   );
+  return render(component, { wrapper });
 };
 
 describe('Login Page', () => {
