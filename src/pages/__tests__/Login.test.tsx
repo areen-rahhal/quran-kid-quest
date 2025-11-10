@@ -8,18 +8,16 @@ import Login from '@/pages/Login';
 const MockGoalsPage = () => <div data-testid="goals-page">Goals Page</div>;
 const MockOnboardingPage = () => <div data-testid="onboarding-page">Onboarding Page</div>;
 
-const renderWithRouter = (component: React.ReactElement) => {
-  // Create a fresh router instance for each test to avoid history pollution
-  const wrapper = ({ children }: { children: React.ReactNode }) => (
+const renderWithRouter = () => {
+  return render(
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={component} />
+        <Route path="/" element={<Login />} />
         <Route path="/goals" element={<MockGoalsPage />} />
         <Route path="/onboarding" element={<MockOnboardingPage />} />
       </Routes>
     </BrowserRouter>
   );
-  return render(component, { wrapper });
 };
 
 describe('Login Page', () => {
