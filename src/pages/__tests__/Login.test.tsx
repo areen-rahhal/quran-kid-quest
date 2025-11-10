@@ -1,13 +1,27 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { MemoryRouter, Routes, Route, BrowserRouter } from 'react-router-dom';
 import Login from '@/pages/Login';
 
 // Mock pages for navigation testing
 const MockGoalsPage = () => <div data-testid="goals-page">Goals Page</div>;
 const MockOnboardingPage = () => <div data-testid="onboarding-page">Onboarding Page</div>;
 
+// For navigation tests, use MemoryRouter which properly isolates between tests
+const renderWithMemoryRouter = () => {
+  return render(
+    <MemoryRouter initialEntries={['/']}>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/goals" element={<MockGoalsPage />} />
+        <Route path="/onboarding" element={<MockOnboardingPage />} />
+      </Routes>
+    </MemoryRouter>
+  );
+};
+
+// For simple rendering tests without navigation expectations
 const renderWithRouter = () => {
   return render(
     <BrowserRouter>
