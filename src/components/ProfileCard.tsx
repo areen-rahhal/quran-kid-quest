@@ -148,7 +148,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
               className="gap-2 border-2 hover:border-primary/50 hover:bg-accent"
               onClick={(e) => {
                 e.stopPropagation();
-                onAddGoal?.(profile.id);
+                setIsGoalsModalOpen(true);
               }}
             >
               <Plus className="h-4 w-4" />
