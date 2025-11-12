@@ -39,7 +39,7 @@ export const UnitCard = ({ name, arabicName, status, onClick, isFirstCompleted }
       )}
       dir={isArabic ? "rtl" : "ltr"}
     >
-      <p className="text-[8px] font-bold text-center leading-tight line-clamp-3">
+      <p className="text-xs font-bold text-center leading-tight line-clamp-3">
         {displayName}
       </p>
 
