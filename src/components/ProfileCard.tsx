@@ -105,7 +105,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
                   <div className="space-y-0.5">
                     {/* Goal Name with Trophy Icon for Completed Goals */}
                     <div className="flex items-center justify-between gap-1">
-                      <span className="text-xs font-semibold text-foreground line-clamp-1">
+                      <span className="text-sm font-semibold text-foreground line-clamp-2">
                         {getTranslatedGoalName(goal.name)}
                       </span>
                       {goal.status === 'completed' && (
