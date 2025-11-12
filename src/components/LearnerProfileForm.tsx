@@ -17,8 +17,27 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Profile } from '@/types/profile';
-import { AVATAR_OPTIONS } from '@/utils/avatars';
+import { AvatarImage } from './AvatarImage';
 import { Trash2, Plus } from 'lucide-react';
+
+interface AvatarOption {
+  id: string;
+  name: string;
+  image: string;
+}
+
+const AVATAR_OPTIONS: AvatarOption[] = [
+  {
+    id: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fcc50a4fcacab42d49c80a89631bc6bec?format=webp&width=800',
+    name: 'Waleed',
+    image: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fcc50a4fcacab42d49c80a89631bc6bec?format=webp&width=800',
+  },
+  {
+    id: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fa3cffb81fbde4015ad8bedfb2e19a16e?format=webp&width=800',
+    name: 'Zain',
+    image: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fa3cffb81fbde4015ad8bedfb2e19a16e?format=webp&width=800',
+  },
+];
 
 interface LearnerProfileFormProps {
   profile: Profile;
