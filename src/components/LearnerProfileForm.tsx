@@ -115,7 +115,7 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
         <label className="text-sm font-semibold text-foreground block">
           {t('learnersProfiles.avatar') || 'Avatar'}
         </label>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 gap-3">
           {AVATAR_OPTIONS.map((avatar) => (
             <button
               key={avatar.id}
@@ -128,9 +128,11 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
                 }
               `}
             >
-              <div className={`text-4xl ${avatar.color} rounded-full w-12 h-12 flex items-center justify-center`}>
-                {avatar.emoji}
-              </div>
+              <img
+                src={avatar.image}
+                alt={avatar.name}
+                className="w-16 h-16 rounded-full object-cover"
+              />
               <span className="text-xs font-medium text-center line-clamp-1">{avatar.name}</span>
             </button>
           ))}
