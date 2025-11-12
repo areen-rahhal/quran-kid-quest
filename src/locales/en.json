@@ -1,0 +1,23 @@
+{
+  "common": {
+    "appName": "Children's Quran",
+    "language": "EN",
+    "switchLanguage": "Switch to Arabic"
+  },
+  "index": {
+    "title": "Children's Quran",
+    "cta": {
+      "createAccount": "Create Account",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "heading": "Let's Learn, Play and Memorize!"
+  },
+  "navigation": {
+    "home": "Home",
+    "login": "Login",
+    "register": "Register",
+    "goals": "Goals",
+    "logout": "Logout"
+  }
+}
