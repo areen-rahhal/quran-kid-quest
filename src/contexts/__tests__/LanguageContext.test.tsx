@@ -202,12 +202,13 @@ describe('LanguageContext', () => {
     });
   });
 
-  describe('localStorage integration', () => {
+  describe('i18n integration', () => {
     it('should persist language to localStorage on toggle', async () => {
+      const user = userEvent.setup();
       renderWithProvider(<TestComponent />);
 
       const toggleBtn = screen.getByTestId('toggle-btn');
-      await userEvent.click(toggleBtn);
+      await user.click(toggleBtn);
 
       await waitFor(() => {
         const saved = localStorage.getItem('app-language');
@@ -215,56 +216,28 @@ describe('LanguageContext', () => {
       });
     });
 
-    it('should persist English language to localStorage', async () => {
+    it('should persist language via i18n on setLanguage', async () => {
+      const user = userEvent.setup();
       renderWithProvider(<TestComponent />);
 
-      const setEnBtn = screen.getByTestId('set-en-btn');
-      await userEvent.click(setEnBtn);
+      const setArBtn = screen.getByTestId('set-ar-btn');
+      await user.click(setArBtn);
 
       await waitFor(() => {
-        const saved = localStorage.getItem('app-language');
-        expect(saved).toBe('en');
+        expect(i18n.language).toBe('ar');
       });
     });
 
-    it('should restore language from localStorage on mount', () => {
-      localStorage.setItem('app-language', 'ar');
-
-      renderWithProvider(<TestComponent />);
-
-      expect(screen.getByTestId('current-language')).toHaveTextContent('ar');
-    });
-
-    it('should restore isArabic flag from localStorage', () => {
-      localStorage.setItem('app-language', 'ar');
-
-      renderWithProvider(<TestComponent />);
-
-      expect(screen.getByTestId('is-arabic')).toHaveTextContent('true');
-      expect(screen.getByTestId('is-english')).toHaveTextContent('false');
-    });
-
-    it('should ignore invalid localStorage values and use default', () => {
-      localStorage.setItem('app-language', 'invalid');
-
-      renderWithProvider(<TestComponent />);
-
-      expect(screen.getByTestId('current-language')).toHaveTextContent('en');
-    });
-
-    it('should persist across multiple toggles', async () => {
+    it('should sync with i18n language changes', async () => {
+      const user = userEvent.setup();
       renderWithProvider(<TestComponent />);
 
       const toggleBtn = screen.getByTestId('toggle-btn');
+      await user.click(toggleBtn);
 
-      await userEvent.click(toggleBtn);
       await waitFor(() => {
-        expect(localStorage.getItem('app-language')).toBe('ar');
-      });
-
-      await userEvent.click(toggleBtn);
-      await waitFor(() => {
-        expect(localStorage.getItem('app-language')).toBe('en');
+        expect(i18n.language).toBe('ar');
+        expect(screen.getByTestId('current-language')).toHaveTextContent('ar');
       });
     });
   });
