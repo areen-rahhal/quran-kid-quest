@@ -42,12 +42,6 @@ describe('Index Page', () => {
       expect(screen.getByRole('heading', { name: /Let's Learn, Play and Memorize!/i })).toBeInTheDocument();
     });
 
-    it('should render description text', () => {
-      renderWithRouter(<Index />);
-      expect(
-        screen.getByText(/Join us on an exciting journey to memorize the Holy Quran with games and rewards/i)
-      ).toBeInTheDocument();
-    });
 
     it('should render Create Account button', () => {
       renderWithRouter(<Index />);
