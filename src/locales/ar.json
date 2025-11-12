@@ -3,7 +3,7 @@
     "appName": "قرآن الأطفال",
     "language": "عربي",
     "switchLanguage": "التبديل إلى الإنجليزية",
-    "email": "البريد الإلكتروني",
+    "email": "البريد الإلكترون��",
     "password": "كلمة المرور",
     "confirmPassword": "تأكيد كلمة المرور",
     "name": "اسمك",
@@ -63,7 +63,7 @@
   },
   "goals": {
     "startJourney": "ابدأ رحلتك",
-    "selectGoal": "اختر هدفك التعليمي الأول",
+    "selectGoal": "اختر هدفك ال��عليمي الأول",
     "chooseGoal": "اختر هدفاً:",
     "chooseGoalLabel": "اختر هدفاً",
     "startLearning": "ابدأ التعلم",
@@ -86,5 +86,13 @@
     "manageProfiles": "إدارة الملفات الشخصية",
     "parent": "الوالد/الوالدة",
     "child": "الطفل"
+  },
+  "learnersProfiles": {
+    "title": "ملفات المتعلمين",
+    "goalsLabel": "الأهداف",
+    "setupFirstGoal": "قم بإعداد الهدف الأول لبدء التعلم",
+    "addFirstGoal": "إضافة الهدف الأول",
+    "addNewLearner": "إضافة متعلم جديد",
+    "createProfile": "إنشاء ملف شخصي لطفل آخر"
   }
 }

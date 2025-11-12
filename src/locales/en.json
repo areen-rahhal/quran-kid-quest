@@ -86,5 +86,13 @@
     "manageProfiles": "Manage Profiles",
     "parent": "Parent",
     "child": "Child"
+  },
+  "learnersProfiles": {
+    "title": "Learners Profiles",
+    "goalsLabel": "Goals",
+    "setupFirstGoal": "Set up the first goal to begin learning",
+    "addFirstGoal": "Add First Goal",
+    "addNewLearner": "Add New Learner",
+    "createProfile": "Create a profile for another child"
   }
 }
