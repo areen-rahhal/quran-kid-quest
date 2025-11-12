@@ -8,7 +8,9 @@
     "confirmPassword": "Confirm Password",
     "name": "Your Name",
     "required": "Required",
-    "backToLogin": "Back to Login"
+    "backToLogin": "Back to Login",
+    "cancel": "Cancel",
+    "delete": "Delete"
   },
   "index": {
     "title": "Children's Quran",
