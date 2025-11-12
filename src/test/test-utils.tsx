@@ -1,9 +1,11 @@
 import React, { ReactElement } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { ProfileProvider } from '@/contexts/ProfileContext';
+import { LanguageProvider } from '@/contexts/LanguageContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import '@/config/i18n';
 
 const createTestQueryClient = () =>
   new QueryClient({
@@ -18,6 +20,7 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   withRouter?: boolean;
   withProfileProvider?: boolean;
   withQueryClient?: boolean;
+  withLanguageProvider?: boolean;
 }
 
 const AllTheProviders = ({
@@ -25,13 +28,19 @@ const AllTheProviders = ({
   withRouter = true,
   withProfileProvider = true,
   withQueryClient = true,
+  withLanguageProvider = true,
 }: {
   children: React.ReactNode;
   withRouter?: boolean;
   withProfileProvider?: boolean;
   withQueryClient?: boolean;
+  withLanguageProvider?: boolean;
 }) => {
   let content = children;
+
+  if (withLanguageProvider) {
+    content = <LanguageProvider>{content}</LanguageProvider>;
+  }
 
   if (withProfileProvider) {
     content = <ProfileProvider>{content}</ProfileProvider>;
@@ -66,6 +75,7 @@ const customRender = (
         withRouter={options?.withRouter !== false}
         withProfileProvider={options?.withProfileProvider !== false}
         withQueryClient={options?.withQueryClient !== false}
+        withLanguageProvider={options?.withLanguageProvider !== false}
       >
         {children}
       </AllTheProviders>
