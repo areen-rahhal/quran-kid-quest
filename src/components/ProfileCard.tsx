@@ -28,6 +28,15 @@ const getInitials = (name: string) => {
 export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: ProfileCardProps) => {
   const { t } = useTranslation();
 
+  // Helper function to get translated goal name
+  const getTranslatedGoalName = (goalName: string): string => {
+    const goalTranslationMap: { [key: string]: string } = {
+      "Juz' 29": t('goals.juz29'),
+      "Juz' 30": t('goals.juz30'),
+    };
+    return goalTranslationMap[goalName] || goalName;
+  };
+
   // Check if profile has active goals
   const hasActiveGoals = profile.currentGoal || profile.goalsCount > 0;
 
@@ -94,7 +103,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
                     {/* Goal Name with Trophy Icon for Completed Goals */}
                     <div className="flex items-center justify-between gap-1">
                       <span className="text-xs font-semibold text-foreground line-clamp-1">
-                        {goal.name}
+                        {getTranslatedGoalName(goal.name)}
                       </span>
                       {goal.status === 'completed' && (
                         <Trophy className="w-3 h-3 text-accent flex-shrink-0" />
