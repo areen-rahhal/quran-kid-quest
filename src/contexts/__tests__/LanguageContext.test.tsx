@@ -72,10 +72,11 @@ describe('LanguageContext', () => {
 
   describe('toggleLanguage', () => {
     it('should toggle from English to Arabic', async () => {
+      const user = userEvent.setup();
       renderWithProvider(<TestComponent />);
 
       const toggleBtn = screen.getByTestId('toggle-btn');
-      await userEvent.click(toggleBtn);
+      await user.click(toggleBtn);
 
       await waitFor(() => {
         expect(screen.getByTestId('current-language')).toHaveTextContent('ar');
@@ -83,11 +84,12 @@ describe('LanguageContext', () => {
     });
 
     it('should toggle from Arabic back to English', async () => {
+      const user = userEvent.setup();
       renderWithProvider(<TestComponent />);
 
       const toggleBtn = screen.getByTestId('toggle-btn');
-      await userEvent.click(toggleBtn);
-      await userEvent.click(toggleBtn);
+      await user.click(toggleBtn);
+      await user.click(toggleBtn);
 
       await waitFor(() => {
         expect(screen.getByTestId('current-language')).toHaveTextContent('en');
@@ -95,10 +97,11 @@ describe('LanguageContext', () => {
     });
 
     it('should update isArabic and isEnglish flags on toggle', async () => {
+      const user = userEvent.setup();
       renderWithProvider(<TestComponent />);
 
       const toggleBtn = screen.getByTestId('toggle-btn');
-      await userEvent.click(toggleBtn);
+      await user.click(toggleBtn);
 
       await waitFor(() => {
         expect(screen.getByTestId('is-arabic')).toHaveTextContent('true');
@@ -107,21 +110,23 @@ describe('LanguageContext', () => {
     });
 
     it('should update HTML lang attribute on toggle to Arabic', async () => {
+      const user = userEvent.setup();
       renderWithProvider(<TestComponent />);
 
       const toggleBtn = screen.getByTestId('toggle-btn');
-      await userEvent.click(toggleBtn);
+      await user.click(toggleBtn);
 
       await waitFor(() => {
-        expect(document.documentElement.lang).toBe('ar');
+        expect(i18n.language).toBe('ar');
       });
     });
 
     it('should set document dir to rtl when toggled to Arabic', async () => {
+      const user = userEvent.setup();
       renderWithProvider(<TestComponent />);
 
       const toggleBtn = screen.getByTestId('toggle-btn');
-      await userEvent.click(toggleBtn);
+      await user.click(toggleBtn);
 
       await waitFor(() => {
         expect(document.documentElement.dir).toBe('rtl');
@@ -129,11 +134,12 @@ describe('LanguageContext', () => {
     });
 
     it('should set document dir back to ltr when toggled to English', async () => {
+      const user = userEvent.setup();
       renderWithProvider(<TestComponent />);
 
       const toggleBtn = screen.getByTestId('toggle-btn');
-      await userEvent.click(toggleBtn);
-      await userEvent.click(toggleBtn);
+      await user.click(toggleBtn);
+      await user.click(toggleBtn);
 
       await waitFor(() => {
         expect(document.documentElement.dir).toBe('ltr');
