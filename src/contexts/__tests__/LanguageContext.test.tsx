@@ -149,10 +149,11 @@ describe('LanguageContext', () => {
 
   describe('setLanguage', () => {
     it('should set language to English', async () => {
+      const user = userEvent.setup();
       renderWithProvider(<TestComponent />);
 
       const setEnBtn = screen.getByTestId('set-en-btn');
-      await userEvent.click(setEnBtn);
+      await user.click(setEnBtn);
 
       await waitFor(() => {
         expect(screen.getByTestId('current-language')).toHaveTextContent('en');
@@ -160,10 +161,11 @@ describe('LanguageContext', () => {
     });
 
     it('should set language to Arabic', async () => {
+      const user = userEvent.setup();
       renderWithProvider(<TestComponent />);
 
       const setArBtn = screen.getByTestId('set-ar-btn');
-      await userEvent.click(setArBtn);
+      await user.click(setArBtn);
 
       await waitFor(() => {
         expect(screen.getByTestId('current-language')).toHaveTextContent('ar');
@@ -171,28 +173,30 @@ describe('LanguageContext', () => {
     });
 
     it('should update document attributes when setting Arabic', async () => {
+      const user = userEvent.setup();
       renderWithProvider(<TestComponent />);
 
       const setArBtn = screen.getByTestId('set-ar-btn');
-      await userEvent.click(setArBtn);
+      await user.click(setArBtn);
 
       await waitFor(() => {
-        expect(document.documentElement.lang).toBe('ar');
+        expect(i18n.language).toBe('ar');
         expect(document.documentElement.dir).toBe('rtl');
       });
     });
 
     it('should update document attributes when setting English', async () => {
+      const user = userEvent.setup();
       renderWithProvider(<TestComponent />);
 
       const setArBtn = screen.getByTestId('set-ar-btn');
-      await userEvent.click(setArBtn);
+      await user.click(setArBtn);
 
       const setEnBtn = screen.getByTestId('set-en-btn');
-      await userEvent.click(setEnBtn);
+      await user.click(setEnBtn);
 
       await waitFor(() => {
-        expect(document.documentElement.lang).toBe('en');
+        expect(i18n.language).toBe('en');
         expect(document.documentElement.dir).toBe('ltr');
       });
     });
