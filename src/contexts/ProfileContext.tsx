@@ -96,14 +96,21 @@ const mockProfiles: Profile[] = [
 ];
 
 export function ProfileProvider({ children }: { children: ReactNode }) {
-  const [profiles, setProfiles] = useState<Profile[]>(mockProfiles);
+  const [profiles, setProfiles] = useState<Profile[]>(() => {
+    const saved = localStorage.getItem('profiles');
+    return saved ? JSON.parse(saved) : mockProfiles;
+  });
   const [currentProfile, setCurrentProfile] = useState<Profile>(() => {
     const saved = localStorage.getItem('currentProfile');
     if (saved) {
       const savedProfile = JSON.parse(saved);
-      return profiles.find(p => p.id === savedProfile.id) || profiles[0];
+      const allProfiles = localStorage.getItem('profiles');
+      const profilesList = allProfiles ? JSON.parse(allProfiles) : mockProfiles;
+      return profilesList.find((p: Profile) => p.id === savedProfile.id) || profilesList[0];
     }
-    return profiles[0];
+    const allProfiles = localStorage.getItem('profiles');
+    const profilesList = allProfiles ? JSON.parse(allProfiles) : mockProfiles;
+    return profilesList[0];
   });
   const [isRegistrationComplete, setIsRegistrationComplete] = useState<boolean>(() => {
     return localStorage.getItem('isRegistrationComplete') === 'true';
