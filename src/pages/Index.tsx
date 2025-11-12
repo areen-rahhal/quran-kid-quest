@@ -50,9 +50,9 @@ const Index = () => {
 
         {/* Content */}
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-foreground mb-4">
+          <p className="text-2xl font-bold text-foreground mb-4">
             {t('index.heading')}
-          </h2>
+          </p>
         </div>
 
         {/* CTA Button */}
