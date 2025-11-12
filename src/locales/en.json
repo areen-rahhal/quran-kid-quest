@@ -2,7 +2,13 @@
   "common": {
     "appName": "Children's Quran",
     "language": "EN",
-    "switchLanguage": "Switch to Arabic"
+    "switchLanguage": "Switch to Arabic",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "name": "Your Name",
+    "required": "Required",
+    "backToLogin": "Back to Login"
   },
   "index": {
     "title": "Children's Quran",
@@ -19,5 +25,57 @@
     "register": "Register",
     "goals": "Goals",
     "logout": "Logout"
+  },
+  "login": {
+    "title": "Welcome Back",
+    "subtitle": "Continue your Quran journey",
+    "signIn": "Sign In",
+    "quickLogin": "Quick Login:",
+    "testAccounts": {
+      "parent": "Use Aya (Parent)",
+      "newUser": "Use Ahmad (New User)",
+      "admin": "Use Admin Account"
+    }
+  },
+  "register": {
+    "title": "Create Account",
+    "subtitle": "Enter your information to get started",
+    "createAccount": "Create Account",
+    "creating": "Creating Account...",
+    "validation": {
+      "nameRequired": "Name is required",
+      "nameMin": "Name must be at least 2 characters",
+      "nameMax": "Name must not exceed 20 characters",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email",
+      "passwordRequired": "Password is required",
+      "passwordMin": "Password must be at least 6 characters",
+      "passwordMismatch": "Passwords do not match"
+    },
+    "success": "Registration successful!",
+    "successDesc": "Proceeding to email verification...",
+    "error": "Registration failed",
+    "errorDesc": "Please try again"
+  },
+  "home": {
+    "title": "Quran Quest",
+    "subtitle": "Welcome to your learning journey"
+  },
+  "goals": {
+    "startJourney": "Start Your Journey",
+    "selectGoal": "Select your first learning goal",
+    "chooseGoal": "Choose a goal:",
+    "chooseGoalLabel": "Choose a goal",
+    "startLearning": "Start Learning",
+    "beginJourney": "Begin your journey of Quranic learning and earn rewards as you progress",
+    "surahCount": "Surahs",
+    "ayatCount": "Ayat",
+    "previousGoal": "Previous goal",
+    "nextGoal": "Next goal",
+    "juz30": "Juz' 30",
+    "juz29": "Juz' 29",
+    "surahBakarah": "Surah Al Bakarah",
+    "opening": "Opening {{name}}",
+    "learningDesc": "Let's learn {{arabicName}}!"
   }
 }
