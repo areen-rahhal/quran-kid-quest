@@ -21,6 +21,7 @@ const Goals = () => {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const { currentProfile, profiles, switchProfile } = useProfile();
+  const { allGoals, getGoal } = useGoals();
   const [selectedGoal, setSelectedGoal] = useState("");
   const [currentGoalIndex, setCurrentGoalIndex] = useState(0);
   const [hasAppliedUrlParams, setHasAppliedUrlParams] = useState(false);
