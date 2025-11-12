@@ -51,9 +51,6 @@ const Index = () => {
           <h2 className="text-2xl font-bold text-foreground mb-4">
             Let's Learn, Play and Memorize!
           </h2>
-          <p className="text-base text-muted-foreground px-4 leading-relaxed">
-            Join us on an exciting journey to memorize the Holy Quran with games and rewards
-          </p>
         </div>
 
         {/* CTA Button */}
