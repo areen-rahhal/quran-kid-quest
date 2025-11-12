@@ -1,4 +1,5 @@
 import { Check } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import {
   Sheet,
   SheetContent,
@@ -17,6 +18,7 @@ interface ProfileSwitcherProps {
 }
 
 export const ProfileSwitcher = ({ open, onOpenChange }: ProfileSwitcherProps) => {
+  const { t } = useTranslation();
   const { currentProfile, profiles, switchProfile } = useProfile();
 
   const getInitials = (name: string) => {
@@ -37,9 +39,9 @@ export const ProfileSwitcher = ({ open, onOpenChange }: ProfileSwitcherProps) =>
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="bottom" className="max-h-[85vh]">
         <SheetHeader>
-          <SheetTitle>Switch Profile</SheetTitle>
+          <SheetTitle>{t('profileSwitcher.title')}</SheetTitle>
           <SheetDescription>
-            Select a profile to continue your learning journey
+            {t('profileSwitcher.description')}
           </SheetDescription>
         </SheetHeader>
 
@@ -77,9 +79,9 @@ export const ProfileSwitcher = ({ open, onOpenChange }: ProfileSwitcherProps) =>
                     </Badge>
                   </div>
                   <p className="text-sm text-muted-foreground mt-1">
-                    {profile.currentGoal 
-                      ? `${profile.currentGoal} • ${profile.goalsCount} goal${profile.goalsCount !== 1 ? 's' : ''}`
-                      : 'No active goals'}
+                    {profile.currentGoal
+                      ? `${profile.currentGoal} • ${profile.goalsCount} ${profile.goalsCount !== 1 ? 'goals' : 'goal'}`
+                      : t('profileSwitcher.noActiveGoals')}
                   </p>
                 </div>
 
@@ -100,7 +102,7 @@ export const ProfileSwitcher = ({ open, onOpenChange }: ProfileSwitcherProps) =>
             }}
             className="w-full flex items-center justify-center gap-2 p-4 rounded-xl border-2 border-border hover:border-primary/50 hover:bg-accent transition-all"
           >
-            <span className="font-semibold text-foreground">Manage Profiles</span>
+            <span className="font-semibold text-foreground">{t('profileSwitcher.manageProfiles')}</span>
           </button>
         </div>
       </SheetContent>
