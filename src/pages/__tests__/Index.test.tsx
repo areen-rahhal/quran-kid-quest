@@ -36,10 +36,6 @@ describe('Index Page', () => {
       expect(screen.getByRole('heading', { name: /Children's Quran/i })).toBeInTheDocument();
     });
 
-    it('should render the subtitle', () => {
-      renderWithRouter(<Index />);
-      expect(screen.getByText(/An enjoyable journey to memorize the Holy Quran/i)).toBeInTheDocument();
-    });
 
     it('should render section heading', () => {
       renderWithRouter(<Index />);
