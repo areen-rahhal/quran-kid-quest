@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Lottie from "lottie-react";
 import { TopNavBar } from "@/components/TopNavBar";
 import { GoalHeader } from "@/components/GoalHeader";
@@ -16,6 +17,7 @@ import pencilMascot from "@/assets/pencil-mascot.json";
 const Goals = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const { currentProfile, profiles, switchProfile } = useProfile();
   const [selectedGoal, setSelectedGoal] = useState("");
@@ -89,7 +91,7 @@ const Goals = () => {
     { id: 83, name: "Al-Mutaffifin", arabicName: "المطففين", status: "completed" },
     { id: 84, name: "Al-Inshiqaq", arabicName: "الإنشقاق", status: "completed" },
     { id: 85, name: "Al-Buruj", arabicName: "البروج", status: "completed" },
-    { id: 86, name: "At-Tariq", arabicName: "الطارق", status: "completed" },
+    { id: 86, name: "At-Tariq", arabicName: "ا��طارق", status: "completed" },
     { id: 87, name: "Al-A'la", arabicName: "الأعلى", status: "completed" },
     { id: 88, name: "Al-Ghashiyah", arabicName: "الغاشية", status: "completed" },
     { id: 89, name: "Al-Fajr", arabicName: "الفجر", status: "completed" },
@@ -143,8 +145,8 @@ const Goals = () => {
 
   const handleUnitClick = (unit: Unit) => {
     toast({
-      title: `Opening ${unit.name}`,
-      description: `Let's learn ${unit.arabicName}!`,
+      title: t('goals.opening', { name: unit.name }),
+      description: t('goals.learningDesc', { arabicName: unit.arabicName }),
     });
   };
 
@@ -253,28 +255,28 @@ const Goals = () => {
                   <Target className="w-10 h-10 text-primary-foreground" />
                 </div>
                 <div>
-                  <CardTitle className="text-2xl">Start Your Journey</CardTitle>
+                  <CardTitle className="text-2xl">{t('goals.startJourney')}</CardTitle>
                   <CardDescription className="text-base mt-2">
-                    Select your first learning goal
+                    {t('goals.selectGoal')}
                   </CardDescription>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground text-center">
-                  Begin your journey of Quranic learning and earn rewards as you progress
+                  {t('goals.beginJourney')}
                 </p>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground">
-                    Choose a goal:
+                    {t('goals.chooseGoal')}
                   </label>
                   <Select value={selectedGoal} onValueChange={setSelectedGoal}>
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Choose a goal" />
+                      <SelectValue placeholder={t('goals.chooseGoalLabel')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="juz-30">Juz' 30</SelectItem>
-                      <SelectItem value="juz-29">Juz' 29</SelectItem>
-                      <SelectItem value="surah-bakarah">Surah Al Bakarah</SelectItem>
+                      <SelectItem value="juz-30">{t('goals.juz30')}</SelectItem>
+                      <SelectItem value="juz-29">{t('goals.juz29')}</SelectItem>
+                      <SelectItem value="surah-bakarah">{t('goals.surahBakarah')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -283,7 +285,7 @@ const Goals = () => {
                   disabled={!selectedGoal}
                   className="w-full px-4 py-2 bg-secondary text-secondary-foreground font-semibold rounded-md hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 >
-                  Start Learning
+                  {t('goals.startLearning')}
                 </button>
               </CardContent>
             </Card>
@@ -348,7 +350,7 @@ const Goals = () => {
                   size="icon"
                   onClick={handlePrevGoal}
                   className="h-14 w-14 rounded-full border-2 border-foreground/50 hover:border-primary hover:bg-primary/10 transition-all"
-                  aria-label="Previous goal"
+                  aria-label={t('goals.previousGoal')}
                 >
                   <ChevronLeft className="h-7 w-7" />
                 </Button>
@@ -357,7 +359,7 @@ const Goals = () => {
                   size="icon"
                   onClick={handleNextGoal}
                   className="h-14 w-14 rounded-full border-2 border-foreground/50 hover:border-primary hover:bg-primary/10 transition-all"
-                  aria-label="Next goal"
+                  aria-label={t('goals.nextGoal')}
                 >
                   <ChevronRight className="h-7 w-7" />
                 </Button>
