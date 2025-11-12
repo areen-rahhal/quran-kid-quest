@@ -1,7 +1,7 @@
 export type GoalType = 'juz' | 'surah' | 'surah-group';
 export type UnitType = 'surah' | 'surah-section' | 'juz-section';
 
-export interface Unit {
+export interface BaseUnit {
   id: number;
   name: string;
   arabicName: string;
