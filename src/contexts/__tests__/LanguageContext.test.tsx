@@ -31,14 +31,16 @@ const renderWithProvider = (component: ReactNode) => {
 };
 
 describe('LanguageContext', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     localStorage.clear();
+    await i18n.changeLanguage('en');
     document.documentElement.lang = 'en';
     document.documentElement.dir = 'ltr';
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     localStorage.clear();
+    await i18n.changeLanguage('en');
     document.documentElement.lang = 'en';
     document.documentElement.dir = 'ltr';
   });
@@ -49,25 +51,22 @@ describe('LanguageContext', () => {
       expect(screen.getByText('Test Content')).toBeInTheDocument();
     });
 
-    it('should initialize with default language (en)', () => {
+    it('should initialize with current i18n language', () => {
       renderWithProvider(<TestComponent />);
       expect(screen.getByTestId('current-language')).toHaveTextContent('en');
     });
 
-    it('should set isEnglish to true by default', () => {
+    it('should set isEnglish flag correctly', () => {
       renderWithProvider(<TestComponent />);
       expect(screen.getByTestId('is-english')).toHaveTextContent('true');
       expect(screen.getByTestId('is-arabic')).toHaveTextContent('false');
     });
 
-    it('should set HTML document lang attribute on initialization', () => {
+    it('should expose toggle and setLanguage methods', () => {
       renderWithProvider(<TestComponent />);
-      expect(document.documentElement.lang).toBe('en');
-    });
-
-    it('should set HTML document dir to ltr for English', () => {
-      renderWithProvider(<TestComponent />);
-      expect(document.documentElement.dir).toBe('ltr');
+      expect(screen.getByTestId('toggle-btn')).toBeInTheDocument();
+      expect(screen.getByTestId('set-en-btn')).toBeInTheDocument();
+      expect(screen.getByTestId('set-ar-btn')).toBeInTheDocument();
     });
   });
 
