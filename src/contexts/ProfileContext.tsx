@@ -154,6 +154,9 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   };
 
   const addGoal = (profileId: string, goalId: string, goalName: string) => {
+    const goalConfig = getGoalById(goalId);
+    const totalSurahs = goalConfig?.metadata.surahCount || 0;
+
     const updatedProfiles = profiles.map(profile => {
       if (profile.id === profileId) {
         const newGoal = {
@@ -161,7 +164,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
           name: goalName,
           status: 'in-progress' as const,
           completedSurahs: 0,
-          totalSurahs: 0,
+          totalSurahs: totalSurahs,
         };
 
         const updatedGoals = [...(profile.goals || []), newGoal];
