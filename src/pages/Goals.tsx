@@ -228,7 +228,18 @@ const Goals = () => {
                   </Select>
                 </div>
                 <button
-                  onClick={() => selectedGoal && navigate("/goals")}
+                  onClick={() => {
+                    if (selectedGoal) {
+                      const goal = getGoal(selectedGoal);
+                      if (goal) {
+                        addGoal(currentProfile.id, selectedGoal, goal.nameEnglish);
+                        toast({
+                          title: t('goals.goalAdded'),
+                          description: `${goal.nameEnglish} has been added to your learning plan`,
+                        });
+                      }
+                    }
+                  }}
                   disabled={!selectedGoal}
                   className="w-full px-4 py-2 bg-secondary text-secondary-foreground font-semibold rounded-md hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 >
