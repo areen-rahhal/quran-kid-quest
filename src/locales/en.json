@@ -108,6 +108,7 @@
     "saveChanges": "Save Changes",
     "deleteGoal": "Delete Goal?",
     "deleteGoalConfirm": "This action cannot be undone. All progress on this goal will be lost.",
-    "createProfile": "Create a profile for another child"
+    "createProfile": "Create a profile for another child",
+    "editProfile": "Edit Profile"
   }
 }
