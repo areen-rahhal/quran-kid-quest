@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { Card } from "@/components/ui/card";
+import { useTranslation } from "react-i18next";
 import { useProfile } from "@/contexts/ProfileContext";
+import { LearnerProfileForm } from "@/components/LearnerProfileForm";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
