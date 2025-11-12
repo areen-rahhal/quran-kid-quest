@@ -52,9 +52,9 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
             <span className="text-muted-foreground">·</span>
             <Badge
               variant="outline"
-              className="text-xs capitalize font-medium border-muted-foreground/30 text-muted-foreground"
+              className="text-xs font-medium border-muted-foreground/30 text-muted-foreground"
             >
-              {profile.type}
+              {t(`profileSwitcher.${profile.type}`)}
             </Badge>
           </div>
         </div>
