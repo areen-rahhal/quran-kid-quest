@@ -156,12 +156,11 @@ describe('Index Page', () => {
   });
 
   describe('Accessibility', () => {
-    it('should have proper heading hierarchy', () => {
+    it('should have proper heading structure', () => {
       renderWithRouter(<Index />);
       const h1 = screen.getByRole('heading', { level: 1 });
-      const h2 = screen.getByRole('heading', { level: 2 });
       expect(h1).toBeInTheDocument();
-      expect(h2).toBeInTheDocument();
+      // Section heading is now a p tag, not h2
     });
 
     it('buttons should be accessible', async () => {
