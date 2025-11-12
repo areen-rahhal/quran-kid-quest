@@ -22,7 +22,11 @@ afterEach(() => {
 });
 
 const renderWithRouter = (component: React.ReactElement) => {
-  return render(<BrowserRouter>{component}</BrowserRouter>);
+  return render(
+    <LanguageProvider>
+      <BrowserRouter>{component}</BrowserRouter>
+    </LanguageProvider>
+  );
 };
 
 describe('Index Page', () => {
