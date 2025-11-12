@@ -34,7 +34,7 @@
     "testAccounts": {
       "parent": "استخدم أيا (الوالدة)",
       "newUser": "استخدم أحمد (مستخدم جديد)",
-      "admin": "است��دم حساب المسؤول"
+      "admin": "استخدم حساب المسؤول"
     }
   },
   "register": {
@@ -72,8 +72,8 @@
     "ayatCount": "الآيات",
     "previousGoal": "الهدف السابق",
     "nextGoal": "الهدف التالي",
-    "juz30": "الجزء 30",
-    "juz29": "الجزء 29",
+    "juz30": "جزء عم",
+    "juz29": "جزء تبارك",
     "surahBakarah": "سورة البقرة",
     "opening": "جاري فتح {{name}}",
     "learningDesc": "دعنا نتعلم {{arabicName}}!"
