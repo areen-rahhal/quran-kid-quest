@@ -121,32 +121,29 @@ const Goals = () => {
       return null;
     }
 
-    const goal = goals[currentGoalIndex % goals.length];
-    const completedCount = goal.completedSurahs || 0;
-    const totalCount = goal.totalSurahs || 0;
+    const goalProgress = goals[currentGoalIndex % goals.length];
+    const configGoal = getGoal(goalProgress.id);
 
-    switch (goal.name) {
-      case "Juz' 29":
-        return {
-          name: t('goals.juz29'),
-          surahCount: 11,
-          ayatCount: 447,
-          units: generateUnitsWithProgress(juz29Surahs, completedCount, totalCount),
-          totalUnits: 11,
-          goalId: goal.id
-        };
-      case "Juz' 30":
-        return {
-          name: t('goals.juz30'),
-          surahCount: 37,
-          ayatCount: 564,
-          units: generateUnitsWithProgress(juz30Surahs, completedCount, totalCount),
-          totalUnits: 37,
-          goalId: goal.id
-        };
-      default:
-        return null;
+    if (!configGoal) {
+      return null;
     }
+
+    const completedCount = goalProgress.completedSurahs || 0;
+    const totalCount = goalProgress.totalSurahs || 0;
+    const unitsWithProgress = generateUnitsWithProgress(
+      configGoal.units as Unit[],
+      completedCount,
+      totalCount
+    );
+
+    return {
+      name: configGoal.nameEnglish,
+      surahCount: configGoal.metadata.surahCount,
+      ayatCount: configGoal.metadata.versesCount,
+      units: unitsWithProgress,
+      totalUnits: configGoal.units.length,
+      goalId: goalProgress.id
+    };
   };
 
   const goalData = getGoalData();
