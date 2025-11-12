@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
+import { LanguageProvider } from '@/contexts/LanguageContext';
 import Index from '@/pages/Index';
 
 vi.mock('@/assets/boy-reading-quran.json', () => ({
@@ -11,6 +12,14 @@ vi.mock('@/assets/boy-reading-quran.json', () => ({
 vi.mock('lottie-react', () => ({
   default: ({ animationData }: any) => <div data-testid="lottie-animation" />,
 }));
+
+beforeEach(() => {
+  localStorage.clear();
+});
+
+afterEach(() => {
+  localStorage.clear();
+});
 
 const renderWithRouter = (component: React.ReactElement) => {
   return render(<BrowserRouter>{component}</BrowserRouter>);
