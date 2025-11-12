@@ -8,6 +8,7 @@ import { VerticalProgressBar } from "@/components/VerticalProgressBar";
 import { UnitsGrid, Unit } from "@/components/UnitsGrid";
 import { useToast } from "@/hooks/use-toast";
 import { useProfile } from "@/contexts/ProfileContext";
+import { useGoals } from "@/hooks/useGoals";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Target, ChevronLeft, ChevronRight } from "lucide-react";
