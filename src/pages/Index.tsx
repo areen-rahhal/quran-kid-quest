@@ -1,13 +1,29 @@
 import { useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
-import { Star } from "lucide-react";
+import { Star, Globe } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/contexts/LanguageContext";
 import boyReadingQuran from "@/assets/boy-reading-quran.json";
 
 const Index = () => {
   const navigate = useNavigate();
+  const { language, toggleLanguage } = useLanguage();
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-gradient-soft islamic-pattern flex flex-col items-center justify-between p-6 relative overflow-hidden">
+      {/* Language Toggle - Top Right */}
+      <div className="absolute top-6 right-6 z-50">
+        <button
+          onClick={toggleLanguage}
+          className="flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all active:scale-95"
+          aria-label={t('common.switchLanguage')}
+        >
+          <Globe className="w-5 h-5" />
+          <span className="text-sm font-bold">{t('common.language')}</span>
+        </button>
+      </div>
+
       {/* Decorative Elements */}
       <div className="absolute top-12 left-8">
         <Star className="w-8 h-8 text-yellow-400 fill-yellow-400 opacity-60" />
@@ -23,11 +39,8 @@ const Index = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-5xl font-bold text-emerald-600 mb-3" style={{ fontFamily: 'Arial, sans-serif' }}>
-            Children's Quran
+            {t('index.title')}
           </h1>
-          <p className="text-lg text-muted-foreground">
-            An enjoyable journey to memorize the Holy Quran
-          </p>
         </div>
 
         {/* Illustration */}
@@ -37,11 +50,8 @@ const Index = () => {
 
         {/* Content */}
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-foreground mb-4">
-            Let's Learn, Play and Memorize!
-          </h2>
-          <p className="text-base text-muted-foreground px-4 leading-relaxed">
-            Join us on an exciting journey to memorize the Holy Quran with games and rewards
+          <p className="text-2xl font-bold text-foreground mb-4">
+            {t('index.heading')}
           </p>
         </div>
 
@@ -51,14 +61,15 @@ const Index = () => {
             onClick={() => navigate("/register")}
             className="flex items-center justify-center gap-2 px-12 py-4 bg-emerald-500 text-white font-bold text-lg rounded-full hover:bg-emerald-600 transition-all shadow-lg hover:shadow-xl active:scale-95"
           >
-            <Star className="w-6 h-6 fill-white" />
-            Create Account
+            {t('index.cta.createAccount')}
           </button>
           <button
             onClick={() => navigate("/login")}
             className="px-12 py-3 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors underline underline-offset-2"
           >
-            Already have an account? Sign in
+            {t('index.cta.haveAccount')}
+            <br />
+            {t('index.cta.signIn')}
           </button>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 
 const Register = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { registerParent } = useProfile();
   const { toast } = useToast();
 
@@ -32,27 +34,27 @@ const Register = () => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.parentName.trim()) {
-      newErrors.parentName = 'Name is required';
+      newErrors.parentName = t('register.validation.nameRequired');
     } else if (formData.parentName.trim().length < 2) {
-      newErrors.parentName = 'Name must be at least 2 characters';
+      newErrors.parentName = t('register.validation.nameMin');
     } else if (formData.parentName.trim().length > 20) {
-      newErrors.parentName = 'Name must not exceed 20 characters';
+      newErrors.parentName = t('register.validation.nameMax');
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = t('register.validation.emailRequired');
     } else if (!validateEmail(formData.email)) {
-      newErrors.email = 'Please enter a valid email';
+      newErrors.email = t('register.validation.emailInvalid');
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = t('register.validation.passwordRequired');
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+      newErrors.password = t('register.validation.passwordMin');
     }
 
     if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+      newErrors.confirmPassword = t('register.validation.passwordMismatch');
     }
 
     setErrors(newErrors);
@@ -77,16 +79,16 @@ const Register = () => {
       });
 
       toast({
-        title: 'Registration successful!',
-        description: 'Proceeding to email verification...',
+        title: t('register.success'),
+        description: t('register.successDesc'),
       });
 
       // Navigate to email verification
       navigate('/verify-email');
     } catch (error) {
       toast({
-        title: 'Registration failed',
-        description: 'Please try again',
+        title: t('register.error'),
+        description: t('register.errorDesc'),
         variant: 'destructive',
       });
     } finally {
@@ -115,10 +117,10 @@ const Register = () => {
             <BookOpen className="w-12 h-12 text-primary-foreground" />
           </div>
           <h1 className="text-3xl font-bold text-primary-foreground mb-2">
-            Create Account
+            {t('register.title')}
           </h1>
           <p className="text-primary-foreground/90 text-base">
-            Enter your information to get started
+            {t('register.subtitle')}
           </p>
         </div>
 
@@ -129,7 +131,7 @@ const Register = () => {
               id="parentName"
               name="parentName"
               type="text"
-              placeholder="Your Name"
+              placeholder={t('common.name')}
               value={formData.parentName}
               onChange={handleInputChange}
               className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground"
@@ -140,7 +142,7 @@ const Register = () => {
               id="email"
               name="email"
               type="email"
-              placeholder="Email"
+              placeholder={t('common.email')}
               value={formData.email}
               onChange={handleInputChange}
               className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground"
@@ -151,7 +153,7 @@ const Register = () => {
               id="password"
               name="password"
               type="password"
-              placeholder="Password"
+              placeholder={t('common.password')}
               value={formData.password}
               onChange={handleInputChange}
               className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground"
@@ -162,7 +164,7 @@ const Register = () => {
               id="confirmPassword"
               name="confirmPassword"
               type="password"
-              placeholder="Confirm Password"
+              placeholder={t('common.confirmPassword')}
               value={formData.confirmPassword}
               onChange={handleInputChange}
               className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground"
@@ -178,7 +180,7 @@ const Register = () => {
             className="w-full h-14 text-base font-semibold bg-white text-primary hover:bg-white/90 shadow-strong mt-6"
             size="lg"
           >
-            {isLoading ? 'Creating Account...' : 'Create Account'}
+            {isLoading ? t('register.creating') : t('register.createAccount')}
           </Button>
         </form>
       </div>
@@ -190,7 +192,7 @@ const Register = () => {
           onClick={() => navigate('/')}
           className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors"
         >
-          Back to Login
+          {t('common.backToLogin')}
         </button>
       </div>
     </div>

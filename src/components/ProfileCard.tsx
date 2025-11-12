@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,17 @@ const getInitials = (name: string) => {
 
 
 export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: ProfileCardProps) => {
+  const { t } = useTranslation();
+
+  // Helper function to get translated goal name
+  const getTranslatedGoalName = (goalName: string): string => {
+    const goalTranslationMap: { [key: string]: string } = {
+      "Juz' 29": t('goals.juz29'),
+      "Juz' 30": t('goals.juz30'),
+    };
+    return goalTranslationMap[goalName] || goalName;
+  };
+
   // Check if profile has active goals
   const hasActiveGoals = profile.currentGoal || profile.goalsCount > 0;
 
@@ -49,9 +61,9 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
             <span className="text-muted-foreground">·</span>
             <Badge
               variant="outline"
-              className="text-xs capitalize font-medium border-muted-foreground/30 text-muted-foreground"
+              className="text-xs font-medium border-muted-foreground/30 text-muted-foreground"
             >
-              {profile.type}
+              {t(`profileSwitcher.${profile.type}`)}
             </Badge>
           </div>
         </div>
@@ -74,7 +86,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
         {profile.goals && profile.goals.length > 0 ? (
           <>
             {/* Goal Label */}
-            <label className="text-sm font-semibold text-foreground block">Goals</label>
+            <label className="text-sm font-semibold text-foreground block">{t('learnersProfiles.goalsLabel')}</label>
 
             {/* Goals List with Add Button */}
             <div className="grid grid-cols-3 gap-2">
@@ -91,7 +103,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
                     {/* Goal Name with Trophy Icon for Completed Goals */}
                     <div className="flex items-center justify-between gap-1">
                       <span className="text-xs font-semibold text-foreground line-clamp-1">
-                        {goal.name}
+                        {getTranslatedGoalName(goal.name)}
                       </span>
                       {goal.status === 'completed' && (
                         <Trophy className="w-3 h-3 text-accent flex-shrink-0" />
@@ -126,7 +138,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
           // Empty state - compact for parent without goals
           <div className={`text-center ${profile.type === 'parent' ? 'py-3' : 'py-6'}`}>
             {profile.type === 'parent' && (
-              <p className="text-xs text-muted-foreground mb-2">Set up the first goal to begin learning</p>
+              <p className="text-xs text-muted-foreground mb-2">{t('learnersProfiles.setupFirstGoal')}</p>
             )}
             <Button
               variant="outline"
@@ -137,7 +149,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
               }}
             >
               <Plus className="h-4 w-4" />
-              Add First Goal
+              {t('learnersProfiles.addFirstGoal')}
             </Button>
           </div>
         )}

@@ -1,0 +1,98 @@
+{
+  "common": {
+    "appName": "قرآن الأطفال",
+    "language": "عربي",
+    "switchLanguage": "التبديل إلى الإنجليزية",
+    "email": "البريد الإلكترون��",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "name": "اسمك",
+    "required": "مطلوب",
+    "backToLogin": "العودة إلى تسجيل الدخول"
+  },
+  "index": {
+    "title": "قرآن الأطفال",
+    "cta": {
+      "createAccount": "إنشاء حساب",
+      "haveAccount": "هل لديك حساب بالفعل؟",
+      "signIn": "تسجيل الدخول"
+    },
+    "heading": "دعنا نتعلم ونلعب ونحفظ!"
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "login": "تسجيل الدخول",
+    "register": "التسجيل",
+    "goals": "الأهداف",
+    "logout": "تسجيل الخروج"
+  },
+  "login": {
+    "title": "أهلا بعودتك",
+    "subtitle": "تابع رحلتك في دراسة القرآن الكريم",
+    "signIn": "تسجيل الدخول",
+    "quickLogin": "تسجيل سريع:",
+    "testAccounts": {
+      "parent": "استخدم أيا (الوالدة)",
+      "newUser": "استخدم أحمد (مستخدم جديد)",
+      "admin": "استخدم حساب المسؤول"
+    }
+  },
+  "register": {
+    "title": "إنشاء حساب",
+    "subtitle": "أدخل بيانتك للبدء",
+    "createAccount": "إنشاء حساب",
+    "creating": "جاري إنشاء الحساب...",
+    "validation": {
+      "nameRequired": "الاسم مطلوب",
+      "nameMin": "يجب أن يكون الاسم 2 أحرف على الأقل",
+      "nameMax": "لا يجب أن يتجاوز الاسم 20 حرفاً",
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح",
+      "passwordRequired": "كلمة المرور مطلوبة",
+      "passwordMin": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+      "passwordMismatch": "كلمات المرور غير متطابقة"
+    },
+    "success": "تم التسجيل بنجاح!",
+    "successDesc": "جاري الانتقال إلى التحقق من البريد الإلكتروني...",
+    "error": "فشل التسجيل",
+    "errorDesc": "يرجى المحاولة مرة أخرى"
+  },
+  "home": {
+    "title": "مغامرة القرآن",
+    "subtitle": "أهلا بك في رحلتك التعليمية"
+  },
+  "goals": {
+    "startJourney": "ابدأ رحلتك",
+    "selectGoal": "اختر هدفك ال��عليمي الأول",
+    "chooseGoal": "اختر هدفاً:",
+    "chooseGoalLabel": "اختر هدفاً",
+    "startLearning": "ابدأ التعلم",
+    "beginJourney": "ابدأ رحلتك في تعلم القرآن الكريم واكسب المكافآت أثناء تقدمك",
+    "surahCount": "السور",
+    "ayatCount": "الآيات",
+    "previousGoal": "الهدف السابق",
+    "nextGoal": "الهدف التالي",
+    "juz30": "جزء عم",
+    "juz29": "جزء تبارك",
+    "surahBakarah": "سورة البقرة",
+    "opening": "جاري فتح {{name}}",
+    "learningDesc": "دعنا نتعلم {{arabicName}}!"
+  },
+  "profileSwitcher": {
+    "title": "تبديل الملف الشخصي",
+    "description": "اختر ملفاً شخصياً لمتابعة رحلتك التعليمية",
+    "noActiveGoals": "لا توجد أهداف نشطة",
+    "goalsSummary": "{{goal}} • {{count}} هدف",
+    "manageProfiles": "إدارة الملفات الشخصية",
+    "parent": "الوالد/الوالدة",
+    "child": "الطفل"
+  },
+  "learnersProfiles": {
+    "title": "ملفات المتعلمين",
+    "goalsLabel": "الأهداف",
+    "setupFirstGoal": "قم بإعداد الهدف الأول لبدء التعلم",
+    "addFirstGoal": "إضافة الهدف الأول",
+    "addNewLearner": "إضافة متعلم جديد",
+    "createProfile": "إنشاء ملف شخصي لطفل آخر"
+  }
+}

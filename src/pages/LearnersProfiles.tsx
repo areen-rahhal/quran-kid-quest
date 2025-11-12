@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Card } from "@/components/ui/card";
 import { useProfile } from "@/contexts/ProfileContext";
 import { ChevronLeft, UserPlus, RefreshCw } from "lucide-react";
@@ -8,6 +9,7 @@ import { useState } from "react";
 
 const LearnersProfiles = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { profiles } = useProfile();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -59,7 +61,7 @@ const LearnersProfiles = () => {
               >
                 <ChevronLeft className="h-5 w-5" />
               </Button>
-              <h1 className="text-2xl font-bold text-foreground">Learners Profiles</h1>
+              <h1 className="text-2xl font-bold text-foreground">{t('learnersProfiles.title')}</h1>
             </div>
             <Button
               variant="ghost"
@@ -96,8 +98,8 @@ const LearnersProfiles = () => {
               <UserPlus className="h-6 w-6 text-primary-foreground" />
             </div>
             <div className="text-center">
-              <p className="text-lg font-bold text-foreground">Add New Learner</p>
-              <p className="text-sm text-muted-foreground">Create a profile for another child</p>
+              <p className="text-lg font-bold text-foreground">{t('learnersProfiles.addNewLearner')}</p>
+              <p className="text-sm text-muted-foreground">{t('learnersProfiles.createProfile')}</p>
             </div>
           </div>
         </Card>
