@@ -102,7 +102,7 @@ const Goals = () => {
   const hasGoals = currentProfile.goalsCount && currentProfile.goalsCount > 0;
 
   // Generate unit statuses based on learner's progress
-  const generateUnitsWithProgress = (units: Unit[], completedCount: number, totalCount: number) => {
+  const generateUnitsWithProgress = (units: BaseUnit[], completedCount: number, totalCount: number): Unit[] => {
     return units.map((unit, index) => {
       if (index < completedCount) {
         return { ...unit, status: "completed" as const };
