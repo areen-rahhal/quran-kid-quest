@@ -1,0 +1,23 @@
+{
+  "common": {
+    "appName": "قرآن الأطفال",
+    "language": "عربي",
+    "switchLanguage": "التبديل إلى الإنجليزية"
+  },
+  "index": {
+    "title": "قرآن الأطفال",
+    "cta": {
+      "createAccount": "إنشاء حساب",
+      "haveAccount": "هل لديك حساب بالفعل؟",
+      "signIn": "تسجيل الدخول"
+    },
+    "heading": "دعنا نتعلم ونلعب ونحفظ!"
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "login": "تسجيل الدخول",
+    "register": "التسجيل",
+    "goals": "الأهداف",
+    "logout": "تسجيل الخروج"
+  }
+}
