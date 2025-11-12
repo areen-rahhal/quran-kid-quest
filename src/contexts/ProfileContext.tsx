@@ -254,6 +254,8 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         switchProfile,
         registerParent,
         addGoal,
+        updateProfile,
+        deleteGoal,
         isRegistrationComplete,
         parentProfile,
       }}
