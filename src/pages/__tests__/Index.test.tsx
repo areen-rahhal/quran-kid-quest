@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import Index from '@/pages/Index';
+import i18n from '@/config/i18n';
 
 vi.mock('@/assets/boy-reading-quran.json', () => ({
   default: {},
@@ -13,12 +14,14 @@ vi.mock('lottie-react', () => ({
   default: ({ animationData }: any) => <div data-testid="lottie-animation" />,
 }));
 
-beforeEach(() => {
+beforeEach(async () => {
   localStorage.clear();
+  await i18n.changeLanguage('en');
 });
 
-afterEach(() => {
+afterEach(async () => {
   localStorage.clear();
+  await i18n.changeLanguage('en');
 });
 
 const renderWithRouter = (component: React.ReactElement) => {
