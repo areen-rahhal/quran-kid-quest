@@ -39,9 +39,6 @@ const Index = () => {
           <h1 className="text-5xl font-bold text-emerald-600 mb-3" style={{ fontFamily: 'Arial, sans-serif' }}>
             Children's Quran
           </h1>
-          <p className="text-lg text-muted-foreground">
-            An enjoyable journey to memorize the Holy Quran
-          </p>
         </div>
 
         {/* Illustration */}
