@@ -61,7 +61,6 @@ const Index = () => {
             onClick={() => navigate("/register")}
             className="flex items-center justify-center gap-2 px-12 py-4 bg-emerald-500 text-white font-bold text-lg rounded-full hover:bg-emerald-600 transition-all shadow-lg hover:shadow-xl active:scale-95"
           >
-            <Star className="w-6 h-6 fill-white" />
             {t('index.cta.createAccount')}
           </button>
           <button
