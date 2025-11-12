@@ -13,6 +13,7 @@ interface ProfileContextType {
   profiles: Profile[];
   switchProfile: (profileId: string) => void;
   registerParent: (data: RegistrationData) => Profile;
+  addGoal: (profileId: string, goalId: string, goalName: string) => void;
   isRegistrationComplete: boolean;
   parentProfile: Profile | null;
 }
