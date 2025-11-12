@@ -22,7 +22,7 @@ export interface Goal {
   nameArabic: string;
   type: GoalType;
   metadata: GoalMetadata;
-  units: Unit[];
+  units: BaseUnit[];
   description?: string;
 }
 
