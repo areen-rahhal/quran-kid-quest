@@ -17,7 +17,6 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Profile } from '@/types/profile';
-import { AvatarImage } from './AvatarImage';
 import { Trash2, Plus } from 'lucide-react';
 
 interface AvatarOption {
