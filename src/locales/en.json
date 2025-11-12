@@ -94,6 +94,9 @@
     "setupFirstGoal": "Set up the first goal to begin learning",
     "addFirstGoal": "Add First Goal",
     "addNewLearner": "Add New Learner",
+    "selectGoal": "Select a Goal",
+    "alreadyAdded": "Already Added",
+    "addedSuccessfully": "added to your learning plan",
     "createProfile": "Create a profile for another child"
   }
 }
