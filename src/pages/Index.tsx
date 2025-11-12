@@ -1,12 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
 import { Star, Globe } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/contexts/LanguageContext";
 import boyReadingQuran from "@/assets/boy-reading-quran.json";
 
 const Index = () => {
   const navigate = useNavigate();
   const { language, toggleLanguage } = useLanguage();
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-gradient-soft islamic-pattern flex flex-col items-center justify-between p-6 relative overflow-hidden">
