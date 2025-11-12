@@ -77,7 +77,7 @@ const mockProfiles: Profile[] = [
     streak: 7,
     goals: [
       {
-        id: 'goal-3',
+        id: 'juz-30',
         name: "Juz' 30",
         status: 'in-progress',
         completedSurahs: 3,
