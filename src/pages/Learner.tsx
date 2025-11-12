@@ -4,6 +4,7 @@ import { useProfile } from "@/contexts/ProfileContext";
 import { LearnerProfileForm } from "@/components/LearnerProfileForm";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { AlertDialog } from "@/components/ui/alert-dialog";
 
 const Learner = () => {
   const navigate = useNavigate();
