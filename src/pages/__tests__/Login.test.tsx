@@ -92,6 +92,11 @@ describe('Login Page', () => {
       const user = userEvent.setup();
       renderWithRouter();
 
+      await waitFor(() => {
+        const emailInput = screen.getByPlaceholderText(/Email/i) as HTMLInputElement;
+        expect(emailInput).toBeInTheDocument();
+      });
+
       const emailInput = screen.getByPlaceholderText(/Email/i) as HTMLInputElement;
       await user.type(emailInput, 'test@example.com');
 
@@ -101,6 +106,11 @@ describe('Login Page', () => {
     it('should update password input when user types', async () => {
       const user = userEvent.setup();
       renderWithRouter();
+
+      await waitFor(() => {
+        const passwordInput = screen.getByPlaceholderText(/Password/i) as HTMLInputElement;
+        expect(passwordInput).toBeInTheDocument();
+      });
 
       const passwordInput = screen.getByPlaceholderText(/Password/i) as HTMLInputElement;
       await user.type(passwordInput, 'password123');
@@ -114,6 +124,10 @@ describe('Login Page', () => {
       const user = userEvent.setup();
       renderWithRouter();
 
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Use Aya \(Parent\)/i })).toBeInTheDocument();
+      });
+
       const ayaButton = screen.getByRole('button', { name: /Use Aya \(Parent\)/i });
       await user.click(ayaButton);
 
@@ -125,6 +139,10 @@ describe('Login Page', () => {
       const user = userEvent.setup();
       renderWithRouter();
 
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Use Aya \(Parent\)/i })).toBeInTheDocument();
+      });
+
       const ayaButton = screen.getByRole('button', { name: /Use Aya \(Parent\)/i });
       await user.click(ayaButton);
 
@@ -135,6 +153,10 @@ describe('Login Page', () => {
     it('should have correct Aya credentials (email: Aya@testmail.com, password: 123456)', async () => {
       const user = userEvent.setup();
       renderWithRouter();
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Use Aya \(Parent\)/i })).toBeInTheDocument();
+      });
 
       const ayaButton = screen.getByRole('button', { name: /Use Aya \(Parent\)/i });
       await user.click(ayaButton);
@@ -152,6 +174,10 @@ describe('Login Page', () => {
       const user = userEvent.setup();
       renderWithRouter();
 
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Use Ahmad \(New User\)/i })).toBeInTheDocument();
+      });
+
       const ahmadButton = screen.getByRole('button', { name: /Use Ahmad \(New User\)/i });
       await user.click(ahmadButton);
 
@@ -163,6 +189,10 @@ describe('Login Page', () => {
       const user = userEvent.setup();
       renderWithRouter();
 
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Use Ahmad \(New User\)/i })).toBeInTheDocument();
+      });
+
       const ahmadButton = screen.getByRole('button', { name: /Use Ahmad \(New User\)/i });
       await user.click(ahmadButton);
 
@@ -173,6 +203,10 @@ describe('Login Page', () => {
     it('should have correct Ahmad credentials (email: Ahmad@testmail.com, password: TestPass)', async () => {
       const user = userEvent.setup();
       renderWithRouter();
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Use Ahmad \(New User\)/i })).toBeInTheDocument();
+      });
 
       const ahmadButton = screen.getByRole('button', { name: /Use Ahmad \(New User\)/i });
       await user.click(ahmadButton);
@@ -190,6 +224,10 @@ describe('Login Page', () => {
       const user = userEvent.setup();
       renderWithRouter();
 
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Use Admin Account/i })).toBeInTheDocument();
+      });
+
       const adminButton = screen.getByRole('button', { name: /Use Admin Account/i });
       await user.click(adminButton);
 
@@ -201,6 +239,10 @@ describe('Login Page', () => {
       const user = userEvent.setup();
       renderWithRouter();
 
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Use Admin Account/i })).toBeInTheDocument();
+      });
+
       const adminButton = screen.getByRole('button', { name: /Use Admin Account/i });
       await user.click(adminButton);
 
@@ -211,6 +253,10 @@ describe('Login Page', () => {
     it('should have correct admin credentials (email: Myadmin@google.com, password: 123)', async () => {
       const user = userEvent.setup();
       renderWithRouter();
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Use Admin Account/i })).toBeInTheDocument();
+      });
 
       const adminButton = screen.getByRole('button', { name: /Use Admin Account/i });
       await user.click(adminButton);
@@ -227,6 +273,10 @@ describe('Login Page', () => {
     it('should allow switching between test accounts', async () => {
       const user = userEvent.setup();
       renderWithRouter();
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Use Aya \(Parent\)/i })).toBeInTheDocument();
+      });
 
       const ayaButton = screen.getByRole('button', { name: /Use Aya \(Parent\)/i });
       const ahmadButton = screen.getByRole('button', { name: /Use Ahmad \(New User\)/i });
@@ -371,24 +421,32 @@ describe('Login Page', () => {
   });
 
   describe('Accessibility', () => {
-    it('should have proper heading hierarchy', () => {
+    it('should have proper heading hierarchy', async () => {
       renderWithRouter();
-      const heading = screen.getByRole('heading', { level: 1 });
-      expect(heading).toBeInTheDocument();
+      await waitFor(() => {
+        const heading = screen.getByRole('heading', { level: 1 });
+        expect(heading).toBeInTheDocument();
+      });
     });
 
-    it('should have accessible input fields with proper types', () => {
+    it('should have accessible input fields with proper types', async () => {
       renderWithRouter();
-      
-      const emailInput = screen.getByPlaceholderText(/Email/i);
-      const passwordInput = screen.getByPlaceholderText(/Password/i);
 
-      expect(emailInput).toHaveAttribute('type', 'email');
-      expect(passwordInput).toHaveAttribute('type', 'password');
+      await waitFor(() => {
+        const emailInput = screen.getByPlaceholderText(/Email/i);
+        const passwordInput = screen.getByPlaceholderText(/Password/i);
+
+        expect(emailInput).toHaveAttribute('type', 'email');
+        expect(passwordInput).toHaveAttribute('type', 'password');
+      });
     });
 
     it('buttons should not be disabled', async () => {
       renderWithRouter();
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Use Aya \(Parent\)/i })).toBeInTheDocument();
+      });
 
       const ayaButton = screen.getByRole('button', { name: /Use Aya \(Parent\)/i });
       const ahmadButton = screen.getByRole('button', { name: /Use Ahmad \(New User\)/i });
@@ -403,27 +461,35 @@ describe('Login Page', () => {
   });
 
   describe('Visual & Layout', () => {
-    it('should have gradient background', () => {
+    it('should have gradient background', async () => {
       const { container } = renderWithRouter();
-      const mainDiv = container.querySelector('[class*="bg-gradient-primary"]');
-      expect(mainDiv).toHaveClass('bg-gradient-primary');
+      await waitFor(() => {
+        const mainDiv = container.querySelector('[class*="bg-gradient-primary"]');
+        expect(mainDiv).toHaveClass('bg-gradient-primary');
+      });
     });
 
-    it('should have min-height screen', () => {
+    it('should have min-height screen', async () => {
       const { container } = renderWithRouter();
-      const mainDiv = container.querySelector('[class*="min-h-screen"]');
-      expect(mainDiv).toHaveClass('min-h-screen');
+      await waitFor(() => {
+        const mainDiv = container.querySelector('[class*="min-h-screen"]');
+        expect(mainDiv).toHaveClass('min-h-screen');
+      });
     });
 
-    it('should have islamic pattern background decoration', () => {
+    it('should have islamic pattern background decoration', async () => {
       const { container } = renderWithRouter();
-      const pattern = container.querySelector('.islamic-pattern');
-      expect(pattern).toBeInTheDocument();
+      await waitFor(() => {
+        const pattern = container.querySelector('.islamic-pattern');
+        expect(pattern).toBeInTheDocument();
+      });
     });
 
-    it('should display BookOpen icon in header', () => {
+    it('should display BookOpen icon in header', async () => {
       const { container } = renderWithRouter();
-      expect(container.querySelector('svg')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(container.querySelector('svg')).toBeInTheDocument();
+      });
     });
   });
 });
