@@ -38,7 +38,9 @@ const Learner = () => {
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
-            <h1 className="text-2xl font-bold text-foreground">{profile.name}</h1>
+            <h1 className="text-2xl font-bold text-foreground">
+              {t('learnersProfiles.editProfile') || `Edit ${profile.name}`}
+            </h1>
           </div>
         </div>
       </div>
