@@ -8,7 +8,9 @@
     "confirmPassword": "تأكيد كلمة المرور",
     "name": "اسمك",
     "required": "مطلوب",
-    "backToLogin": "العودة إلى تسجيل الدخول"
+    "backToLogin": "العودة إلى تسجيل الدخول",
+    "cancel": "إلغاء",
+    "delete": "حذف"
   },
   "index": {
     "title": "قرآن الأطفال",
@@ -39,7 +41,7 @@
   },
   "register": {
     "title": "إنشاء حساب",
-    "subtitle": "أدخل بيانتك للبدء",
+    "subtitle": "أدخل بي��نتك للبدء",
     "createAccount": "إنشاء حساب",
     "creating": "جاري إنشاء الحساب...",
     "validation": {
@@ -63,7 +65,7 @@
   },
   "goals": {
     "startJourney": "ابدأ رحلتك",
-    "selectGoal": "اختر هدفك ال��عليمي الأول",
+    "selectGoal": "اختر هدفك ال��عليمي ال��ول",
     "chooseGoal": "اختر هدفاً:",
     "chooseGoalLabel": "اختر هدفاً",
     "startLearning": "ابدأ التعلم",
