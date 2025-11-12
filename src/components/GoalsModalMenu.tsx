@@ -15,7 +15,6 @@ export const GoalsModalMenu = ({ profile, isOpen, onClose }: GoalsModalMenuProps
   const { t, i18n } = useTranslation();
   const { allGoals } = useGoals();
   const { addGoal } = useProfile();
-  const { toast } = useToast();
   const isArabic = i18n.language === 'ar';
 
   // Get IDs of goals already added to this profile
@@ -23,12 +22,6 @@ export const GoalsModalMenu = ({ profile, isOpen, onClose }: GoalsModalMenuProps
 
   const handleGoalSelect = (goalId: string, goalName: string) => {
     addGoal(profile.id, goalId, goalName);
-    
-    toast({
-      title: t('goals.goalAdded'),
-      description: `${goalName} ${t('learnersProfiles.addedSuccessfully')}`,
-    });
-
     onClose();
   };
 
