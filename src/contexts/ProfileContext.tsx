@@ -201,6 +201,51 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     setProfiles(updatedProfiles);
   };
 
+  const updateProfile = (profileId: string, updates: Partial<Profile>) => {
+    const updatedProfiles = profiles.map(profile => {
+      if (profile.id === profileId) {
+        const updatedProfile: Profile = {
+          ...profile,
+          ...updates,
+        };
+
+        // Update currentProfile if it's the one being modified
+        if (currentProfile.id === profileId) {
+          setCurrentProfile(updatedProfile);
+        }
+
+        return updatedProfile;
+      }
+      return profile;
+    });
+
+    setProfiles(updatedProfiles);
+  };
+
+  const deleteGoal = (profileId: string, goalId: string) => {
+    const updatedProfiles = profiles.map(profile => {
+      if (profile.id === profileId) {
+        const updatedGoals = (profile.goals || []).filter(goal => goal.id !== goalId);
+        const updatedProfile: Profile = {
+          ...profile,
+          goals: updatedGoals,
+          goalsCount: updatedGoals.length,
+          currentGoal: updatedGoals.length > 0 ? updatedGoals[0].name : undefined,
+        };
+
+        // Update currentProfile if it's the one being modified
+        if (currentProfile.id === profileId) {
+          setCurrentProfile(updatedProfile);
+        }
+
+        return updatedProfile;
+      }
+      return profile;
+    });
+
+    setProfiles(updatedProfiles);
+  };
+
   return (
     <ProfileContext.Provider
       value={{
