@@ -155,12 +155,91 @@ describe('Index Page', () => {
     it('buttons should be accessible via keyboard', async () => {
       const user = userEvent.setup();
       renderWithRouter(<Index />);
-      
+
       const createAccountBtn = screen.getByRole('button', { name: /Create Account/i });
       expect(createAccountBtn).not.toBeDisabled();
-      
+
       await user.tab();
       expect(createAccountBtn).toHaveFocus();
+    });
+  });
+
+  describe('Language Toggle', () => {
+    it('should display language toggle button at top-right', () => {
+      renderWithRouter(<Index />);
+      const toggleBtn = screen.getByRole('button', { name: /switch to arabic/i });
+      expect(toggleBtn).toBeInTheDocument();
+    });
+
+    it('should show "عربي" text when language is English', () => {
+      renderWithRouter(<Index />);
+      const toggleBtn = screen.getByRole('button', { name: /switch to arabic/i });
+      expect(toggleBtn).toHaveTextContent('عربي');
+    });
+
+    it('should toggle language from English to Arabic on click', async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<Index />);
+
+      const toggleBtn = screen.getByRole('button', { name: /switch to arabic/i });
+      await user.click(toggleBtn);
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /switch to english/i })).toBeInTheDocument();
+      });
+    });
+
+    it('should show "EN" text when language is Arabic', async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<Index />);
+
+      const toggleBtn = screen.getByRole('button', { name: /switch to arabic/i });
+      await user.click(toggleBtn);
+
+      await waitFor(() => {
+        const arToggleBtn = screen.getByRole('button', { name: /switch to english/i });
+        expect(arToggleBtn).toHaveTextContent('EN');
+      });
+    });
+
+    it('should persist language preference to localStorage on toggle', async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<Index />);
+
+      const toggleBtn = screen.getByRole('button', { name: /switch to arabic/i });
+      await user.click(toggleBtn);
+
+      await waitFor(() => {
+        expect(localStorage.getItem('app-language')).toBe('ar');
+      });
+    });
+
+    it('should have globe icon in language toggle button', () => {
+      const { container } = renderWithRouter(<Index />);
+      const toggleBtn = screen.getByRole('button', { name: /switch to/i });
+      const svg = toggleBtn.querySelector('svg');
+      expect(svg).toBeInTheDocument();
+    });
+
+    it('should have accessible aria-label on language toggle', () => {
+      renderWithRouter(<Index />);
+      const toggleBtn = screen.getByRole('button', { name: /switch to arabic/i });
+      expect(toggleBtn).toHaveAttribute('aria-label', 'Switch to Arabic');
+    });
+
+    it('should update aria-label after toggling language', async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<Index />);
+
+      let toggleBtn = screen.getByRole('button', { name: /switch to arabic/i });
+      expect(toggleBtn).toHaveAttribute('aria-label', 'Switch to Arabic');
+
+      await user.click(toggleBtn);
+
+      await waitFor(() => {
+        toggleBtn = screen.getByRole('button', { name: /switch to english/i });
+        expect(toggleBtn).toHaveAttribute('aria-label', 'Switch to English');
+      });
     });
   });
 });
