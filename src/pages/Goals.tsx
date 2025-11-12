@@ -181,7 +181,7 @@ const Goals = () => {
     switch (goal.name) {
       case "Juz' 29":
         return {
-          name: "Juz' 29",
+          name: t('goals.juz29'),
           surahCount: 11,
           ayatCount: 447,
           units: generateUnitsWithProgress(juz29Surahs, completedCount, totalCount),
@@ -190,7 +190,7 @@ const Goals = () => {
         };
       case "Juz' 30":
         return {
-          name: "Juz' 30",
+          name: t('goals.juz30'),
           surahCount: 37,
           ayatCount: 564,
           units: generateUnitsWithProgress(juz30Surahs, completedCount, totalCount),
