@@ -34,14 +34,14 @@
     "signIn": "تسجيل الدخول",
     "quickLogin": "تسجيل سريع:",
     "testAccounts": {
-      "parent": "استخدم أيا (الوالدة)",
+      "parent": "استخدم أيا (الوالد��)",
       "newUser": "استخدم أحمد (مستخدم جديد)",
       "admin": "استخدم حساب المسؤول"
     }
   },
   "register": {
     "title": "إنشاء حساب",
-    "subtitle": "أدخل بي��نتك للبدء",
+    "subtitle": "أدخل بيانتك للبدء",
     "createAccount": "إنشاء حساب",
     "creating": "جاري إنشاء الحساب...",
     "validation": {
@@ -65,7 +65,7 @@
   },
   "goals": {
     "startJourney": "ابدأ رحلتك",
-    "selectGoal": "اختر هدفك ال��عليمي ال��ول",
+    "selectGoal": "اختر هدفك ال��عليمي الأول",
     "chooseGoal": "اختر هدفاً:",
     "chooseGoalLabel": "اختر هدفاً",
     "startLearning": "ابدأ التعلم",
@@ -108,6 +108,7 @@
     "saveChanges": "حفظ التغييرات",
     "deleteGoal": "حذف الهدف؟",
     "deleteGoalConfirm": "لا يمكن التراجع عن هذا الإجراء. سيتم فقدان جميع التقدم في هذا الهدف.",
-    "createProfile": "إنشاء ملف شخصي لطفل آخر"
+    "createProfile": "إنشاء ملف شخصي لطفل آخر",
+    "editProfile": "تحرير الملف الشخ��ي"
   }
 }
