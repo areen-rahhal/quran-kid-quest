@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,8 @@ const getInitials = (name: string) => {
 
 
 export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: ProfileCardProps) => {
+  const { t } = useTranslation();
+
   // Check if profile has active goals
   const hasActiveGoals = profile.currentGoal || profile.goalsCount > 0;
 
@@ -74,7 +77,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
         {profile.goals && profile.goals.length > 0 ? (
           <>
             {/* Goal Label */}
-            <label className="text-sm font-semibold text-foreground block">Goals</label>
+            <label className="text-sm font-semibold text-foreground block">{t('learnersProfiles.goalsLabel')}</label>
 
             {/* Goals List with Add Button */}
             <div className="grid grid-cols-3 gap-2">
@@ -126,7 +129,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
           // Empty state - compact for parent without goals
           <div className={`text-center ${profile.type === 'parent' ? 'py-3' : 'py-6'}`}>
             {profile.type === 'parent' && (
-              <p className="text-xs text-muted-foreground mb-2">Set up the first goal to begin learning</p>
+              <p className="text-xs text-muted-foreground mb-2">{t('learnersProfiles.setupFirstGoal')}</p>
             )}
             <Button
               variant="outline"
@@ -137,7 +140,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
               }}
             >
               <Plus className="h-4 w-4" />
-              Add First Goal
+              {t('learnersProfiles.addFirstGoal')}
             </Button>
           </div>
         )}
