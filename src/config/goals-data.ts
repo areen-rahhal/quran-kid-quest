@@ -3,7 +3,7 @@ import { Goal } from '@/types/goals';
 export const GOALS_DATABASE: Goal[] = [
   {
     id: 'juz-30',
-    nameEnglish: "Juz' 30 (Amma)",
+    nameEnglish: "Juz' 30",
     nameArabic: "جزء عم",
     type: 'juz',
     metadata: {
@@ -12,7 +12,7 @@ export const GOALS_DATABASE: Goal[] = [
       quartersCount: 8,
       surahCount: 37,
       defaultUnit: 'surah',
-      difficulty: 'short',
+      difficulty: 'Easy',
     },
     units: [
       { id: 78, name: "An-Naba", arabicName: "النبأ" },
@@ -57,7 +57,7 @@ export const GOALS_DATABASE: Goal[] = [
   },
   {
     id: 'juz-29',
-    nameEnglish: "Juz' 29 (Tabaarak)",
+    nameEnglish: "Juz' 29",
     nameArabic: "جزء تبارك",
     type: 'juz',
     metadata: {
