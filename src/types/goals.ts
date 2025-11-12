@@ -1,5 +1,5 @@
-export type GoalType = 'juz' | 'surah' | 'surah-group';
-export type UnitType = 'surah' | 'surah-section' | 'juz-section';
+export type GoalType = 'juz' | 'surah-xlong' | 'surah-long' | 'surah-medium' | 'surah-small' | 'surah-xsmall' | 'group';
+export type UnitType = 'surah' | 'quarter' | 'page';
 
 export interface BaseUnit {
   id: number;
