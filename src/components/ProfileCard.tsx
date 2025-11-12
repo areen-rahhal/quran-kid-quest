@@ -29,6 +29,7 @@ const getInitials = (name: string) => {
 
 export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: ProfileCardProps) => {
   const { t } = useTranslation();
+  const [isGoalsModalOpen, setIsGoalsModalOpen] = useState(false);
 
   // Helper function to get translated goal name
   const getTranslatedGoalName = (goalName: string): string => {
