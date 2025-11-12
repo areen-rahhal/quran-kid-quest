@@ -25,8 +25,7 @@ const LearnersProfiles = () => {
   };
 
   const handleAddGoal = (profileId: string) => {
-    // TODO: Navigate to add goal page
-    console.log('Add goal for profile:', profileId);
+    navigate(`/goals?profileId=${profileId}`);
   };
 
   const handleGoalClick = (profileId: string, goalId: string) => {
