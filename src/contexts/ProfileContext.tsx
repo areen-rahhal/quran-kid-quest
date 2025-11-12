@@ -46,14 +46,14 @@ const mockProfiles: Profile[] = [
     streak: 12,
     goals: [
       {
-        id: 'goal-1',
+        id: 'juz-29',
         name: "Juz' 29",
         status: 'in-progress',
         completedSurahs: 4,
         totalSurahs: 11,
       },
       {
-        id: 'goal-2',
+        id: 'juz-30',
         name: "Juz' 30",
         status: 'completed',
         completedSurahs: 37,
