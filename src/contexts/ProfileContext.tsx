@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Profile } from '@/types/profile';
+import { getGoalById } from '@/config/goals-data';
 
 interface RegistrationData {
   email: string;
