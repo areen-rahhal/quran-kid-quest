@@ -10,6 +10,18 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-soft islamic-pattern flex flex-col items-center justify-between p-6 relative overflow-hidden">
+      {/* Language Toggle - Top Right */}
+      <div className="absolute top-6 right-6 z-20">
+        <button
+          onClick={toggleLanguage}
+          className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-white/20 transition-colors text-white font-semibold"
+          aria-label={`Switch to ${language === 'en' ? 'Arabic' : 'English'}`}
+        >
+          <Globe className="w-5 h-5" />
+          <span className="text-sm">{language === 'en' ? 'عربي' : 'EN'}</span>
+        </button>
+      </div>
+
       {/* Decorative Elements */}
       <div className="absolute top-12 left-8">
         <Star className="w-8 h-8 text-yellow-400 fill-yellow-400 opacity-60" />
