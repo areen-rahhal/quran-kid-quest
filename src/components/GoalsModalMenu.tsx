@@ -56,7 +56,10 @@ export const GoalsModalMenu = ({ profile, isOpen, onClose }: GoalsModalMenuProps
               return (
                 <button
                   key={goal.id}
-                  onClick={() => !isAdded && handleGoalSelect(goal.id, goal.nameEnglish)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!isAdded) handleGoalSelect(goal.id, goal.nameEnglish);
+                  }}
                   disabled={isAdded}
                   className={`w-full p-4 rounded-lg border-2 transition-all text-left
                     ${
