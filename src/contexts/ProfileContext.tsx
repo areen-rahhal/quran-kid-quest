@@ -152,6 +152,38 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     return newParentProfile;
   };
 
+  const addGoal = (profileId: string, goalId: string, goalName: string) => {
+    const updatedProfiles = profiles.map(profile => {
+      if (profile.id === profileId) {
+        const newGoal = {
+          id: goalId,
+          name: goalName,
+          status: 'in-progress' as const,
+          completedSurahs: 0,
+          totalSurahs: 0,
+        };
+
+        const updatedGoals = [...(profile.goals || []), newGoal];
+        const updatedProfile: Profile = {
+          ...profile,
+          goals: updatedGoals,
+          goalsCount: updatedGoals.length,
+          currentGoal: goalName,
+        };
+
+        // Update currentProfile if it's the one being modified
+        if (currentProfile.id === profileId) {
+          setCurrentProfile(updatedProfile);
+        }
+
+        return updatedProfile;
+      }
+      return profile;
+    });
+
+    setProfiles(updatedProfiles);
+  };
+
   return (
     <ProfileContext.Provider
       value={{
