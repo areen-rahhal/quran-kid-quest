@@ -218,9 +218,11 @@ const Goals = () => {
                       <SelectValue placeholder={t('goals.chooseGoalLabel')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="juz-30">{t('goals.juz30')}</SelectItem>
-                      <SelectItem value="juz-29">{t('goals.juz29')}</SelectItem>
-                      <SelectItem value="surah-bakarah">{t('goals.surahBakarah')}</SelectItem>
+                      {allGoals.map((goal) => (
+                        <SelectItem key={goal.id} value={goal.id}>
+                          {goal.nameEnglish}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
