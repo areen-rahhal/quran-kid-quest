@@ -17,10 +17,10 @@ const Index = () => {
         <button
           onClick={toggleLanguage}
           className="flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all active:scale-95"
-          aria-label={`Switch to ${language === 'en' ? 'Arabic' : 'English'}`}
+          aria-label={t('common.switchLanguage')}
         >
           <Globe className="w-5 h-5" />
-          <span className="text-sm font-bold">{language === 'en' ? 'عربي' : 'EN'}</span>
+          <span className="text-sm font-bold">{t('common.language')}</span>
         </button>
       </div>
 
