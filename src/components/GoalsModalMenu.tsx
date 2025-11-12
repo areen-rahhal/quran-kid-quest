@@ -28,9 +28,15 @@ export const GoalsModalMenu = ({ profile, isOpen, onClose }: GoalsModalMenuProps
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm animate-in fade-in">
+    <div
+      className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm animate-in fade-in"
+      onClick={onClose}
+    >
       {/* Modal Container */}
-      <div className="fixed inset-0 z-50 flex flex-col bg-white">
+      <div
+        className="fixed inset-0 z-50 flex flex-col bg-white"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="sticky top-0 bg-white border-b border-border p-4 flex items-center justify-between">
           <h2 className="text-xl font-bold text-foreground">
@@ -39,7 +45,10 @@ export const GoalsModalMenu = ({ profile, isOpen, onClose }: GoalsModalMenuProps
           <Button
             variant="ghost"
             size="icon"
-            onClick={onClose}
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }}
             className="hover:bg-accent"
           >
             <X className="w-5 h-5" />
