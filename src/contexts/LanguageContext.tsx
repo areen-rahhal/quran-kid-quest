@@ -1,6 +1,6 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-
-export type Language = 'en' | 'ar';
+import { createContext, useContext, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { Language } from '@/config/i18n';
 
 interface LanguageContextType {
   language: Language;
@@ -12,35 +12,19 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-const LANGUAGE_STORAGE_KEY = 'app-language';
-const DEFAULT_LANGUAGE: Language = 'en';
-
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>(() => {
-    // Try to get from localStorage first
-    const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-    if (saved === 'en' || saved === 'ar') {
-      return saved;
-    }
-    return DEFAULT_LANGUAGE;
-  });
-
-  // Persist to localStorage whenever language changes
-  useEffect(() => {
-    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
-    // Update HTML document lang attribute for accessibility
-    document.documentElement.lang = language;
-    // Update document dir for RTL support when Arabic is selected
-    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
-  }, [language]);
+  const { i18n } = useTranslation();
 
   const toggleLanguage = () => {
-    setLanguageState(prev => (prev === 'en' ? 'ar' : 'en'));
+    const newLang = i18n.language === 'en' ? 'ar' : 'en';
+    i18n.changeLanguage(newLang);
   };
 
   const setLanguage = (lang: Language) => {
-    setLanguageState(lang);
+    i18n.changeLanguage(lang);
   };
+
+  const language = (i18n.language === 'ar' ? 'ar' : 'en') as Language;
 
   const value: LanguageContextType = {
     language,
