@@ -39,7 +39,7 @@ const Index = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-5xl font-bold text-emerald-600 mb-3" style={{ fontFamily: 'Arial, sans-serif' }}>
-            Children's Quran
+            {t('index.title')}
           </h1>
         </div>
 
