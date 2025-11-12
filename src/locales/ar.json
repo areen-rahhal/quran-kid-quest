@@ -94,6 +94,9 @@
     "setupFirstGoal": "قم بإعداد الهدف الأول لبدء التعلم",
     "addFirstGoal": "إضافة الهدف الأول",
     "addNewLearner": "إضافة متعلم جديد",
+    "selectGoal": "اختر هدفاً",
+    "alreadyAdded": "تمت إضافته بالفعل",
+    "addedSuccessfully": "تمت إضافته إلى خطة التعلم الخاصة بك",
     "createProfile": "إنشاء ملف شخصي لطفل آخر"
   }
 }
