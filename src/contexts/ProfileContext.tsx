@@ -15,6 +15,8 @@ interface ProfileContextType {
   switchProfile: (profileId: string) => void;
   registerParent: (data: RegistrationData) => Profile;
   addGoal: (profileId: string, goalId: string, goalName: string) => void;
+  updateProfile: (profileId: string, updates: Partial<Profile>) => void;
+  deleteGoal: (profileId: string, goalId: string) => void;
   isRegistrationComplete: boolean;
   parentProfile: Profile | null;
 }
