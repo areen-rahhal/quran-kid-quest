@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 
 const Learner = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { profiles } = useProfile();
 
