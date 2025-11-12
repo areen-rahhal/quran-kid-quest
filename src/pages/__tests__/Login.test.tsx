@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+import { render, screen, waitFor } from '@/test/test-utils';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter, Routes, Route, BrowserRouter } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { LanguageProvider } from '@/contexts/LanguageContext';
 import Login from '@/pages/Login';
 
 // Mock pages for navigation testing
@@ -12,64 +13,77 @@ const MockOnboardingPage = () => <div data-testid="onboarding-page">Onboarding P
 const renderWithMemoryRouter = () => {
   return render(
     <MemoryRouter initialEntries={['/']}>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/goals" element={<MockGoalsPage />} />
-        <Route path="/onboarding" element={<MockOnboardingPage />} />
-      </Routes>
-    </MemoryRouter>
+      <LanguageProvider>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/goals" element={<MockGoalsPage />} />
+          <Route path="/onboarding" element={<MockOnboardingPage />} />
+        </Routes>
+      </LanguageProvider>
+    </MemoryRouter>,
+    { withRouter: false }
   );
 };
 
 // For simple rendering tests without navigation expectations
 const renderWithRouter = () => {
   return render(
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/goals" element={<MockGoalsPage />} />
-        <Route path="/onboarding" element={<MockOnboardingPage />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/goals" element={<MockGoalsPage />} />
+      <Route path="/onboarding" element={<MockOnboardingPage />} />
+    </Routes>
   );
 };
 
 describe('Login Page', () => {
   describe('Rendering', () => {
-    it('should render the welcome heading', () => {
+    it('should render the welcome heading', async () => {
       renderWithRouter();
-      expect(screen.getByRole('heading', { name: /Welcome Back/i })).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByRole('heading', { name: /Welcome Back/i })).toBeInTheDocument();
+      });
     });
 
-    it('should render the subtitle', () => {
+    it('should render the subtitle', async () => {
       renderWithRouter();
-      expect(screen.getByText(/Continue your Quran journey/i)).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText(/Continue your Quran journey/i)).toBeInTheDocument();
+      });
     });
 
-    it('should render email input field', () => {
+    it('should render email input field', async () => {
       renderWithRouter();
-      const emailInput = screen.getByPlaceholderText(/Email/i);
-      expect(emailInput).toBeInTheDocument();
-      expect(emailInput).toHaveAttribute('type', 'email');
+      await waitFor(() => {
+        const emailInput = screen.getByPlaceholderText(/Email/i);
+        expect(emailInput).toBeInTheDocument();
+        expect(emailInput).toHaveAttribute('type', 'email');
+      });
     });
 
-    it('should render password input field', () => {
+    it('should render password input field', async () => {
       renderWithRouter();
-      const passwordInput = screen.getByPlaceholderText(/Password/i);
-      expect(passwordInput).toBeInTheDocument();
-      expect(passwordInput).toHaveAttribute('type', 'password');
+      await waitFor(() => {
+        const passwordInput = screen.getByPlaceholderText(/Password/i);
+        expect(passwordInput).toBeInTheDocument();
+        expect(passwordInput).toHaveAttribute('type', 'password');
+      });
     });
 
-    it('should render Sign In button', () => {
+    it('should render Sign In button', async () => {
       renderWithRouter();
-      expect(screen.getByRole('button', { name: /Sign In/i })).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Sign In/i })).toBeInTheDocument();
+      });
     });
 
-    it('should render test account quick login options', () => {
+    it('should render test account quick login options', async () => {
       renderWithRouter();
-      expect(screen.getByRole('button', { name: /Use Aya \(Parent\)/i })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /Use Ahmad \(New User\)/i })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /Use Admin Account/i })).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /Use Aya \(Parent\)/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Use Ahmad \(New User\)/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Use Admin Account/i })).toBeInTheDocument();
+      });
     });
   });
 
