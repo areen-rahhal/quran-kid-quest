@@ -71,11 +71,11 @@ export const ProfileSwitcher = ({ open, onOpenChange }: ProfileSwitcherProps) =>
                     <span className="font-semibold text-foreground">
                       {profile.name}
                     </span>
-                    <Badge 
-                      variant="secondary" 
-                      className="text-xs capitalize"
+                    <Badge
+                      variant="secondary"
+                      className="text-xs"
                     >
-                      {profile.type}
+                      {t(`profileSwitcher.${profile.type}`)}
                     </Badge>
                   </div>
                   <p className="text-sm text-muted-foreground mt-1">
