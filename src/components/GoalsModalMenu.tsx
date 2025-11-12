@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useGoals } from '@/hooks/useGoals';
 import { useProfile } from '@/contexts/ProfileContext';
-import { useToast } from '@/hooks/use-toast';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Profile } from '@/types/profile';
