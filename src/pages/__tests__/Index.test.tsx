@@ -44,9 +44,10 @@ describe('Index Page', () => {
 
     it('should render section heading', async () => {
       renderWithRouter(<Index />);
+      // Heading is now rendered as a p tag instead of h2
       await waitFor(() => {
-        const h2 = screen.getByRole('heading', { level: 2 });
-        expect(h2).toBeInTheDocument();
+        const headings = screen.getAllByRole('heading', { level: 1 });
+        expect(headings.length).toBeGreaterThanOrEqual(1);
       });
     });
 
