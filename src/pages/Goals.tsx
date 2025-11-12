@@ -132,7 +132,7 @@ const Goals = () => {
     const completedCount = goalProgress.completedSurahs || 0;
     const totalCount = goalProgress.totalSurahs || 0;
     const unitsWithProgress = generateUnitsWithProgress(
-      configGoal.units as Unit[],
+      configGoal.units,
       completedCount,
       totalCount
     );
