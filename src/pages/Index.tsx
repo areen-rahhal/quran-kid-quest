@@ -51,7 +51,7 @@ const Index = () => {
         {/* Content */}
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-foreground mb-4">
-            Let's Learn, Play and Memorize!
+            {t('index.heading')}
           </h2>
         </div>
 
@@ -62,13 +62,15 @@ const Index = () => {
             className="flex items-center justify-center gap-2 px-12 py-4 bg-emerald-500 text-white font-bold text-lg rounded-full hover:bg-emerald-600 transition-all shadow-lg hover:shadow-xl active:scale-95"
           >
             <Star className="w-6 h-6 fill-white" />
-            Create Account
+            {t('index.cta.createAccount')}
           </button>
           <button
             onClick={() => navigate("/login")}
             className="px-12 py-3 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors underline underline-offset-2"
           >
-            Already have an account? Sign in
+            {t('index.cta.haveAccount')}
+            <br />
+            {t('index.cta.signIn')}
           </button>
         </div>
       </div>
