@@ -157,6 +157,13 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
           </div>
         )}
       </div>
+
+      {/* Goals Modal Menu */}
+      <GoalsModalMenu
+        profile={profile}
+        isOpen={isGoalsModalOpen}
+        onClose={() => setIsGoalsModalOpen(false)}
+      />
     </Card>
   );
 };
