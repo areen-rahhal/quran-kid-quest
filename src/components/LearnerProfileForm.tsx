@@ -25,6 +25,7 @@ interface LearnerProfileFormProps {
 }
 
 export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { updateProfile, deleteGoal } = useProfile();
   const { getGoal } = useGoals();
@@ -43,6 +44,9 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
       avatar: selectedAvatar,
       age: age,
     });
+
+    // Navigate back to learners profiles screen
+    navigate('/learners-profiles');
   };
 
   const handleDeleteGoal = (goalId: string) => {
