@@ -97,6 +97,15 @@
     "selectGoal": "Select a Goal",
     "alreadyAdded": "Already Added",
     "addedSuccessfully": "added to your learning plan",
+    "nickname": "Nickname",
+    "avatar": "Avatar",
+    "dateOfBirth": "Date of Birth",
+    "age": "Age",
+    "addGoal": "Add Goal",
+    "noGoals": "No goals added yet",
+    "saveChanges": "Save Changes",
+    "deleteGoal": "Delete Goal?",
+    "deleteGoalConfirm": "This action cannot be undone. All progress on this goal will be lost.",
     "createProfile": "Create a profile for another child"
   }
 }
