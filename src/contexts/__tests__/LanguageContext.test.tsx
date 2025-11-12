@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LanguageProvider, useLanguage, Language } from '@/contexts/LanguageContext';
 import { ReactNode } from 'react';
+import i18n from '@/config/i18n';
 
 const TestComponent = () => {
   const { language, toggleLanguage, setLanguage, isArabic, isEnglish } = useLanguage();
