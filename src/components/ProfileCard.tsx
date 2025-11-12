@@ -130,7 +130,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
                 className="h-auto aspect-square bg-primary/10 text-primary hover:bg-primary/20"
                 onClick={(e) => {
                   e.stopPropagation();
-                  onAddGoal?.(profile.id);
+                  setIsGoalsModalOpen(true);
                 }}
               >
                 <Plus className="h-5 w-5" />
