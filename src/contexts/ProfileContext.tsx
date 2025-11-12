@@ -121,6 +121,10 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   });
 
   useEffect(() => {
+    localStorage.setItem('profiles', JSON.stringify(profiles));
+  }, [profiles]);
+
+  useEffect(() => {
     localStorage.setItem('currentProfile', JSON.stringify(currentProfile));
   }, [currentProfile]);
 
