@@ -34,7 +34,7 @@
     "testAccounts": {
       "parent": "استخدم أيا (الوالدة)",
       "newUser": "استخدم أحمد (مستخدم جديد)",
-      "admin": "استخدم حساب المسؤول"
+      "admin": "است��دم حساب المسؤول"
     }
   },
   "register": {
@@ -77,5 +77,14 @@
     "surahBakarah": "سورة البقرة",
     "opening": "جاري فتح {{name}}",
     "learningDesc": "دعنا نتعلم {{arabicName}}!"
+  },
+  "profileSwitcher": {
+    "title": "تبديل الملف الشخصي",
+    "description": "اختر ملفاً شخصياً لمتابعة رحلتك التعليمية",
+    "noActiveGoals": "لا توجد أهداف نشطة",
+    "goalsSummary": "{{goal}} • {{count}} هدف",
+    "manageProfiles": "إدارة الملفات الشخصية",
+    "parent": "الوالد/الوالدة",
+    "child": "الطفل"
   }
 }

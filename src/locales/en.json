@@ -77,5 +77,14 @@
     "surahBakarah": "Surah Al Bakarah",
     "opening": "Opening {{name}}",
     "learningDesc": "Let's learn {{arabicName}}!"
+  },
+  "profileSwitcher": {
+    "title": "Switch Profile",
+    "description": "Select a profile to continue your learning journey",
+    "noActiveGoals": "No active goals",
+    "goalsSummary": "{{goal}} • {{count}} goal{{count !== 1 ? 's' : ''}}",
+    "manageProfiles": "Manage Profiles",
+    "parent": "Parent",
+    "child": "Child"
   }
 }
