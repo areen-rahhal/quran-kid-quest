@@ -27,9 +27,9 @@ const Learner = () => {
   return (
     <div className="min-h-screen bg-gradient-soft islamic-pattern">
       {/* Header */}
-      <div className="bg-card border-b border-border sticky top-0 z-10 shadow-soft">
-        <div className="container max-w-2xl mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
+      <div className="bg-card/80 backdrop-blur-sm border-b border-border sticky top-0 z-10 shadow-soft">
+        <div className="container max-w-2xl mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
             <Button
               variant="ghost"
               size="icon"
@@ -38,9 +38,10 @@ const Learner = () => {
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
-            <h1 className="text-2xl font-bold text-foreground">
-              {t('learnersProfiles.editProfile') || `Edit ${profile.name}`}
+            <h1 className="text-xl font-bold text-foreground">
+              {t('learnersProfiles.editProfile') || 'Edit Profile'}
             </h1>
+            <div className="w-10" />
           </div>
         </div>
       </div>
