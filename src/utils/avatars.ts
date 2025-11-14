@@ -24,5 +24,18 @@ export const getRandomAvatar = (): AvatarOption => {
 
 export const getAvatarImageUrl = (avatarId: string): string => {
   const avatar = getAvatarOption(avatarId);
-  return avatar?.image || '';
+  if (avatar?.image) return avatar.image;
+
+  // Fallback for old avatar IDs (avatar-1, avatar-2, etc.)
+  // Map to new avatar options
+  const fallbackMap: { [key: string]: string } = {
+    'avatar-1': AVATAR_OPTIONS[0].image,
+    'avatar-2': AVATAR_OPTIONS[1].image,
+    'avatar-3': AVATAR_OPTIONS[0].image,
+    'avatar-4': AVATAR_OPTIONS[1].image,
+    'avatar-5': AVATAR_OPTIONS[0].image,
+    'avatar-6': AVATAR_OPTIONS[1].image,
+  };
+
+  return fallbackMap[avatarId] || AVATAR_OPTIONS[0].image;
 };
