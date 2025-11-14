@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useProfile } from '@/contexts/ProfileContext';
 import { useGoals } from '@/hooks/useGoals';
 import { GoalsModalMenu } from './GoalsModalMenu';
+import { AvatarSelectionModal } from './AvatarSelectionModal';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,26 +18,8 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Profile } from '@/types/profile';
-import { Trash2, Plus } from 'lucide-react';
-
-interface AvatarOption {
-  id: string;
-  name: string;
-  image: string;
-}
-
-const AVATAR_OPTIONS: AvatarOption[] = [
-  {
-    id: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fcc50a4fcacab42d49c80a89631bc6bec?format=webp&width=800',
-    name: 'Waleed',
-    image: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fcc50a4fcacab42d49c80a89631bc6bec?format=webp&width=800',
-  },
-  {
-    id: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fa3cffb81fbde4015ad8bedfb2e19a16e?format=webp&width=800',
-    name: 'Zain',
-    image: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fa3cffb81fbde4015ad8bedfb2e19a16e?format=webp&width=800',
-  },
-];
+import { Trash2, Plus, Pencil } from 'lucide-react';
+import { getAvatarImageUrl } from '@/utils/avatars';
 
 interface LearnerProfileFormProps {
   profile: Profile;
@@ -49,9 +32,10 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
   const { getGoal } = useGoals();
 
   const [nickname, setNickname] = useState(profile.name);
-  const [selectedAvatar, setSelectedAvatar] = useState(profile.avatar || 'avatar-1');
+  const [selectedAvatar, setSelectedAvatar] = useState(profile.avatar || 'avatar-waleed');
   const [dob, setDob] = useState(profile.age ? new Date(new Date().getFullYear() - profile.age, 0, 1).toISOString().split('T')[0] : '');
   const [isGoalsModalOpen, setIsGoalsModalOpen] = useState(false);
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
   const [goalToDelete, setGoalToDelete] = useState<string | null>(null);
 
   const handleSave = () => {
@@ -76,6 +60,10 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
       deleteGoal(profile.id, goalToDelete);
       setGoalToDelete(null);
     }
+  };
+
+  const handleAvatarSelect = (avatarId: string) => {
+    setSelectedAvatar(avatarId);
   };
 
   const calculateAge = (dobString: string): number | null => {
@@ -111,30 +99,26 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
 
       {/* Avatar Selection */}
       <Card className="p-6 space-y-4">
-        <label className="text-sm font-semibold text-foreground block">
-          {t('learnersProfiles.avatar') || 'Avatar'}
-        </label>
-        <div className="grid grid-cols-2 gap-3">
-          {AVATAR_OPTIONS.map((avatar) => (
-            <button
-              key={avatar.id}
-              onClick={() => setSelectedAvatar(avatar.id)}
-              className={`p-4 rounded-lg border-2 transition-all flex flex-col items-center gap-2
-                ${
-                  selectedAvatar === avatar.id
-                    ? 'bg-primary/10 border-primary'
-                    : 'bg-muted/50 border-border hover:border-primary/50'
-                }
-              `}
-            >
-              <img
-                src={avatar.image}
-                alt={avatar.name}
-                className="w-16 h-16 rounded-full object-cover"
-              />
-              <span className="text-xs font-medium text-center line-clamp-1">{avatar.name}</span>
-            </button>
-          ))}
+        <div className="flex items-center justify-between">
+          <label className="text-sm font-semibold text-foreground block">
+            {t('learnersProfiles.avatar') || 'Avatar'}
+          </label>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsAvatarModalOpen(true)}
+            className="gap-1"
+          >
+            <Pencil className="w-4 h-4" />
+            {t('learnersProfiles.changeAvatar') || 'Change'}
+          </Button>
+        </div>
+        <div className="flex justify-center">
+          <img
+            src={getAvatarImageUrl(selectedAvatar)}
+            alt="Selected Avatar"
+            className="w-24 h-24 rounded-full object-cover"
+          />
         </div>
       </Card>
 
@@ -249,6 +233,14 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
         profile={profile}
         isOpen={isGoalsModalOpen}
         onClose={() => setIsGoalsModalOpen(false)}
+      />
+
+      {/* Avatar Selection Modal */}
+      <AvatarSelectionModal
+        isOpen={isAvatarModalOpen}
+        onClose={() => setIsAvatarModalOpen(false)}
+        onSelectAvatar={handleAvatarSelect}
+        currentAvatarId={selectedAvatar}
       />
     </div>
   );
