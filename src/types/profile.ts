@@ -1,10 +1,4 @@
-export interface Goal {
-  id: string;
-  name: string;
-  status: 'in-progress' | 'completed' | 'paused';
-  completedSurahs?: number;
-  totalSurahs?: number;
-}
+import { GoalProgress } from './goals';
 
 export interface Achievements {
   stars: number;
@@ -19,7 +13,7 @@ export interface Profile {
   type: 'parent' | 'child';
   avatar?: string;
   currentGoal?: string;
-  goals?: Goal[];
+  goals?: GoalProgress[];
   goalsCount: number;
   email?: string;
   age?: number;
