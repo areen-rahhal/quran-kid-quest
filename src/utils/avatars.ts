@@ -38,7 +38,15 @@ export const getRandomAvatar = (): AvatarOption => {
   return AVATAR_OPTIONS[Math.floor(Math.random() * AVATAR_OPTIONS.length)];
 };
 
-export const getAvatarImageUrl = (avatarId: string): string => {
+export const getAvatarImageUrl = (avatarId: string | undefined): string => {
+  if (!avatarId) return AVATAR_OPTIONS[0].image;
+
+  // If it's already a full URL, return it as-is
+  if (avatarId.startsWith('http')) {
+    return avatarId;
+  }
+
+  // Otherwise, treat it as an avatar ID
   const avatar = getAvatarOption(avatarId);
   if (avatar?.image) return avatar.image;
 
