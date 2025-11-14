@@ -82,64 +82,54 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
 
   return (
     <div className="space-y-6">
-      {/* Nickname */}
-      <Card className="p-6 space-y-3">
-        <div>
-          <label className="text-sm font-semibold text-foreground block mb-2">
-            {t('learnersProfiles.nickname') || 'Nickname'}
-          </label>
+      {/* Profile Header Card */}
+      <Card className="p-8 text-center space-y-4 bg-gradient-to-b from-primary/5 to-transparent border-primary/20">
+        {/* Avatar with Edit Icon Overlay */}
+        <div className="flex justify-center">
+          <div className="relative inline-block">
+            <img
+              src={getAvatarImageUrl(selectedAvatar)}
+              alt="Selected Avatar"
+              className="w-32 h-32 rounded-full object-cover border-4 border-primary/20 shadow-lg"
+            />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsAvatarModalOpen(true)}
+              className="absolute bottom-0 right-0 h-10 w-10 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-md border-4 border-white"
+            >
+              <Pencil className="w-5 h-5" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Nickname */}
+        <div className="space-y-2">
           <Input
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
             placeholder="Enter nickname"
-            className="text-base"
+            className="text-center text-lg font-bold text-foreground text-base border-0 border-b-2 border-primary/30 focus:border-primary px-0 py-1 h-auto"
           />
-        </div>
-      </Card>
-
-      {/* Avatar Selection */}
-      <Card className="p-6 space-y-4">
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-semibold text-foreground block">
-            {t('learnersProfiles.avatar') || 'Avatar'}
-          </label>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setIsAvatarModalOpen(true)}
-            className="gap-1"
-          >
-            <Pencil className="w-4 h-4" />
-            {t('learnersProfiles.changeAvatar') || 'Change'}
-          </Button>
-        </div>
-        <div className="flex justify-center">
-          <img
-            src={getAvatarImageUrl(selectedAvatar)}
-            alt="Selected Avatar"
-            className="w-24 h-24 rounded-full object-cover"
-          />
+          <p className="text-sm text-muted-foreground">
+            {displayAge !== null
+              ? `${displayAge} ${displayAge === 1 ? 'year' : 'years'} old`
+              : t('learnersProfiles.dateOfBirth') || 'Date of Birth'}
+          </p>
         </div>
       </Card>
 
       {/* Age / DOB */}
-      <Card className="p-6 space-y-3">
-        <div>
-          <label className="text-sm font-semibold text-foreground block mb-2">
-            {t('learnersProfiles.dateOfBirth') || 'Date of Birth'}
-          </label>
-          <input
-            type="date"
-            value={dob}
-            onChange={(e) => setDob(e.target.value)}
-            className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground"
-          />
-          {displayAge !== null && (
-            <p className="text-sm text-muted-foreground mt-2">
-              {t('learnersProfiles.age') || 'Age'}: {displayAge} {displayAge === 1 ? 'year' : 'years'}
-            </p>
-          )}
-        </div>
+      <Card className="p-6 space-y-3 border-border/50">
+        <label className="text-sm font-semibold text-foreground block">
+          {t('learnersProfiles.dateOfBirth') || 'Date of Birth'}
+        </label>
+        <input
+          type="date"
+          value={dob}
+          onChange={(e) => setDob(e.target.value)}
+          className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground"
+        />
       </Card>
 
       {/* Current Goals */}
