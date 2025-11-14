@@ -8,7 +8,9 @@
     "confirmPassword": "تأكيد كلمة المرور",
     "name": "اسمك",
     "required": "مطلوب",
-    "backToLogin": "العودة إلى تسجيل الدخول"
+    "backToLogin": "العودة إلى تسجيل الدخول",
+    "cancel": "إلغاء",
+    "delete": "حذف"
   },
   "index": {
     "title": "قرآن الأطفال",
@@ -32,7 +34,7 @@
     "signIn": "تسجيل الدخول",
     "quickLogin": "تسجيل سريع:",
     "testAccounts": {
-      "parent": "استخدم أيا (الوالدة)",
+      "parent": "استخدم أيا (الوالد��)",
       "newUser": "استخدم أحمد (مستخدم جديد)",
       "admin": "استخدم حساب المسؤول"
     }
@@ -67,6 +69,7 @@
     "chooseGoal": "اختر هدفاً:",
     "chooseGoalLabel": "اختر هدفاً",
     "startLearning": "ابدأ التعلم",
+    "goalAdded": "تم إضافة الهدف بنجاح",
     "beginJourney": "ابدأ رحلتك في تعلم القرآن الكريم واكسب المكافآت أثناء تقدمك",
     "surahCount": "السور",
     "ayatCount": "الآيات",
@@ -93,6 +96,21 @@
     "setupFirstGoal": "قم بإعداد الهدف الأول لبدء التعلم",
     "addFirstGoal": "إضافة الهدف الأول",
     "addNewLearner": "إضافة متعلم جديد",
-    "createProfile": "إنشاء ملف شخصي لطفل آخر"
+    "selectGoal": "اختر هدفاً",
+    "selectAvatar": "اختر صورة رمزية",
+    "changeAvatar": "تغيير",
+    "alreadyAdded": "تمت إضافته بالفعل",
+    "addedSuccessfully": "تمت إضافته إلى خطة التعلم الخاصة بك",
+    "nickname": "الاسم المستعار",
+    "avatar": "الصورة الرمزية",
+    "dateOfBirth": "تاريخ الميلاد",
+    "age": "العمر",
+    "addGoal": "إضافة هدف",
+    "noGoals": "لم تتم إضافة أهداف بعد",
+    "saveChanges": "حفظ التغييرات",
+    "deleteGoal": "حذف الهدف؟",
+    "deleteGoalConfirm": "لا يمكن التراجع عن هذا الإجراء. سيتم فقدان جميع التقدم في هذا الهدف.",
+    "createProfile": "إنشاء ملف شخصي لطفل آخر",
+    "editProfile": "تحرير الملف الشخ��ي"
   }
 }

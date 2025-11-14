@@ -11,6 +11,7 @@ import { AvatarImage } from '@/components/AvatarImage';
 import { Badge } from '@/components/ui/badge';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Profile } from '@/types/profile';
+import { getAvatarImageUrl } from '@/utils/avatars';
 
 interface ProfileSwitcherProps {
   open: boolean;
@@ -60,11 +61,11 @@ export const ProfileSwitcher = ({ open, onOpenChange }: ProfileSwitcherProps) =>
                 }`}
               >
                 <AvatarImage
-                  src={profile.avatar}
-                  initials={getInitials(profile.name)}
-                  name={profile.name}
-                  size="sm"
-                />
+                src={getAvatarImageUrl(profile.avatar)}
+                initials={getInitials(profile.name)}
+                name={profile.name}
+                size="sm"
+              />
 
                 <div className="flex-1 text-left">
                   <div className="flex items-center gap-2">

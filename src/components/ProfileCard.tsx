@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -6,7 +7,9 @@ import { Progress } from "@/components/ui/progress";
 import { Plus, Trophy } from "lucide-react";
 import { AchievementsRow } from "./AchievementsRow";
 import { AvatarImage } from "./AvatarImage";
+import { GoalsModalMenu } from "./GoalsModalMenu";
 import { Profile } from "@/types/profile";
+import { getAvatarImageUrl } from "@/utils/avatars";
 
 interface ProfileCardProps {
   profile: Profile;
@@ -27,6 +30,7 @@ const getInitials = (name: string) => {
 
 export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: ProfileCardProps) => {
   const { t } = useTranslation();
+  const [isGoalsModalOpen, setIsGoalsModalOpen] = useState(false);
 
   // Helper function to get translated goal name
   const getTranslatedGoalName = (goalName: string): string => {
@@ -43,12 +47,12 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
   return (
     <Card
       className="p-6 space-y-4 transition-all hover:shadow-medium cursor-pointer"
-      onClick={() => onNavigate?.(profile.id)}
+      onClick={() => !isGoalsModalOpen && onNavigate?.(profile.id)}
     >
       {/* Profile Header */}
       <div className="flex items-center gap-4">
         <AvatarImage
-          src={profile.avatar}
+          src={getAvatarImageUrl(profile.avatar)}
           initials={getInitials(profile.name)}
           name={profile.name}
           size="md"
@@ -102,7 +106,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
                   <div className="space-y-0.5">
                     {/* Goal Name with Trophy Icon for Completed Goals */}
                     <div className="flex items-center justify-between gap-1">
-                      <span className="text-xs font-semibold text-foreground line-clamp-1">
+                      <span className="text-sm font-semibold text-foreground line-clamp-2">
                         {getTranslatedGoalName(goal.name)}
                       </span>
                       {goal.status === 'completed' && (
@@ -127,7 +131,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
                 className="h-auto aspect-square bg-primary/10 text-primary hover:bg-primary/20"
                 onClick={(e) => {
                   e.stopPropagation();
-                  onAddGoal?.(profile.id);
+                  setIsGoalsModalOpen(true);
                 }}
               >
                 <Plus className="h-5 w-5" />
@@ -145,7 +149,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
               className="gap-2 border-2 hover:border-primary/50 hover:bg-accent"
               onClick={(e) => {
                 e.stopPropagation();
-                onAddGoal?.(profile.id);
+                setIsGoalsModalOpen(true);
               }}
             >
               <Plus className="h-4 w-4" />
@@ -154,6 +158,13 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
           </div>
         )}
       </div>
+
+      {/* Goals Modal Menu */}
+      <GoalsModalMenu
+        profile={profile}
+        isOpen={isGoalsModalOpen}
+        onClose={() => setIsGoalsModalOpen(false)}
+      />
     </Card>
   );
 };

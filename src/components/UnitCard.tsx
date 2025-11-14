@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { Gem } from "lucide-react";
 
@@ -12,6 +13,10 @@ interface UnitCardProps {
 }
 
 export const UnitCard = ({ name, arabicName, status, onClick, isFirstCompleted }: UnitCardProps) => {
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === 'ar';
+  const displayName = isArabic ? arabicName : name;
+
   const getStatusStyles = () => {
     switch (status) {
       case "completed":
@@ -32,12 +37,10 @@ export const UnitCard = ({ name, arabicName, status, onClick, isFirstCompleted }
         "relative rounded-full aspect-square w-full border-2 transition-all duration-200 flex flex-col items-center justify-center gap-0 shadow-soft p-1.5 active:scale-95 group",
         getStatusStyles()
       )}
+      dir={isArabic ? "rtl" : "ltr"}
     >
-      <p className="text-[8px] font-bold text-center leading-tight" dir="rtl">
-        {arabicName}
-      </p>
-      <p className="text-[6px] font-semibold text-center opacity-70 leading-tight">
-        {name}
+      <p className="text-xs font-bold text-center leading-tight line-clamp-3">
+        {displayName}
       </p>
 
       {isFirstCompleted && status === "completed" && (

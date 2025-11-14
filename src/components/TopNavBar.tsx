@@ -3,6 +3,7 @@ import { Star, Flame, Gem, Trophy } from 'lucide-react';
 import { AvatarImage } from '@/components/AvatarImage';
 import { ProfileSwitcher } from '@/components/ProfileSwitcher';
 import { useProfile } from '@/contexts/ProfileContext';
+import { getAvatarImageUrl } from '@/utils/avatars';
 
 interface AchievementProps {
   stars: number;
@@ -37,7 +38,7 @@ export const TopNavBar = ({ achievements }: TopNavBarProps) => {
             className="hover:bg-accent rounded-full p-1 transition-colors"
           >
             <AvatarImage
-              src={currentProfile.avatar}
+              src={getAvatarImageUrl(currentProfile.avatar)}
               initials={getInitials(currentProfile.name)}
               name={currentProfile.name}
               size="sm"

@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Profile } from '@/types/profile';
+import { getGoalById } from '@/config/goals-data';
 
 interface RegistrationData {
   email: string;
@@ -13,6 +14,9 @@ interface ProfileContextType {
   profiles: Profile[];
   switchProfile: (profileId: string) => void;
   registerParent: (data: RegistrationData) => Profile;
+  addGoal: (profileId: string, goalId: string, goalName: string) => void;
+  updateProfile: (profileId: string, updates: Partial<Profile>) => void;
+  deleteGoal: (profileId: string, goalId: string) => void;
   isRegistrationComplete: boolean;
   parentProfile: Profile | null;
 }
@@ -46,14 +50,14 @@ const mockProfiles: Profile[] = [
     streak: 12,
     goals: [
       {
-        id: 'goal-1',
+        id: 'juz-29',
         name: "Juz' 29",
         status: 'in-progress',
         completedSurahs: 4,
         totalSurahs: 11,
       },
       {
-        id: 'goal-2',
+        id: 'juz-30',
         name: "Juz' 30",
         status: 'completed',
         completedSurahs: 37,
@@ -77,7 +81,7 @@ const mockProfiles: Profile[] = [
     streak: 7,
     goals: [
       {
-        id: 'goal-3',
+        id: 'juz-30',
         name: "Juz' 30",
         status: 'in-progress',
         completedSurahs: 3,
@@ -94,14 +98,21 @@ const mockProfiles: Profile[] = [
 ];
 
 export function ProfileProvider({ children }: { children: ReactNode }) {
-  const [profiles, setProfiles] = useState<Profile[]>(mockProfiles);
+  const [profiles, setProfiles] = useState<Profile[]>(() => {
+    const saved = localStorage.getItem('profiles');
+    return saved ? JSON.parse(saved) : mockProfiles;
+  });
   const [currentProfile, setCurrentProfile] = useState<Profile>(() => {
     const saved = localStorage.getItem('currentProfile');
     if (saved) {
       const savedProfile = JSON.parse(saved);
-      return profiles.find(p => p.id === savedProfile.id) || profiles[0];
+      const allProfiles = localStorage.getItem('profiles');
+      const profilesList = allProfiles ? JSON.parse(allProfiles) : mockProfiles;
+      return profilesList.find((p: Profile) => p.id === savedProfile.id) || profilesList[0];
     }
-    return profiles[0];
+    const allProfiles = localStorage.getItem('profiles');
+    const profilesList = allProfiles ? JSON.parse(allProfiles) : mockProfiles;
+    return profilesList[0];
   });
   const [isRegistrationComplete, setIsRegistrationComplete] = useState<boolean>(() => {
     return localStorage.getItem('isRegistrationComplete') === 'true';
@@ -110,6 +121,10 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     const saved = localStorage.getItem('parentProfile');
     return saved ? JSON.parse(saved) : null;
   });
+
+  useEffect(() => {
+    localStorage.setItem('profiles', JSON.stringify(profiles));
+  }, [profiles]);
 
   useEffect(() => {
     localStorage.setItem('currentProfile', JSON.stringify(currentProfile));
@@ -151,6 +166,86 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     return newParentProfile;
   };
 
+  const addGoal = (profileId: string, goalId: string, goalName: string) => {
+    const goalConfig = getGoalById(goalId);
+    const totalSurahs = goalConfig?.metadata.surahCount || 0;
+
+    const updatedProfiles = profiles.map(profile => {
+      if (profile.id === profileId) {
+        const newGoal = {
+          id: goalId,
+          name: goalName,
+          status: 'in-progress' as const,
+          completedSurahs: 0,
+          totalSurahs: totalSurahs,
+        };
+
+        const updatedGoals = [...(profile.goals || []), newGoal];
+        const updatedProfile: Profile = {
+          ...profile,
+          goals: updatedGoals,
+          goalsCount: updatedGoals.length,
+          currentGoal: goalName,
+        };
+
+        // Update currentProfile if it's the one being modified
+        if (currentProfile.id === profileId) {
+          setCurrentProfile(updatedProfile);
+        }
+
+        return updatedProfile;
+      }
+      return profile;
+    });
+
+    setProfiles(updatedProfiles);
+  };
+
+  const updateProfile = (profileId: string, updates: Partial<Profile>) => {
+    const updatedProfiles = profiles.map(profile => {
+      if (profile.id === profileId) {
+        const updatedProfile: Profile = {
+          ...profile,
+          ...updates,
+        };
+
+        // Update currentProfile if it's the one being modified
+        if (currentProfile.id === profileId) {
+          setCurrentProfile(updatedProfile);
+        }
+
+        return updatedProfile;
+      }
+      return profile;
+    });
+
+    setProfiles(updatedProfiles);
+  };
+
+  const deleteGoal = (profileId: string, goalId: string) => {
+    const updatedProfiles = profiles.map(profile => {
+      if (profile.id === profileId) {
+        const updatedGoals = (profile.goals || []).filter(goal => goal.id !== goalId);
+        const updatedProfile: Profile = {
+          ...profile,
+          goals: updatedGoals,
+          goalsCount: updatedGoals.length,
+          currentGoal: updatedGoals.length > 0 ? updatedGoals[0].name : undefined,
+        };
+
+        // Update currentProfile if it's the one being modified
+        if (currentProfile.id === profileId) {
+          setCurrentProfile(updatedProfile);
+        }
+
+        return updatedProfile;
+      }
+      return profile;
+    });
+
+    setProfiles(updatedProfiles);
+  };
+
   return (
     <ProfileContext.Provider
       value={{
@@ -158,6 +253,9 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         profiles,
         switchProfile,
         registerParent,
+        addGoal,
+        updateProfile,
+        deleteGoal,
         isRegistrationComplete,
         parentProfile,
       }}

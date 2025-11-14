@@ -8,6 +8,8 @@ import { VerticalProgressBar } from "@/components/VerticalProgressBar";
 import { UnitsGrid, Unit } from "@/components/UnitsGrid";
 import { useToast } from "@/hooks/use-toast";
 import { useProfile } from "@/contexts/ProfileContext";
+import { useGoals } from "@/hooks/useGoals";
+import { BaseUnit } from "@/types/goals";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Target, ChevronLeft, ChevronRight } from "lucide-react";
@@ -19,7 +21,8 @@ const Goals = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
-  const { currentProfile, profiles, switchProfile } = useProfile();
+  const { currentProfile, profiles, switchProfile, addGoal } = useProfile();
+  const { allGoals, getGoal } = useGoals();
   const [selectedGoal, setSelectedGoal] = useState("");
   const [currentGoalIndex, setCurrentGoalIndex] = useState(0);
   const [hasAppliedUrlParams, setHasAppliedUrlParams] = useState(false);
@@ -81,61 +84,6 @@ const Goals = () => {
     }
   }, [currentProfile.id, hasAppliedUrlParams, searchParams]);
 
-  // Sample data for Juz' 30 (last juz of Quran)
-  const juz30Surahs: Unit[] = [
-    { id: 78, name: "An-Naba", arabicName: "النبأ", status: "completed" },
-    { id: 79, name: "An-Nazi'at", arabicName: "النازعات", status: "completed" },
-    { id: 80, name: "Abasa", arabicName: "عبس", status: "completed" },
-    { id: 81, name: "At-Takwir", arabicName: "التكوير", status: "completed" },
-    { id: 82, name: "Al-Infitar", arabicName: "الإنفطار", status: "completed" },
-    { id: 83, name: "Al-Mutaffifin", arabicName: "المطففين", status: "completed" },
-    { id: 84, name: "Al-Inshiqaq", arabicName: "الإنشقاق", status: "completed" },
-    { id: 85, name: "Al-Buruj", arabicName: "البروج", status: "completed" },
-    { id: 86, name: "At-Tariq", arabicName: "ا��طارق", status: "completed" },
-    { id: 87, name: "Al-A'la", arabicName: "الأعلى", status: "completed" },
-    { id: 88, name: "Al-Ghashiyah", arabicName: "الغاشية", status: "completed" },
-    { id: 89, name: "Al-Fajr", arabicName: "الفجر", status: "completed" },
-    { id: 90, name: "Al-Balad", arabicName: "البلد", status: "completed" },
-    { id: 91, name: "Ash-Shams", arabicName: "الشمس", status: "completed" },
-    { id: 92, name: "Al-Lail", arabicName: "الليل", status: "completed" },
-    { id: 93, name: "Ad-Duha", arabicName: "الضحى", status: "completed" },
-    { id: 94, name: "Ash-Sharh", arabicName: "الشرح", status: "completed" },
-    { id: 95, name: "At-Tin", arabicName: "التين", status: "completed" },
-    { id: 96, name: "Al-Alaq", arabicName: "العلق", status: "completed" },
-    { id: 97, name: "Al-Qadr", arabicName: "القدر", status: "completed" },
-    { id: 98, name: "Al-Bayyinah", arabicName: "البينة", status: "completed" },
-    { id: 99, name: "Az-Zalzalah", arabicName: "الزلزلة", status: "completed" },
-    { id: 100, name: "Al-Adiyat", arabicName: "العاديات", status: "completed" },
-    { id: 101, name: "Al-Qari'ah", arabicName: "القارعة", status: "completed" },
-    { id: 102, name: "At-Takathur", arabicName: "التكاثر", status: "completed" },
-    { id: 103, name: "Al-Asr", arabicName: "العصر", status: "completed" },
-    { id: 104, name: "Al-Humazah", arabicName: "الهمزة", status: "completed" },
-    { id: 105, name: "Al-Fil", arabicName: "الفيل", status: "completed" },
-    { id: 106, name: "Quraish", arabicName: "قريش", status: "completed" },
-    { id: 107, name: "Al-Ma'un", arabicName: "الماعون", status: "completed" },
-    { id: 108, name: "Al-Kawthar", arabicName: "الكوثر", status: "completed" },
-    { id: 109, name: "Al-Kafirun", arabicName: "الكافرون", status: "completed" },
-    { id: 110, name: "An-Nasr", arabicName: "النصر", status: "completed" },
-    { id: 111, name: "Al-Masad", arabicName: "المسد", status: "completed" },
-    { id: 112, name: "Al-Ikhlas", arabicName: "الإخلاص", status: "completed" },
-    { id: 113, name: "Al-Falaq", arabicName: "الفلق", status: "completed" },
-    { id: 114, name: "An-Nas", arabicName: "الناس", status: "completed" },
-  ];
-
-  // Sample data for Juz' 29 (Tabaarak) - 11 Surahs
-  const juz29Surahs: Unit[] = [
-    { id: 67, name: "Al-Mulk", arabicName: "الملك", status: "completed" },
-    { id: 68, name: "Al-Qalam", arabicName: "القلم", status: "completed" },
-    { id: 69, name: "Al-Haqqah", arabicName: "الحاقة", status: "completed" },
-    { id: 70, name: "Al-Ma'arij", arabicName: "ال��عارج", status: "completed" },
-    { id: 71, name: "Nuh", arabicName: "نوح", status: "completed" },
-    { id: 72, name: "Al-Jinn", arabicName: "الجن", status: "completed" },
-    { id: 73, name: "Al-Muzzammil", arabicName: "المزمل", status: "in-progress" },
-    { id: 74, name: "Al-Muddathir", arabicName: "المدثر", status: "not-started" },
-    { id: 75, name: "Al-Qiyamah", arabicName: "القيامة", status: "not-started" },
-    { id: 76, name: "Al-Insan", arabicName: "الإنسان", status: "not-started" },
-    { id: 77, name: "Al-Mursalat", arabicName: "المرسلات", status: "not-started" },
-  ];
 
   // Get achievements directly from current profile
   const stars = currentProfile.achievements?.stars || 0;
@@ -154,7 +102,7 @@ const Goals = () => {
   const hasGoals = currentProfile.goalsCount && currentProfile.goalsCount > 0;
 
   // Generate unit statuses based on learner's progress
-  const generateUnitsWithProgress = (units: Unit[], completedCount: number, totalCount: number) => {
+  const generateUnitsWithProgress = (units: BaseUnit[], completedCount: number, totalCount: number): Unit[] => {
     return units.map((unit, index) => {
       if (index < completedCount) {
         return { ...unit, status: "completed" as const };
@@ -174,32 +122,29 @@ const Goals = () => {
       return null;
     }
 
-    const goal = goals[currentGoalIndex % goals.length];
-    const completedCount = goal.completedSurahs || 0;
-    const totalCount = goal.totalSurahs || 0;
+    const goalProgress = goals[currentGoalIndex % goals.length];
+    const configGoal = getGoal(goalProgress.id);
 
-    switch (goal.name) {
-      case "Juz' 29":
-        return {
-          name: t('goals.juz29'),
-          surahCount: 11,
-          ayatCount: 447,
-          units: generateUnitsWithProgress(juz29Surahs, completedCount, totalCount),
-          totalUnits: 11,
-          goalId: goal.id
-        };
-      case "Juz' 30":
-        return {
-          name: t('goals.juz30'),
-          surahCount: 37,
-          ayatCount: 564,
-          units: generateUnitsWithProgress(juz30Surahs, completedCount, totalCount),
-          totalUnits: 37,
-          goalId: goal.id
-        };
-      default:
-        return null;
+    if (!configGoal) {
+      return null;
     }
+
+    const completedCount = goalProgress.completedSurahs || 0;
+    const totalCount = goalProgress.totalSurahs || 0;
+    const unitsWithProgress = generateUnitsWithProgress(
+      configGoal.units,
+      completedCount,
+      totalCount
+    );
+
+    return {
+      name: configGoal.nameEnglish,
+      surahCount: configGoal.metadata.surahCount,
+      ayatCount: configGoal.metadata.versesCount,
+      units: unitsWithProgress,
+      totalUnits: configGoal.units.length,
+      goalId: goalProgress.id
+    };
   };
 
   const goalData = getGoalData();
@@ -274,14 +219,27 @@ const Goals = () => {
                       <SelectValue placeholder={t('goals.chooseGoalLabel')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="juz-30">{t('goals.juz30')}</SelectItem>
-                      <SelectItem value="juz-29">{t('goals.juz29')}</SelectItem>
-                      <SelectItem value="surah-bakarah">{t('goals.surahBakarah')}</SelectItem>
+                      {allGoals.map((goal) => (
+                        <SelectItem key={goal.id} value={goal.id}>
+                          {goal.nameEnglish}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <button
-                  onClick={() => selectedGoal && navigate("/goals")}
+                  onClick={() => {
+                    if (selectedGoal) {
+                      const goal = getGoal(selectedGoal);
+                      if (goal) {
+                        addGoal(currentProfile.id, selectedGoal, goal.nameEnglish);
+                        toast({
+                          title: t('goals.goalAdded'),
+                          description: `${goal.nameEnglish} has been added to your learning plan`,
+                        });
+                      }
+                    }
+                  }}
                   disabled={!selectedGoal}
                   className="w-full px-4 py-2 bg-secondary text-secondary-foreground font-semibold rounded-md hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 >
