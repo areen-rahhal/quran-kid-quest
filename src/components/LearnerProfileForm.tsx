@@ -104,18 +104,18 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
         </div>
 
         {/* Nickname */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           <Input
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
             placeholder="Enter nickname"
-            className="text-center text-lg font-bold text-foreground text-base border-0 border-b-2 border-primary/30 focus:border-primary px-0 py-1 h-auto"
+            className="text-center text-2xl font-bold text-foreground border-0 border-b-2 border-primary/40 focus:border-primary/70 px-2 py-2 h-auto focus-visible:ring-0 focus-visible:outline-none transition-colors bg-transparent"
           />
-          <p className="text-sm text-muted-foreground">
-            {displayAge !== null
-              ? `${displayAge} ${displayAge === 1 ? 'year' : 'years'} old`
-              : t('learnersProfiles.dateOfBirth') || 'Date of Birth'}
-          </p>
+          {displayAge !== null && (
+            <p className="text-sm text-muted-foreground text-center">
+              {displayAge} {displayAge === 1 ? 'year' : 'years'} old
+            </p>
+          )}
         </div>
       </Card>
 
