@@ -9,6 +9,7 @@ import { AchievementsRow } from "./AchievementsRow";
 import { AvatarImage } from "./AvatarImage";
 import { GoalsModalMenu } from "./GoalsModalMenu";
 import { Profile } from "@/types/profile";
+import { getAvatarImageUrl } from "@/utils/avatars";
 
 interface ProfileCardProps {
   profile: Profile;
@@ -51,7 +52,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
       {/* Profile Header */}
       <div className="flex items-center gap-4">
         <AvatarImage
-          src={profile.avatar}
+          src={getAvatarImageUrl(profile.avatar)}
           initials={getInitials(profile.name)}
           name={profile.name}
           size="md"
