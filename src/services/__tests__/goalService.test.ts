@@ -117,13 +117,13 @@ describe('goalService', () => {
     it('should retrieve a goal from profile', () => {
       let profile = goalService.addGoalToProfile(mockProfile, 'surah-fatiha', 'Surah Al-Fatiha');
       const goal = goalService.getGoalFromProfile(profile, 'surah-fatiha');
-      
+
       expect(goal).toBeDefined();
       expect(goal?.id).toBe('surah-fatiha');
     });
 
     it('should return undefined for non-existent goal', () => {
-      const profile = goalService.getGoalFromProfile(mockProfile, 'non-existent');
+      const goal = goalService.getGoalFromProfile(mockProfile, 'non-existent');
       expect(goal).toBeUndefined();
     });
   });
