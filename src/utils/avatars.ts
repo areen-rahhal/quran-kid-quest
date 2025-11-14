@@ -47,10 +47,10 @@ export const getAvatarImageUrl = (avatarId: string): string => {
   const fallbackMap: { [key: string]: string } = {
     'avatar-1': AVATAR_OPTIONS[0].image,
     'avatar-2': AVATAR_OPTIONS[1].image,
-    'avatar-3': AVATAR_OPTIONS[0].image,
-    'avatar-4': AVATAR_OPTIONS[1].image,
-    'avatar-5': AVATAR_OPTIONS[0].image,
-    'avatar-6': AVATAR_OPTIONS[1].image,
+    'avatar-3': AVATAR_OPTIONS[2].image,
+    'avatar-4': AVATAR_OPTIONS[3].image,
+    'avatar-5': AVATAR_OPTIONS[4].image,
+    'avatar-6': AVATAR_OPTIONS[5].image,
   };
 
   return fallbackMap[avatarId] || AVATAR_OPTIONS[0].image;
