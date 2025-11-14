@@ -92,27 +92,18 @@ const mockProfiles: Profile[] = [
 
 export function ProfileProvider({ children }: { children: ReactNode }) {
   const [profiles, setProfiles] = useState<Profile[]>(() => {
-    const saved = localStorage.getItem('profiles');
-    return saved ? JSON.parse(saved) : mockProfiles;
+    return profileService.initializeProfiles(mockProfiles);
   });
   const [currentProfile, setCurrentProfile] = useState<Profile>(() => {
-    const saved = localStorage.getItem('currentProfile');
-    if (saved) {
-      const savedProfile = JSON.parse(saved);
-      const allProfiles = localStorage.getItem('profiles');
-      const profilesList = allProfiles ? JSON.parse(allProfiles) : mockProfiles;
-      return profilesList.find((p: Profile) => p.id === savedProfile.id) || profilesList[0];
-    }
-    const allProfiles = localStorage.getItem('profiles');
-    const profilesList = allProfiles ? JSON.parse(allProfiles) : mockProfiles;
-    return profilesList[0];
+    return profileService.initializeCurrentProfile(
+      profileService.initializeProfiles(mockProfiles)
+    );
   });
   const [isRegistrationComplete, setIsRegistrationComplete] = useState<boolean>(() => {
-    return localStorage.getItem('isRegistrationComplete') === 'true';
+    return profileService.initializeRegistrationStatus();
   });
   const [parentProfile, setParentProfile] = useState<Profile | null>(() => {
-    const saved = localStorage.getItem('parentProfile');
-    return saved ? JSON.parse(saved) : null;
+    return profileService.initializeParentProfile();
   });
 
   useEffect(() => {
