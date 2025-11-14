@@ -134,7 +134,7 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
 
       {/* Current Goals */}
       {profile.goals && profile.goals.length > 0 && (
-        <Card className="p-6 space-y-4">
+        <Card className="p-6 space-y-4 border-border/50">
           <label className="text-sm font-semibold text-foreground block">
             {t('learnersProfiles.goalsLabel')} ({profile.goals.length})
           </label>
@@ -146,7 +146,7 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
               return (
                 <div
                   key={goal.id}
-                  className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+                  className="flex items-center justify-between p-4 bg-gradient-to-r from-primary/5 to-transparent rounded-lg border border-primary/10 hover:border-primary/20 transition-colors"
                 >
                   <span className="font-medium text-foreground">{goalName}</span>
                   <Button
@@ -166,7 +166,7 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
           <Button
             onClick={() => setIsGoalsModalOpen(true)}
             variant="outline"
-            className="w-full gap-2"
+            className="w-full gap-2 border-primary/30 hover:border-primary/60 text-primary hover:bg-primary/5"
           >
             <Plus className="w-4 h-4" />
             {t('learnersProfiles.addGoal') || 'Add Goal'}
@@ -176,14 +176,13 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
 
       {/* Empty Goals State */}
       {(!profile.goals || profile.goals.length === 0) && (
-        <Card className="p-6 text-center space-y-3">
+        <Card className="p-8 text-center space-y-4 border-border/50 bg-gradient-to-b from-muted/30 to-transparent">
           <p className="text-sm text-muted-foreground">
             {t('learnersProfiles.noGoals') || 'No goals added yet'}
           </p>
           <Button
             onClick={() => setIsGoalsModalOpen(true)}
-            variant="outline"
-            className="w-full gap-2"
+            className="w-full gap-2 bg-primary hover:bg-primary/90"
           >
             <Plus className="w-4 h-4" />
             {t('learnersProfiles.addFirstGoal')}
@@ -194,7 +193,7 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
       {/* Save Button */}
       <Button
         onClick={handleSave}
-        className="w-full bg-primary text-primary-foreground font-semibold py-3"
+        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 h-12 text-base"
       >
         {t('learnersProfiles.saveChanges') || 'Save Changes'}
       </Button>
