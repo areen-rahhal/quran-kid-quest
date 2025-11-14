@@ -12,7 +12,6 @@ import { Badge } from '@/components/ui/badge';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Profile } from '@/types/profile';
 import { getAvatarImageUrl } from '@/utils/avatars';
-import { Check } from 'lucide-react';
 
 interface ProfileSwitcherProps {
   open: boolean;
