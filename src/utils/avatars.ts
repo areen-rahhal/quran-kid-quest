@@ -12,6 +12,22 @@ export const AVATAR_OPTIONS: AvatarOption[] = [
     id: 'avatar-zain',
     image: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fa3cffb81fbde4015ad8bedfb2e19a16e?format=webp&width=800',
   },
+  {
+    id: 'avatar-bird',
+    image: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2F37b5892531844d678a879db622149ca1?format=webp&width=800',
+  },
+  {
+    id: 'avatar-deer',
+    image: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2F5c82b1a379374de6ac6cf873e93c9e17?format=webp&width=800',
+  },
+  {
+    id: 'avatar-koala',
+    image: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2F1b55c0e17a7b46f28f86ac66e757e6bb?format=webp&width=800',
+  },
+  {
+    id: 'avatar-sheep',
+    image: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fa9f0debaa6ba45388cfbca30e3525880?format=webp&width=800',
+  },
 ];
 
 export const getAvatarOption = (id: string): AvatarOption | undefined => {
