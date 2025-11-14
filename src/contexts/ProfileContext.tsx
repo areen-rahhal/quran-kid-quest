@@ -1,13 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Profile } from '@/types/profile';
-import { getGoalById } from '@/config/goals-data';
-
-interface RegistrationData {
-  email: string;
-  password: string;
-  parentName: string;
-  avatar: string;
-}
+import { Profile, RegistrationData, ProfileUpdate } from '@/lib/validation';
+import { profileService } from '@/services/profileService';
 
 interface ProfileContextType {
   currentProfile: Profile;
@@ -15,7 +8,7 @@ interface ProfileContextType {
   switchProfile: (profileId: string) => void;
   registerParent: (data: RegistrationData) => Profile;
   addGoal: (profileId: string, goalId: string, goalName: string) => void;
-  updateProfile: (profileId: string, updates: Partial<Profile>) => void;
+  updateProfile: (profileId: string, updates: ProfileUpdate) => void;
   deleteGoal: (profileId: string, goalId: string) => void;
   isRegistrationComplete: boolean;
   parentProfile: Profile | null;
