@@ -1,13 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Profile } from '@/types/profile';
-import { getGoalById } from '@/config/goals-data';
-
-interface RegistrationData {
-  email: string;
-  password: string;
-  parentName: string;
-  avatar: string;
-}
+import { Profile, RegistrationData, ProfileUpdate } from '@/lib/validation';
+import { profileService } from '@/services/profileService';
 
 interface ProfileContextType {
   currentProfile: Profile;
@@ -15,7 +8,7 @@ interface ProfileContextType {
   switchProfile: (profileId: string) => void;
   registerParent: (data: RegistrationData) => Profile;
   addGoal: (profileId: string, goalId: string, goalName: string) => void;
-  updateProfile: (profileId: string, updates: Partial<Profile>) => void;
+  updateProfile: (profileId: string, updates: ProfileUpdate) => void;
   deleteGoal: (profileId: string, goalId: string) => void;
   isRegistrationComplete: boolean;
   parentProfile: Profile | null;
@@ -99,27 +92,18 @@ const mockProfiles: Profile[] = [
 
 export function ProfileProvider({ children }: { children: ReactNode }) {
   const [profiles, setProfiles] = useState<Profile[]>(() => {
-    const saved = localStorage.getItem('profiles');
-    return saved ? JSON.parse(saved) : mockProfiles;
+    return profileService.initializeProfiles(mockProfiles);
   });
   const [currentProfile, setCurrentProfile] = useState<Profile>(() => {
-    const saved = localStorage.getItem('currentProfile');
-    if (saved) {
-      const savedProfile = JSON.parse(saved);
-      const allProfiles = localStorage.getItem('profiles');
-      const profilesList = allProfiles ? JSON.parse(allProfiles) : mockProfiles;
-      return profilesList.find((p: Profile) => p.id === savedProfile.id) || profilesList[0];
-    }
-    const allProfiles = localStorage.getItem('profiles');
-    const profilesList = allProfiles ? JSON.parse(allProfiles) : mockProfiles;
-    return profilesList[0];
+    return profileService.initializeCurrentProfile(
+      profileService.initializeProfiles(mockProfiles)
+    );
   });
   const [isRegistrationComplete, setIsRegistrationComplete] = useState<boolean>(() => {
-    return localStorage.getItem('isRegistrationComplete') === 'true';
+    return profileService.initializeRegistrationStatus();
   });
   const [parentProfile, setParentProfile] = useState<Profile | null>(() => {
-    const saved = localStorage.getItem('parentProfile');
-    return saved ? JSON.parse(saved) : null;
+    return profileService.initializeParentProfile();
   });
 
   useEffect(() => {
@@ -141,109 +125,56 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   }, [parentProfile]);
 
   const switchProfile = (profileId: string) => {
-    const profile = profiles.find(p => p.id === profileId);
+    const profile = profileService.switchProfile(profiles, profileId);
     if (profile) {
       setCurrentProfile(profile);
     }
   };
 
   const registerParent = (data: RegistrationData): Profile => {
-    const newParentProfile: Profile = {
-      id: Date.now().toString(),
-      name: data.parentName,
-      type: 'parent',
-      email: data.email,
-      avatar: data.avatar,
-      goalsCount: 0,
-    };
-
-    const updatedProfiles = [...profiles, newParentProfile];
+    const { profile, updatedProfiles } = profileService.registerParent(
+      data,
+      profiles
+    );
     setProfiles(updatedProfiles);
-    setCurrentProfile(newParentProfile);
-    setParentProfile(newParentProfile);
+    setCurrentProfile(profile);
+    setParentProfile(profile);
     setIsRegistrationComplete(true);
-
-    return newParentProfile;
+    return profile;
   };
 
   const addGoal = (profileId: string, goalId: string, goalName: string) => {
-    const goalConfig = getGoalById(goalId);
-    const totalSurahs = goalConfig?.metadata.surahCount || 0;
-
-    const updatedProfiles = profiles.map(profile => {
-      if (profile.id === profileId) {
-        const newGoal = {
-          id: goalId,
-          name: goalName,
-          status: 'in-progress' as const,
-          completedSurahs: 0,
-          totalSurahs: totalSurahs,
-        };
-
-        const updatedGoals = [...(profile.goals || []), newGoal];
-        const updatedProfile: Profile = {
-          ...profile,
-          goals: updatedGoals,
-          goalsCount: updatedGoals.length,
-          currentGoal: goalName,
-        };
-
-        // Update currentProfile if it's the one being modified
-        if (currentProfile.id === profileId) {
-          setCurrentProfile(updatedProfile);
-        }
-
-        return updatedProfile;
-      }
-      return profile;
-    });
-
+    const { updatedProfiles, updatedCurrentProfile } = profileService.addGoal(
+      profiles,
+      profileId,
+      goalId,
+      goalName
+    );
     setProfiles(updatedProfiles);
+    if (currentProfile.id === profileId) {
+      setCurrentProfile(updatedCurrentProfile);
+    }
   };
 
-  const updateProfile = (profileId: string, updates: Partial<Profile>) => {
-    const updatedProfiles = profiles.map(profile => {
-      if (profile.id === profileId) {
-        const updatedProfile: Profile = {
-          ...profile,
-          ...updates,
-        };
-
-        // Update currentProfile if it's the one being modified
-        if (currentProfile.id === profileId) {
-          setCurrentProfile(updatedProfile);
-        }
-
-        return updatedProfile;
-      }
-      return profile;
-    });
-
+  const updateProfile = (profileId: string, updates: ProfileUpdate) => {
+    const { updatedProfiles, updatedCurrentProfile } =
+      profileService.updateProfile(profiles, profileId, updates);
     setProfiles(updatedProfiles);
+    if (currentProfile.id === profileId) {
+      setCurrentProfile(updatedCurrentProfile);
+    }
   };
 
   const deleteGoal = (profileId: string, goalId: string) => {
-    const updatedProfiles = profiles.map(profile => {
-      if (profile.id === profileId) {
-        const updatedGoals = (profile.goals || []).filter(goal => goal.id !== goalId);
-        const updatedProfile: Profile = {
-          ...profile,
-          goals: updatedGoals,
-          goalsCount: updatedGoals.length,
-          currentGoal: updatedGoals.length > 0 ? updatedGoals[0].name : undefined,
-        };
-
-        // Update currentProfile if it's the one being modified
-        if (currentProfile.id === profileId) {
-          setCurrentProfile(updatedProfile);
-        }
-
-        return updatedProfile;
-      }
-      return profile;
-    });
-
+    const { updatedProfiles, updatedCurrentProfile } = profileService.deleteGoal(
+      profiles,
+      profileId,
+      goalId
+    );
     setProfiles(updatedProfiles);
+    if (currentProfile.id === profileId) {
+      setCurrentProfile(updatedCurrentProfile);
+    }
   };
 
   return (
