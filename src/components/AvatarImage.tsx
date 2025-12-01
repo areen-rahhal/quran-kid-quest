@@ -37,7 +37,7 @@ export const AvatarImage = ({
           alt={name}
           className="w-full h-full object-cover object-center antialiased transition-transform duration-300 hover:scale-105"
           style={{
-            imageRendering: 'smooth',
+            imageRendering: 'auto',
             WebkitFontSmoothing: 'antialiased',
             WebkitBackfaceVisibility: 'hidden',
             backfaceVisibility: 'hidden',

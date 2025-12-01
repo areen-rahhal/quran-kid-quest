@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { LanguageProvider, useLanguage, Language } from '@/contexts/LanguageContext';
+import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
+import type { Language } from '@/config/i18n';
 import { ReactNode } from 'react';
 import i18n from '@/config/i18n';
 
