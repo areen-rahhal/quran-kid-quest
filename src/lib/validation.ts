@@ -1,4 +1,10 @@
 import { z } from 'zod';
+import type { Profile, Achievements } from '@/types/profile';
+import type { GoalProgress } from '@/types/goals';
+
+// Re-export canonical types
+export type { Profile, Achievements } from '@/types/profile';
+export type { GoalProgress } from '@/types/goals';
 
 // Base enums
 export const ProfileTypeSchema = z.enum(['parent', 'child']);
@@ -16,7 +22,7 @@ export const GoalTypeSchema = z.enum([
 export const UnitTypeSchema = z.enum(['surah', 'quarter', 'page']);
 export const DifficultySchema = z.enum(['short', 'medium', 'long']);
 
-// Achievements schema
+// Achievements schema (for validation)
 export const AchievementsSchema = z.object({
   stars: z.number().int().nonnegative(),
   streak: z.number().int().nonnegative(),
@@ -24,7 +30,7 @@ export const AchievementsSchema = z.object({
   goalsCompleted: z.number().int().nonnegative(),
 });
 
-// Goal Progress schema (for user's progress on a goal)
+// Goal Progress schema (for validation)
 export const GoalProgressSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
@@ -61,7 +67,7 @@ export const GoalConfigSchema = z.object({
   description: z.string().optional(),
 });
 
-// Profile schema
+// Profile schema (for validation)
 export const ProfileSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
@@ -87,8 +93,22 @@ export const RegistrationDataSchema = z.object({
   avatar: z.string().min(1, 'Avatar is required'),
 });
 
-// Profile update schema
-export const ProfileUpdateSchema = ProfileSchema.partial().omit({ id: true });
+// Profile update schema - partial profile without id
+export const ProfileUpdateSchema = z.object({
+  name: z.string().min(1).optional(),
+  type: ProfileTypeSchema.optional(),
+  avatar: z.string().optional(),
+  currentGoal: z.string().optional(),
+  goals: z.array(GoalProgressSchema).optional(),
+  goalsCount: z.number().int().nonnegative().optional(),
+  email: z.string().email().optional(),
+  age: z.number().int().positive().optional(),
+  arabicProficiency: z.boolean().optional(),
+  arabicAccent: z.string().optional(),
+  tajweedLevel: TajweedLevelSchema.optional(),
+  streak: z.number().int().nonnegative().optional(),
+  achievements: AchievementsSchema.optional(),
+});
 
 // Add Goal schema (for adding goals to profile)
 export const AddGoalSchema = z.object({
@@ -103,13 +123,10 @@ export const DeleteGoalSchema = z.object({
   goalId: z.string().min(1),
 });
 
-// Type exports
-export type Achievements = z.infer<typeof AchievementsSchema>;
-export type GoalProgress = z.infer<typeof GoalProgressSchema>;
+// Additional type exports (from Zod inference)
 export type BaseUnit = z.infer<typeof BaseUnitSchema>;
 export type GoalMetadata = z.infer<typeof GoalMetadataSchema>;
 export type GoalConfig = z.infer<typeof GoalConfigSchema>;
-export type Profile = z.infer<typeof ProfileSchema>;
 export type RegistrationData = z.infer<typeof RegistrationDataSchema>;
 export type ProfileUpdate = z.infer<typeof ProfileUpdateSchema>;
 export type AddGoal = z.infer<typeof AddGoalSchema>;

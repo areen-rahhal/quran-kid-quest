@@ -17,10 +17,9 @@ const Onboarding = () => {
     navigate("/");
   };
 
-  const getAvatarEmoji = (avatarId?: string) => {
-    if (!avatarId) return "👤";
-    const avatar = AVATAR_OPTIONS.find(a => a.id === avatarId);
-    return avatar?.emoji || "👤";
+  const getInitials = (name?: string) => {
+    if (!name) return "?";
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   };
 
   return (
@@ -33,7 +32,7 @@ const Onboarding = () => {
           <div className="flex items-center gap-4">
             <Avatar className="h-12 w-12 border-2 border-primary">
               <AvatarFallback className="bg-gradient-primary text-primary-foreground text-lg">
-                {getAvatarEmoji(parentProfile?.avatar)}
+                {getInitials(parentProfile?.name)}
               </AvatarFallback>
             </Avatar>
             <div>
