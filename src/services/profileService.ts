@@ -153,12 +153,14 @@ export const profileService = {
     // Validate updates
     const validatedUpdates = ProfileUpdateSchema.parse(updates);
 
-    const updatedProfiles = profiles.map((profile) => {
+    const updatedProfiles = profiles.map((profile): Profile => {
       if (profile.id === profileId) {
+        // Merge the validated updates with the existing profile
+        // The original profile has required fields, updates only override what's provided
         return {
           ...profile,
           ...validatedUpdates,
-        };
+        } as Profile;
       }
       return profile;
     });

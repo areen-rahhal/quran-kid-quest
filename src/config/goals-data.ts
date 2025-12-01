@@ -181,7 +181,7 @@ export const GOALS_DATABASE: Goal[] = [
       quartersCount: 8,
       surahCount: 37,
       defaultUnit: 'surah',
-      difficulty: 'Easy',
+      difficulty: 'short',
     },
     units: [
       { id: 78, name: "An-Naba", arabicName: "النبأ" },

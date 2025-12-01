@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
-import { AVATAR_OPTIONS, getAvatarOption, getRandomAvatar } from '@/utils/avatars';
+import { describe, it, expect } from 'vitest';
+import { AVATAR_OPTIONS, getAvatarOption, getRandomAvatar, getAvatarImageUrl } from '@/utils/avatars';
 
 describe('Avatar utilities', () => {
   describe('AVATAR_OPTIONS', () => {
@@ -10,9 +10,7 @@ describe('Avatar utilities', () => {
     it('should have required properties for each avatar', () => {
       AVATAR_OPTIONS.forEach(avatar => {
         expect(avatar).toHaveProperty('id');
-        expect(avatar).toHaveProperty('name');
-        expect(avatar).toHaveProperty('emoji');
-        expect(avatar).toHaveProperty('color');
+        expect(avatar).toHaveProperty('image');
       });
     });
 
@@ -22,26 +20,25 @@ describe('Avatar utilities', () => {
       expect(uniqueIds.size).toBe(ids.length);
     });
 
-    it('should have valid tailwind color classes', () => {
-      const validColors = ['bg-pink-200', 'bg-blue-200', 'bg-purple-200', 'bg-green-200', 'bg-yellow-200', 'bg-indigo-200'];
+    it('should have valid image URLs', () => {
       AVATAR_OPTIONS.forEach(avatar => {
-        expect(validColors).toContain(avatar.color);
+        expect(avatar.image).toMatch(/^https?:\/\//);
       });
     });
 
-    it('should have emoji strings', () => {
+    it('should have non-empty id strings', () => {
       AVATAR_OPTIONS.forEach(avatar => {
-        expect(typeof avatar.emoji).toBe('string');
-        expect(avatar.emoji.length).toBeGreaterThan(0);
+        expect(typeof avatar.id).toBe('string');
+        expect(avatar.id.length).toBeGreaterThan(0);
       });
     });
   });
 
   describe('getAvatarOption', () => {
     it('should return avatar by valid id', () => {
-      const avatar = getAvatarOption('avatar-1');
+      const avatar = getAvatarOption('avatar-waleed');
       expect(avatar).toBeDefined();
-      expect(avatar?.name).toBe('Hana');
+      expect(avatar?.id).toBe('avatar-waleed');
     });
 
     it('should return undefined for invalid id', () => {
@@ -50,26 +47,22 @@ describe('Avatar utilities', () => {
     });
 
     it('should return avatar with all properties', () => {
-      const avatar = getAvatarOption('avatar-2');
-      expect(avatar).toEqual({
-        id: 'avatar-2',
-        name: 'Ali',
-        emoji: '👦',
-        color: 'bg-blue-200',
-      });
+      const avatar = getAvatarOption('avatar-zain');
+      expect(avatar).toHaveProperty('id', 'avatar-zain');
+      expect(avatar).toHaveProperty('image');
+      expect(avatar?.image).toMatch(/^https?:\/\//);
     });
 
     it('should find all avatars by id', () => {
-      const ids = ['avatar-1', 'avatar-2', 'avatar-3', 'avatar-4', 'avatar-5', 'avatar-6'];
-      ids.forEach(id => {
-        const avatar = getAvatarOption(id);
+      AVATAR_OPTIONS.forEach(expectedAvatar => {
+        const avatar = getAvatarOption(expectedAvatar.id);
         expect(avatar).toBeDefined();
-        expect(avatar?.id).toBe(id);
+        expect(avatar?.id).toBe(expectedAvatar.id);
       });
     });
 
     it('should handle case-sensitive search', () => {
-      const avatar = getAvatarOption('AVATAR-1');
+      const avatar = getAvatarOption('AVATAR-WALEED');
       expect(avatar).toBeUndefined();
     });
   });
@@ -84,9 +77,7 @@ describe('Avatar utilities', () => {
     it('should return avatar with all required properties', () => {
       const avatar = getRandomAvatar();
       expect(avatar).toHaveProperty('id');
-      expect(avatar).toHaveProperty('name');
-      expect(avatar).toHaveProperty('emoji');
-      expect(avatar).toHaveProperty('color');
+      expect(avatar).toHaveProperty('image');
     });
 
     it('should return different avatars over multiple calls (with high probability)', () => {
@@ -119,6 +110,34 @@ describe('Avatar utilities', () => {
         expect(count).toBeGreaterThan(average * 0.5);
         expect(count).toBeLessThan(average * 1.5);
       });
+    });
+  });
+
+  describe('getAvatarImageUrl', () => {
+    it('should return image URL for valid avatar id', () => {
+      const url = getAvatarImageUrl('avatar-waleed');
+      expect(url).toMatch(/^https?:\/\//);
+    });
+
+    it('should return first avatar image for undefined input', () => {
+      const url = getAvatarImageUrl(undefined);
+      expect(url).toBe(AVATAR_OPTIONS[0].image);
+    });
+
+    it('should return input as-is if it starts with http', () => {
+      const inputUrl = 'https://example.com/image.png';
+      const url = getAvatarImageUrl(inputUrl);
+      expect(url).toBe(inputUrl);
+    });
+
+    it('should handle fallback for old avatar IDs', () => {
+      const url = getAvatarImageUrl('avatar-1');
+      expect(url).toBe(AVATAR_OPTIONS[0].image);
+    });
+
+    it('should return default for unknown avatar id', () => {
+      const url = getAvatarImageUrl('unknown-avatar');
+      expect(url).toBe(AVATAR_OPTIONS[0].image);
     });
   });
 });
