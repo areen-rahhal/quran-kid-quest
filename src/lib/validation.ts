@@ -1,10 +1,12 @@
 import { z } from 'zod';
 import type { Profile, Achievements } from '@/types/profile';
-import type { GoalProgress } from '@/types/goals';
+import type { GoalProgress, PhaseProgress as PhaseProgressType } from '@/types/goals';
+import type { Phase, PhaseProgress } from '@/types/phases';
 
 // Re-export canonical types
 export type { Profile, Achievements } from '@/types/profile';
 export type { GoalProgress } from '@/types/goals';
+export type { Phase, PhaseProgress } from '@/types/phases';
 
 // Base enums
 export const ProfileTypeSchema = z.enum(['parent', 'child']);
