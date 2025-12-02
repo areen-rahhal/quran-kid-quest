@@ -34,6 +34,16 @@ export const AchievementsSchema = z.object({
   goalsCompleted: z.number().int().nonnegative(),
 });
 
+// Phase Progress schema
+export const PhaseProgressSchema = z.object({
+  id: z.string().min(1),
+  phaseId: z.string().min(1),
+  status: PhaseStatusSchema,
+  completionDate: z.string().datetime().optional(),
+  lastReviewDate: z.string().datetime().optional(),
+  attemptCount: z.number().int().nonnegative().optional(),
+});
+
 // Goal Progress schema (for validation)
 export const GoalProgressSchema = z.object({
   id: z.string().min(1),
