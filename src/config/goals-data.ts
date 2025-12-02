@@ -36,7 +36,7 @@ export const GOALS_DATABASE: Goal[] = [
     metadata: {
       versesCount: 286,
       pagesCount: 48,
-      quartersCount: 20,
+      quartersCount: 17,
       surahCount: 1,
       defaultUnit: 'quarter',
       difficulty: 'long',
