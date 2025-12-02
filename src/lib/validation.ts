@@ -48,6 +48,9 @@ export const BaseUnitSchema = z.object({
   id: z.number().int().positive(),
   name: z.string().min(1),
   arabicName: z.string().min(1),
+  versesCount: z.number().int().positive(),
+  startVerse: z.string().regex(/^\d+:\d+$/, 'Verse format must be "surah:verse"'),
+  endVerse: z.string().regex(/^\d+:\d+$/, 'Verse format must be "surah:verse"'),
 });
 
 // Goal Metadata schema
