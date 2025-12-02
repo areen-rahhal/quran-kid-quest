@@ -145,12 +145,31 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     return profile;
   };
 
-  const addGoal = (profileId: string, goalId: string, goalName: string) => {
+  const addGoal = (profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
     const { updatedProfiles, updatedCurrentProfile } = profileService.addGoal(
       profiles,
       profileId,
       goalId,
-      goalName
+      goalName,
+      phaseSize
+    );
+    setProfiles(updatedProfiles);
+    if (currentProfile.id === profileId) {
+      setCurrentProfile(updatedCurrentProfile);
+    }
+  };
+
+  const addGoalWithPhaseSize = (profileId: string, goalId: string, goalName: string, phaseSize: number) => {
+    addGoal(profileId, goalId, goalName, phaseSize);
+  };
+
+  const updateGoalPhaseSize = (profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => {
+    const { updatedProfiles, updatedCurrentProfile } = profileService.updateGoalPhaseSize(
+      profiles,
+      profileId,
+      goalId,
+      newPhaseSize,
+      unitId
     );
     setProfiles(updatedProfiles);
     if (currentProfile.id === profileId) {
