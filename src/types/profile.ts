@@ -1,4 +1,4 @@
-import { GoalProgress } from './goals';
+import { GoalProgress, PhaseProgress } from './goals';
 
 export interface Achievements {
   stars: number;
@@ -22,11 +22,4 @@ export interface Profile {
   tajweedLevel?: 'beginner' | 'intermediate' | 'advanced';
   streak?: number;
   achievements?: Achievements;
-}
-
-export interface PhaseProgress {
-  id: string;
-  phaseId: string;
-  status: 'not-started' | 'in-progress' | 'completed';
-  completionDate?: string;
 }
