@@ -135,4 +135,70 @@ export const goalService = {
       status: 'in-progress',
     });
   },
+
+  /**
+   * Update phase size for a goal and regenerate phases
+   * @param profile - The learner's profile
+   * @param goalId - The goal to update
+   * @param newPhaseSize - The new phase size
+   * @param unitId - Optional: only regenerate phases for this unit (defaults to current unit)
+   */
+  updateGoalPhaseSize(
+    profile: Profile,
+    goalId: string,
+    newPhaseSize: number,
+    unitId?: number
+  ): Profile {
+    const goalConfig = getGoalById(goalId);
+    if (!goalConfig) {
+      throw new Error(`Goal with id ${goalId} not found`);
+    }
+
+    if (newPhaseSize <= 0) {
+      throw new Error(`Phase size must be positive, got ${newPhaseSize}`);
+    }
+
+    // Determine which unit to regenerate phases for
+    let targetUnitId = unitId;
+    if (!targetUnitId && goalConfig.units && goalConfig.units.length > 0) {
+      targetUnitId = goalConfig.units[0].id;
+    }
+
+    // Find the unit and regenerate phases
+    const targetUnit = goalConfig.units?.find((u) => u.id === targetUnitId);
+    if (!targetUnit) {
+      throw new Error(`Unit ${targetUnitId} not found in goal ${goalId}`);
+    }
+
+    const newPhases = phaseService.initializePhaseProgress(targetUnit, newPhaseSize);
+
+    return this.updateGoalProgress(profile, goalId, {
+      phaseSize: newPhaseSize,
+      phases: newPhases,
+    });
+  },
+
+  /**
+   * Update phases for a goal
+   */
+  updateGoalPhases(
+    profile: Profile,
+    goalId: string,
+    phases: PhaseProgress[]
+  ): Profile {
+    return this.updateGoalProgress(profile, goalId, {
+      phases,
+    });
+  },
+
+  /**
+   * Get phase metrics for a goal
+   */
+  getGoalPhaseMetrics(profile: Profile, goalId: string) {
+    const goal = this.getGoalFromProfile(profile, goalId);
+    if (!goal || !goal.phases) {
+      return null;
+    }
+    return phaseService.getPhaseMetrics(goal.phases);
+  },
 };
