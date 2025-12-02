@@ -53,6 +53,29 @@ export const BaseUnitSchema = z.object({
   endVerse: z.string().regex(/^\d+:\d+$/, 'Verse format must be "surah:verse"'),
 });
 
+// Phase schema (for phase definitions)
+export const PhaseSchema = z.object({
+  id: z.string().min(1),
+  sequenceNumber: z.number().int().positive(),
+  versesStart: z.number().int().positive(),
+  versesEnd: z.number().int().positive(),
+  versesCount: z.number().int().positive(),
+  arabicName: z.string().optional(),
+  surahNumber: z.number().int().positive().optional(),
+  startVerse: z.string().regex(/^\d+:\d+$/, 'Verse format must be "surah:verse"').optional(),
+  endVerse: z.string().regex(/^\d+:\d+$/, 'Verse format must be "surah:verse"').optional(),
+});
+
+// Phase Progress schema
+export const PhaseProgressSchema = z.object({
+  id: z.string().min(1),
+  phaseId: z.string().min(1),
+  status: PhaseStatusSchema,
+  completionDate: z.string().datetime().optional(),
+  lastReviewDate: z.string().datetime().optional(),
+  attemptCount: z.number().int().nonnegative().optional(),
+});
+
 // Goal Metadata schema
 export const GoalMetadataSchema = z.object({
   versesCount: z.number().int().positive(),
@@ -61,6 +84,8 @@ export const GoalMetadataSchema = z.object({
   surahCount: z.number().int().positive(),
   defaultUnit: UnitTypeSchema,
   difficulty: DifficultySchema,
+  defaultPhaseSize: z.number().int().positive(),
+  supportsCustomPhaseSize: z.boolean(),
 });
 
 // Goal Configuration schema (for goal definitions)
