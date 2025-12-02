@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
 import Lottie from "lottie-react";
 import { TopNavBar } from "@/components/TopNavBar";
 import { GoalHeader } from "@/components/GoalHeader";
