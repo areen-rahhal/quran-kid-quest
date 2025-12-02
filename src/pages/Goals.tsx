@@ -1,18 +1,21 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
 import Lottie from "lottie-react";
 import { TopNavBar } from "@/components/TopNavBar";
 import { GoalHeader } from "@/components/GoalHeader";
 import { VerticalProgressBar } from "@/components/VerticalProgressBar";
 import { UnitsGrid, Unit } from "@/components/UnitsGrid";
+import { LearningPath } from "@/components/LearningPath";
 import { useToast } from "@/hooks/use-toast";
 import { useProfile } from "@/contexts/ProfileContext";
 import { useGoals } from "@/hooks/useGoals";
 import { BaseUnit } from "@/types/goals";
+import { phaseService } from "@/services/phaseService";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Target, ChevronLeft, ChevronRight } from "lucide-react";
+import { Target, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import pencilMascot from "@/assets/pencil-mascot.json";
 
