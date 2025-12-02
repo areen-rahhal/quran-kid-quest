@@ -97,10 +97,8 @@ const Goals = () => {
   const goalsCompleted = currentProfile.achievements?.goalsCompleted || 0;
 
   const handleUnitClick = (unit: Unit) => {
-    toast({
-      title: t('goals.opening', { name: unit.name }),
-      description: t('goals.learningDesc', { arabicName: unit.arabicName }),
-    });
+    setSelectedUnitId(unit.id);
+    setShowLearningPath(true);
   };
 
   // Check if user has goals
