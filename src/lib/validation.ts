@@ -80,16 +80,6 @@ export const PhaseSchema = z.object({
   endVerse: z.string().regex(/^\d+:\d+$/, 'Verse format must be "surah:verse"').optional(),
 });
 
-// Phase Progress schema
-export const PhaseProgressSchema = z.object({
-  id: z.string().min(1),
-  phaseId: z.string().min(1),
-  status: PhaseStatusSchema,
-  completionDate: z.string().datetime().optional(),
-  lastReviewDate: z.string().datetime().optional(),
-  attemptCount: z.number().int().nonnegative().optional(),
-});
-
 // Goal Metadata schema
 export const GoalMetadataSchema = z.object({
   versesCount: z.number().int().positive(),
