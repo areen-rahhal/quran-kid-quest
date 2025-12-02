@@ -83,16 +83,18 @@ export const profileService = {
 
   /**
    * Add a goal to a profile
+   * @param phaseSize - Optional custom phase size (defaults to goal's defaultPhaseSize)
    */
   addGoal(
     profiles: Profile[],
     currentProfileId: string,
     goalId: string,
-    goalName: string
+    goalName: string,
+    phaseSize?: number
   ): { updatedProfiles: Profile[]; updatedCurrentProfile: Profile } {
     const updatedProfiles = profiles.map((profile) => {
       if (profile.id === currentProfileId) {
-        return goalService.addGoalToProfile(profile, goalId, goalName);
+        return goalService.addGoalToProfile(profile, goalId, goalName, phaseSize);
       }
       return profile;
     });
@@ -153,14 +155,12 @@ export const profileService = {
     // Validate updates
     const validatedUpdates = ProfileUpdateSchema.parse(updates);
 
-    const updatedProfiles = profiles.map((profile): Profile => {
+    const updatedProfiles = profiles.map((profile) => {
       if (profile.id === profileId) {
-        // Merge the validated updates with the existing profile
-        // The original profile has required fields, updates only override what's provided
         return {
           ...profile,
           ...validatedUpdates,
-        } as Profile;
+        };
       }
       return profile;
     });
