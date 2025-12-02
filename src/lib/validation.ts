@@ -11,6 +11,8 @@ export type { Phase, PhaseProgress } from '@/types/phases';
 // Base enums
 export const ProfileTypeSchema = z.enum(['parent', 'child']);
 export const GoalStatusSchema = z.enum(['in-progress', 'completed', 'paused']);
+export const PhaseStatusSchema = z.enum(['not-started', 'in-progress', 'completed']);
+export const LessonTypeSchema = z.enum(['listen', 'repeat', 'recall', 'exercise']);
 export const TajweedLevelSchema = z.enum(['beginner', 'intermediate', 'advanced']);
 export const GoalTypeSchema = z.enum([
   'juz',
