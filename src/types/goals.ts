@@ -33,8 +33,6 @@ export interface Goal {
   description?: string;
 }
 
-import type { PhaseProgress } from './phases';
-
 export interface GoalProgress {
   id: string;
   name: string;
