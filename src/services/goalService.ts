@@ -1,14 +1,21 @@
 import { Profile, GoalProgress } from '@/lib/validation';
 import { getGoalById } from '@/config/goals-data';
+import { phaseService } from './phaseService';
+import { PhaseProgress } from '@/types/phases';
 
 export const goalService = {
   /**
-   * Add a goal to a profile
+   * Add a goal to a profile with phase initialization
+   * @param profile - The learner's profile
+   * @param goalId - The goal to add
+   * @param goalName - The goal's display name
+   * @param phaseSize - Optional custom phase size (defaults to goal's defaultPhaseSize)
    */
   addGoalToProfile(
     profile: Profile,
     goalId: string,
-    goalName: string
+    goalName: string,
+    phaseSize?: number
   ): Profile {
     const goalConfig = getGoalById(goalId);
     if (!goalConfig) {
@@ -17,12 +24,24 @@ export const goalService = {
 
     const totalSurahs = goalConfig.metadata.surahCount || 0;
 
+    // Determine phase size
+    const effectivePhaseSize = phaseSize || goalConfig.metadata.defaultPhaseSize;
+
+    // Generate phases for the first unit as default
+    let phases: PhaseProgress[] = [];
+    if (goalConfig.units && goalConfig.units.length > 0) {
+      phases = phaseService.initializePhaseProgress(goalConfig.units[0], effectivePhaseSize);
+    }
+
     const newGoal: GoalProgress = {
       id: goalId,
       name: goalName,
       status: 'in-progress',
       completedSurahs: 0,
       totalSurahs: totalSurahs,
+      phaseSize: effectivePhaseSize,
+      phases,
+      currentUnitId: goalConfig.units?.[0]?.id.toString(),
     };
 
     const updatedGoals = [...(profile.goals || []), newGoal];
