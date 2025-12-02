@@ -206,6 +206,8 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         switchProfile,
         registerParent,
         addGoal,
+        addGoalWithPhaseSize,
+        updateGoalPhaseSize,
         updateProfile,
         deleteGoal,
         isRegistrationComplete,
