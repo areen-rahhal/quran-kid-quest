@@ -31,6 +31,8 @@ export interface Goal {
   description?: string;
 }
 
+import type { PhaseProgress } from './phases';
+
 export interface GoalProgress {
   id: string;
   name: string;
@@ -41,11 +43,4 @@ export interface GoalProgress {
   phases?: PhaseProgress[];
   completionDate?: string;
   currentUnitId?: string;
-}
-
-export interface PhaseProgress {
-  id: string;
-  phaseId: string;
-  status: 'not-started' | 'in-progress' | 'completed';
-  completionDate?: string;
 }
