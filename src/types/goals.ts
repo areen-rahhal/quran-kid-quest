@@ -37,4 +37,15 @@ export interface GoalProgress {
   status: 'in-progress' | 'completed' | 'paused';
   completedSurahs?: number;
   totalSurahs?: number;
+  phaseSize?: number;
+  phases?: PhaseProgress[];
+  completionDate?: string;
+  currentUnitId?: string;
+}
+
+export interface PhaseProgress {
+  id: string;
+  phaseId: string;
+  status: 'not-started' | 'in-progress' | 'completed';
+  completionDate?: string;
 }
