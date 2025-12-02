@@ -23,3 +23,10 @@ export interface Profile {
   streak?: number;
   achievements?: Achievements;
 }
+
+export interface PhaseProgress {
+  id: string;
+  phaseId: string;
+  status: 'not-started' | 'in-progress' | 'completed';
+  completionDate?: string;
+}
