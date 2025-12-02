@@ -1,3 +1,5 @@
+import type { PhaseProgress } from './phases';
+
 export type GoalType = 'juz' | 'surah-xlong' | 'surah-long' | 'surah-medium' | 'surah-small' | 'surah-xsmall' | 'group';
 export type UnitType = 'surah' | 'quarter' | 'page';
 
