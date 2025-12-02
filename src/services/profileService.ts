@@ -195,6 +195,38 @@ export const profileService = {
   },
 
   /**
+   * Update phase size for a goal in a profile
+   */
+  updateGoalPhaseSize(
+    profiles: Profile[],
+    profileId: string,
+    goalId: string,
+    newPhaseSize: number,
+    unitId?: number
+  ): { updatedProfiles: Profile[]; updatedCurrentProfile: Profile } {
+    const updatedProfiles = profiles.map((profile) => {
+      if (profile.id === profileId) {
+        return goalService.updateGoalPhaseSize(profile, goalId, newPhaseSize, unitId);
+      }
+      return profile;
+    });
+
+    const updatedCurrentProfile =
+      updatedProfiles.find((p) => p.id === profileId) || updatedProfiles[0];
+
+    // Persist to storage
+    storageService.saveProfiles(updatedProfiles);
+    if (updatedCurrentProfile) {
+      storageService.saveCurrentProfile(updatedCurrentProfile);
+    }
+
+    return {
+      updatedProfiles,
+      updatedCurrentProfile: updatedCurrentProfile || ({} as Profile),
+    };
+  },
+
+  /**
    * Clear all stored data
    */
   clearAll(): void {
