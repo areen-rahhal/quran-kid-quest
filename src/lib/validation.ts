@@ -41,6 +41,10 @@ export const GoalProgressSchema = z.object({
   status: GoalStatusSchema,
   completedSurahs: z.number().int().nonnegative().optional(),
   totalSurahs: z.number().int().nonnegative().optional(),
+  phaseSize: z.number().int().positive().optional(),
+  phases: z.array(PhaseProgressSchema).optional(),
+  completionDate: z.string().datetime().optional(),
+  currentUnitId: z.string().optional(),
 });
 
 // Base Unit schema
