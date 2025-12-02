@@ -5,6 +5,9 @@ export interface BaseUnit {
   id: number;
   name: string;
   arabicName: string;
+  versesCount: number;
+  startVerse: string;
+  endVerse: string;
 }
 
 export interface GoalMetadata {
@@ -14,6 +17,8 @@ export interface GoalMetadata {
   surahCount: number;
   defaultUnit: UnitType;
   difficulty: 'short' | 'medium' | 'long';
+  defaultPhaseSize: number;
+  supportsCustomPhaseSize: boolean;
 }
 
 export interface Goal {
