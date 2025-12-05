@@ -20,6 +20,38 @@ interface ProfileContextType {
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
+// Helper function to initialize phases for a goal
+function initializeGoalWithPhases(
+  goalId: string,
+  goalName: string,
+  status: 'in-progress' | 'completed' | 'paused',
+  completedSurahs: number,
+  totalSurahs: number
+) {
+  const goalConfig = getGoalById(goalId);
+  if (!goalConfig) return null;
+
+  const phaseSize = goalConfig.metadata.defaultPhaseSize;
+  let phases = [];
+  let currentUnitId = undefined;
+
+  if (goalConfig.units && goalConfig.units.length > 0) {
+    phases = phaseService.initializePhaseProgress(goalConfig.units[0], phaseSize);
+    currentUnitId = goalConfig.units[0].id.toString();
+  }
+
+  return {
+    id: goalId,
+    name: goalName,
+    status,
+    completedSurahs,
+    totalSurahs,
+    phaseSize,
+    phases,
+    currentUnitId,
+  };
+}
+
 // Mock profiles data
 const mockProfiles: Profile[] = [
   {
@@ -46,21 +78,9 @@ const mockProfiles: Profile[] = [
     goalsCount: 2,
     streak: 12,
     goals: [
-      {
-        id: 'juz-29',
-        name: "Juz' 29",
-        status: 'in-progress',
-        completedSurahs: 4,
-        totalSurahs: 11,
-      },
-      {
-        id: 'juz-30',
-        name: "Juz' 30",
-        status: 'completed',
-        completedSurahs: 37,
-        totalSurahs: 37,
-      },
-    ],
+      initializeGoalWithPhases('juz-29', "Juz' 29", 'in-progress', 4, 11),
+      initializeGoalWithPhases('juz-30', "Juz' 30", 'completed', 37, 37),
+    ].filter(Boolean) as any[],
     achievements: {
       stars: 42,
       streak: 12,
@@ -77,14 +97,8 @@ const mockProfiles: Profile[] = [
     goalsCount: 1,
     streak: 7,
     goals: [
-      {
-        id: 'juz-30',
-        name: "Juz' 30",
-        status: 'in-progress',
-        completedSurahs: 3,
-        totalSurahs: 37,
-      },
-    ],
+      initializeGoalWithPhases('juz-30', "Juz' 30", 'in-progress', 3, 37),
+    ].filter(Boolean) as any[],
     achievements: {
       stars: 3,
       streak: 7,
