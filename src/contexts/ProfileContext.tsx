@@ -98,10 +98,11 @@ const mockProfiles: Profile[] = [
     type: 'child',
     avatar: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fa3cffb81fbde4015ad8bedfb2e19a16e?format=webp&width=800',
     currentGoal: "Juz' 30",
-    goalsCount: 1,
+    goalsCount: 2,
     streak: 7,
     goals: [
       initializeGoalWithPhases('juz-30', "Juz' 30", 'in-progress', 3, 37),
+      initializeGoalWithPhases('short-surahs', 'Short Surahs', 'in-progress', 0, 9),
     ].filter(Boolean) as any[],
     achievements: {
       stars: 3,
