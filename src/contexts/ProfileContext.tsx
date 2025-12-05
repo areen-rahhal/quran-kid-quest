@@ -58,10 +58,14 @@ const mockProfiles: Profile[] = [
     id: '1',
     name: 'Aya',
     type: 'parent',
-    goalsCount: 0,
+    goalsCount: 1,
     email: 'aya@example.com',
     avatar: 'avatar-1',
+    currentGoal: 'Surah Al-Bakarah',
     streak: 0,
+    goals: [
+      initializeGoalWithPhases('surah-bakarah', 'Surah Al-Bakarah', 'in-progress', 0, 1),
+    ].filter(Boolean) as any[],
     achievements: {
       stars: 128,
       streak: 0,
