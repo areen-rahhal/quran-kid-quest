@@ -180,7 +180,7 @@ export const GOALS_DATABASE: Goal[] = [
       surahCount: 9,
       defaultUnit: 'surah',
       difficulty: 'short',
-      defaultPhaseSize: 5,
+      defaultPhaseSize: 3,
       supportsCustomPhaseSize: true,
     },
     units: [
@@ -264,7 +264,7 @@ export const GOALS_DATABASE: Goal[] = [
       surahCount: 11,
       defaultUnit: 'surah',
       difficulty: 'medium',
-      defaultPhaseSize: 10,
+      defaultPhaseSize: 5,
       supportsCustomPhaseSize: true,
     },
     units: [
