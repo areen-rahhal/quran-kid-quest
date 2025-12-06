@@ -14,9 +14,10 @@ interface AchievementProps {
 
 interface TopNavBarProps {
   achievements?: AchievementProps;
+  onBack?: () => void;
 }
 
-export const TopNavBar = ({ achievements }: TopNavBarProps) => {
+export const TopNavBar = ({ achievements, onBack }: TopNavBarProps) => {
   const { currentProfile } = useProfile();
   const [isProfileSwitcherOpen, setIsProfileSwitcherOpen] = useState(false);
 
