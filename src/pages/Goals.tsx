@@ -28,8 +28,6 @@ const Goals = () => {
   const [selectedGoal, setSelectedGoal] = useState("");
   const [currentGoalIndex, setCurrentGoalIndex] = useState(0);
   const [hasAppliedUrlParams, setHasAppliedUrlParams] = useState(false);
-  const [selectedUnitId, setSelectedUnitId] = useState<number | null>(null);
-  const [showLearningPath, setShowLearningPath] = useState(false);
 
   // Handle URL parameters - set profile and goal from URL if provided (only once on initial load)
   useEffect(() => {
