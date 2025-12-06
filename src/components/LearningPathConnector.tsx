@@ -4,6 +4,8 @@
  * Can be used with CSS-based connectors or full SVG paths
  */
 
+import { cn } from '@/lib/utils';
+
 interface LearningPathConnectorProps {
   /**
    * Number of phases to connect
@@ -104,8 +106,5 @@ export const LearningPathConnectorCSS = ({
     />
   );
 };
-
-// Helper for combining imports
-import { cn } from '@/lib/utils';
 
 export default LearningPathConnector;
