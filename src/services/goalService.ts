@@ -133,7 +133,7 @@ export const goalService = {
   },
 
   /**
-   * Update phase size for a goal and regenerate phases
+   * Update phase size for a goal
    * @param profile - The learner's profile
    * @param goalId - The goal to update
    * @param newPhaseSize - The new phase size
@@ -154,23 +154,23 @@ export const goalService = {
       throw new Error(`Phase size must be positive, got ${newPhaseSize}`);
     }
 
-    // Determine which unit to regenerate phases for
+    // Determine which unit to validate
     let targetUnitId = unitId;
     if (!targetUnitId && goalConfig.units && goalConfig.units.length > 0) {
       targetUnitId = goalConfig.units[0].id;
     }
 
-    // Find the unit and regenerate phases
+    // Find the unit to validate phase size
     const targetUnit = goalConfig.units?.find((u) => u.id === targetUnitId);
     if (!targetUnit) {
       throw new Error(`Unit ${targetUnitId} not found in goal ${goalId}`);
     }
 
-    const newPhases = phaseService.initializePhaseProgress(targetUnit, newPhaseSize);
-
+    // Don't store phases - just update the phase size
+    // Phases will be generated on-demand when needed
     return this.updateGoalProgress(profile, goalId, {
       phaseSize: newPhaseSize,
-      phases: newPhases,
+      phases: null,
     });
   },
 
