@@ -186,31 +186,40 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     return profileService.initializeParentProfile();
   });
 
+  // Debounce localStorage saves to prevent blocking the thread
   useEffect(() => {
-    try {
-      const cleanedProfiles = profiles.map(cleanProfileForStorage);
-      localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
-    } catch (error) {
-      console.error('Failed to save profiles to localStorage:', error);
-      // Clear old data to free up space
-      localStorage.removeItem('profiles');
+    const timer = setTimeout(() => {
       try {
         const cleanedProfiles = profiles.map(cleanProfileForStorage);
         localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
-      } catch (e) {
-        console.error('Still failed after clearing:', e);
+      } catch (error) {
+        console.error('Failed to save profiles to localStorage:', error);
+        // Clear old data to free up space
+        localStorage.removeItem('profiles');
+        try {
+          const cleanedProfiles = profiles.map(cleanProfileForStorage);
+          localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
+        } catch (e) {
+          console.error('Still failed after clearing:', e);
+        }
       }
-    }
+    }, 300); // Wait 300ms after last change before saving
+
+    return () => clearTimeout(timer);
   }, [profiles]);
 
   useEffect(() => {
-    try {
-      const cleanedProfile = cleanProfileForStorage(currentProfile);
-      localStorage.setItem('currentProfile', JSON.stringify(cleanedProfile));
-    } catch (error) {
-      console.error('Failed to save currentProfile to localStorage:', error);
-      localStorage.removeItem('currentProfile');
-    }
+    const timer = setTimeout(() => {
+      try {
+        const cleanedProfile = cleanProfileForStorage(currentProfile);
+        localStorage.setItem('currentProfile', JSON.stringify(cleanedProfile));
+      } catch (error) {
+        console.error('Failed to save currentProfile to localStorage:', error);
+        localStorage.removeItem('currentProfile');
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
   }, [currentProfile]);
 
   useEffect(() => {
