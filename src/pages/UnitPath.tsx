@@ -91,7 +91,7 @@ const UnitPath = () => {
         </div>
 
         {/* Achievement Icon */}
-        <div className="flex justify-center pt-8">
+        <div className="flex justify-center pt-8 relative z-10">
           <div className="w-20 h-20 rounded-full bg-primary/10 border-2 border-primary/30 flex items-center justify-center">
             <Gem className="h-10 w-10 text-primary" />
           </div>
