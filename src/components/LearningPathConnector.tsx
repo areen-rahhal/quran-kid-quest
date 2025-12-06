@@ -51,8 +51,8 @@ export const LearningPathConnector = ({
     >
       {/* Draw vertical connecting lines between nodes */}
       {Array.from({ length: phaseCount - 1 }).map((_, index) => {
-        const startY = (index + 1) * phaseHeight;
-        const endY = (index + 2) * phaseHeight;
+        const startY = index * phaseHeight;
+        const endY = (index + 1) * phaseHeight;
 
         return (
           <g key={`connector-${index}`}>
