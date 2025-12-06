@@ -7,7 +7,7 @@
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { Phase, PhaseProgress, PhaseStatus } from '@/types/phases';
-import { BaseUnit } from '@/lib/validation';
+import { BaseUnit } from '@/types/goals';
 import PhaseNode from './PhaseNode';
 import LearningPathConnector from './LearningPathConnector';
 
