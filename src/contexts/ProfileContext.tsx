@@ -117,12 +117,40 @@ const mockProfiles: Profile[] = [
 
 export function ProfileProvider({ children }: { children: ReactNode }) {
   const [profiles, setProfiles] = useState<Profile[]>(() => {
+    // Try to load from localStorage first
+    const storedProfiles = localStorage.getItem('profiles');
+    if (storedProfiles) {
+      try {
+        const parsed = JSON.parse(storedProfiles);
+        // Validate it's a proper array
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      } catch (e) {
+        // If parse fails, fall back to mock data
+      }
+    }
+    // Fall back to mock data if localStorage is empty or invalid
     return profileService.initializeProfiles(mockProfiles);
   });
   const [currentProfile, setCurrentProfile] = useState<Profile>(() => {
-    return profileService.initializeCurrentProfile(
-      profileService.initializeProfiles(mockProfiles)
-    );
+    // Try to load from localStorage first
+    const storedCurrentProfile = localStorage.getItem('currentProfile');
+    if (storedCurrentProfile) {
+      try {
+        const parsed = JSON.parse(storedCurrentProfile);
+        if (parsed && parsed.id) {
+          return parsed;
+        }
+      } catch (e) {
+        // If parse fails, fall back to initialization
+      }
+    }
+    // Fall back to initialization if localStorage is empty or invalid
+    const initialProfiles = localStorage.getItem('profiles')
+      ? JSON.parse(localStorage.getItem('profiles') || '[]')
+      : profileService.initializeProfiles(mockProfiles);
+    return profileService.initializeCurrentProfile(initialProfiles);
   });
   const [isRegistrationComplete, setIsRegistrationComplete] = useState<boolean>(() => {
     return profileService.initializeRegistrationStatus();
