@@ -223,6 +223,22 @@ export function getPhraseSizeRange(unit: BaseUnit): { min: number; max: number; 
 }
 
 /**
+ * Generate phase progress for a goal's current unit on-demand
+ * This is called when phases are needed rather than storing them
+ */
+export function generatePhaseProgressForGoal(goalId: string, phaseSize: number): PhaseProgress[] | null {
+  const { getGoalById } = require('@/config/goals-data');
+  const goalConfig = getGoalById(goalId);
+
+  if (!goalConfig || !goalConfig.units || goalConfig.units.length === 0) {
+    return null;
+  }
+
+  // Generate phases for the first unit
+  return initializePhaseProgress(goalConfig.units[0], phaseSize);
+}
+
+/**
  * Service object exporting all phase operations
  */
 export const phaseService = {
@@ -237,4 +253,5 @@ export const phaseService = {
   getUnitPhases,
   isValidPhaseSize,
   getPhraseSizeRange,
+  generatePhaseProgressForGoal,
 };
