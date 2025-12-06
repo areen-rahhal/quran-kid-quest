@@ -56,7 +56,7 @@ const UnitPath = () => {
     <div className="min-h-screen bg-gradient-soft islamic-pattern flex flex-col">
       {/* Top Navigation */}
       <TopNavBar
-        onBack={() => navigate('/goals')}
+        onBack={() => navigate(`/goals?profileId=${profileId}&goalId=${goalId}`)}
         achievements={{
           stars: profile.achievements?.stars || 0,
           streak: profile.achievements?.streak || 0,
