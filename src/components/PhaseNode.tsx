@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import React from 'react';
 import { cn } from '@/lib/utils';
 import { Phase } from '@/types/phases';
 import { Check, Circle } from 'lucide-react';
@@ -12,7 +13,7 @@ interface PhaseNodeProps {
   isSelected?: boolean;
 }
 
-export const PhaseNode = ({ phase, status, onClick, isSelected = false }: PhaseNodeProps) => {
+const PhaseNodeComponent = ({ phase, status, onClick, isSelected = false }: PhaseNodeProps) => {
   const getStatusStyles = () => {
     const baseClasses = 'w-16 h-16 rounded-full border-2 flex flex-col items-center justify-center transition-all duration-200';
 
@@ -77,5 +78,7 @@ export const PhaseNode = ({ phase, status, onClick, isSelected = false }: PhaseN
     </div>
   );
 };
+
+export const PhaseNode = React.memo(PhaseNodeComponent);
 
 export default PhaseNode;
