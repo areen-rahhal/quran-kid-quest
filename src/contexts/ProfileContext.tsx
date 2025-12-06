@@ -219,7 +219,12 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (parentProfile) {
-      localStorage.setItem('parentProfile', JSON.stringify(parentProfile));
+      try {
+        const cleanedProfile = cleanProfileForStorage(parentProfile);
+        localStorage.setItem('parentProfile', JSON.stringify(cleanedProfile));
+      } catch (error) {
+        console.error('Failed to save parentProfile:', error);
+      }
     }
   }, [parentProfile]);
 
