@@ -56,7 +56,14 @@ const UnitPath = () => {
   return (
     <div className="min-h-screen bg-gradient-soft islamic-pattern flex flex-col">
       {/* Top Navigation */}
-      <TopNavBar />
+      <TopNavBar
+        achievements={{
+          stars: profile.achievements?.stars || 0,
+          streak: profile.achievements?.streak || 0,
+          recitations: profile.achievements?.recitations || 0,
+          goalsCompleted: profile.achievements?.goalsCompleted || 0,
+        }}
+      />
 
       {/* Content */}
       <div className="flex-1 container max-w-md mx-auto p-4 pb-8 space-y-6 flex flex-col">
