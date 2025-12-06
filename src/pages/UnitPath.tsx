@@ -1,10 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useProfile } from "@/contexts/ProfileContext";
 import { useGoals } from "@/hooks/useGoals";
 import { phaseService } from "@/services/phaseService";
 import { getGoalById } from "@/config/goals-data";
 import { Gem } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TopNavBar } from "@/components/TopNavBar";
 import { LearningPath } from "@/components/LearningPath";

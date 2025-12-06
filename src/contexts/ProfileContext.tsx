@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Profile, RegistrationData, ProfileUpdate } from '@/lib/validation';
 import { profileService } from '@/services/profileService';
 import { phaseService } from '@/services/phaseService';
