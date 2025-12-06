@@ -162,10 +162,11 @@ export const profileService = {
     const updatedCurrentProfile =
       updatedProfiles.find((p) => p.id === profileId) || updatedProfiles[0];
 
-    // Persist to storage
-    storageService.saveProfiles(updatedProfiles);
+    // Persist to storage with cleaned data
+    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
+    storageService.saveProfiles(cleanedProfiles);
     if (updatedCurrentProfile) {
-      storageService.saveCurrentProfile(updatedCurrentProfile);
+      storageService.saveCurrentProfile(cleanProfileForStorage(updatedCurrentProfile));
     }
 
     return {
