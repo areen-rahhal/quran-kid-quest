@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Star, Flame, Gem, Trophy } from 'lucide-react';
+import { Star, Flame, Gem, Trophy, ChevronLeft } from 'lucide-react';
 import { AvatarImage } from '@/components/AvatarImage';
 import { ProfileSwitcher } from '@/components/ProfileSwitcher';
 import { useProfile } from '@/contexts/ProfileContext';
@@ -14,9 +14,10 @@ interface AchievementProps {
 
 interface TopNavBarProps {
   achievements?: AchievementProps;
+  onBack?: () => void;
 }
 
-export const TopNavBar = ({ achievements }: TopNavBarProps) => {
+export const TopNavBar = ({ achievements, onBack }: TopNavBarProps) => {
   const { currentProfile } = useProfile();
   const [isProfileSwitcherOpen, setIsProfileSwitcherOpen] = useState(false);
 
@@ -32,18 +33,29 @@ export const TopNavBar = ({ achievements }: TopNavBarProps) => {
   return (
     <>
       <header className="sticky top-0 z-40 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-        <div className="container flex h-16 items-center justify-between px-4">
-          <button
-            onClick={() => setIsProfileSwitcherOpen(true)}
-            className="hover:bg-accent rounded-full p-1 transition-colors"
-          >
-            <AvatarImage
-              src={getAvatarImageUrl(currentProfile.avatar)}
-              initials={getInitials(currentProfile.name)}
-              name={currentProfile.name}
-              size="sm"
-            />
-          </button>
+        <div className="container flex h-16 items-center justify-between px-4 gap-4">
+          <div className="flex items-center gap-2">
+            {onBack && (
+              <button
+                onClick={onBack}
+                className="hover:bg-accent rounded-full p-2 transition-colors"
+                aria-label="Go back"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+            )}
+            <button
+              onClick={() => setIsProfileSwitcherOpen(true)}
+              className="hover:bg-accent rounded-full p-1 transition-colors"
+            >
+              <AvatarImage
+                src={getAvatarImageUrl(currentProfile.avatar)}
+                initials={getInitials(currentProfile.name)}
+                name={currentProfile.name}
+                size="sm"
+              />
+            </button>
+          </div>
 
           {achievements && (
             <div className="flex gap-4 items-center">

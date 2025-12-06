@@ -8,6 +8,7 @@ import { ProfileProvider } from "@/contexts/ProfileContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import Index from "./pages/Index";
 import Goals from "./pages/Goals";
+import UnitPath from "./pages/UnitPath";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import VerifyEmail from "./pages/VerifyEmail";
@@ -33,6 +34,7 @@ const App = () => (
               <Route path="/verify-email" element={<VerifyEmail />} />
               <Route path="/onboarding" element={<Onboarding />} />
               <Route path="/goals" element={<Goals />} />
+              <Route path="/unit-path/:profileId/:goalId/:unitId" element={<UnitPath />} />
               <Route path="/learners-profiles" element={<LearnersProfiles />} />
               <Route path="/learner/:id" element={<Learner />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

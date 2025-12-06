@@ -1,14 +1,18 @@
 import { z } from 'zod';
 import type { Profile, Achievements } from '@/types/profile';
-import type { GoalProgress } from '@/types/goals';
+import type { GoalProgress, PhaseProgress as PhaseProgressType } from '@/types/goals';
+import type { Phase, PhaseProgress } from '@/types/phases';
 
 // Re-export canonical types
 export type { Profile, Achievements } from '@/types/profile';
-export type { GoalProgress } from '@/types/goals';
+export type { BaseUnit, GoalProgress } from '@/types/goals';
+export type { Phase, PhaseProgress } from '@/types/phases';
 
 // Base enums
 export const ProfileTypeSchema = z.enum(['parent', 'child']);
 export const GoalStatusSchema = z.enum(['in-progress', 'completed', 'paused']);
+export const PhaseStatusSchema = z.enum(['not-started', 'in-progress', 'completed']);
+export const LessonTypeSchema = z.enum(['listen', 'repeat', 'recall', 'exercise']);
 export const TajweedLevelSchema = z.enum(['beginner', 'intermediate', 'advanced']);
 export const GoalTypeSchema = z.enum([
   'juz',
@@ -30,6 +34,16 @@ export const AchievementsSchema = z.object({
   goalsCompleted: z.number().int().nonnegative(),
 });
 
+// Phase Progress schema
+export const PhaseProgressSchema = z.object({
+  id: z.string().min(1),
+  phaseId: z.string().min(1),
+  status: PhaseStatusSchema,
+  completionDate: z.string().datetime().optional(),
+  lastReviewDate: z.string().datetime().optional(),
+  attemptCount: z.number().int().nonnegative().optional(),
+});
+
 // Goal Progress schema (for validation)
 export const GoalProgressSchema = z.object({
   id: z.string().min(1),
@@ -37,6 +51,10 @@ export const GoalProgressSchema = z.object({
   status: GoalStatusSchema,
   completedSurahs: z.number().int().nonnegative().optional(),
   totalSurahs: z.number().int().nonnegative().optional(),
+  phaseSize: z.number().int().positive().optional(),
+  phases: z.array(PhaseProgressSchema).optional().nullable(),
+  completionDate: z.string().datetime().optional(),
+  currentUnitId: z.string().optional(),
 });
 
 // Base Unit schema
@@ -44,6 +62,22 @@ export const BaseUnitSchema = z.object({
   id: z.number().int().positive(),
   name: z.string().min(1),
   arabicName: z.string().min(1),
+  versesCount: z.number().int().positive(),
+  startVerse: z.string().regex(/^\d+:\d+$/, 'Verse format must be "surah:verse"'),
+  endVerse: z.string().regex(/^\d+:\d+$/, 'Verse format must be "surah:verse"'),
+});
+
+// Phase schema (for phase definitions)
+export const PhaseSchema = z.object({
+  id: z.string().min(1),
+  sequenceNumber: z.number().int().positive(),
+  versesStart: z.number().int().positive(),
+  versesEnd: z.number().int().positive(),
+  versesCount: z.number().int().positive(),
+  arabicName: z.string().optional(),
+  surahNumber: z.number().int().positive().optional(),
+  startVerse: z.string().regex(/^\d+:\d+$/, 'Verse format must be "surah:verse"').optional(),
+  endVerse: z.string().regex(/^\d+:\d+$/, 'Verse format must be "surah:verse"').optional(),
 });
 
 // Goal Metadata schema
@@ -54,6 +88,8 @@ export const GoalMetadataSchema = z.object({
   surahCount: z.number().int().positive(),
   defaultUnit: UnitTypeSchema,
   difficulty: DifficultySchema,
+  defaultPhaseSize: z.number().int().positive(),
+  supportsCustomPhaseSize: z.boolean(),
 });
 
 // Goal Configuration schema (for goal definitions)
@@ -127,6 +163,8 @@ export const DeleteGoalSchema = z.object({
 export type BaseUnit = z.infer<typeof BaseUnitSchema>;
 export type GoalMetadata = z.infer<typeof GoalMetadataSchema>;
 export type GoalConfig = z.infer<typeof GoalConfigSchema>;
+export type PhaseSchemaType = z.infer<typeof PhaseSchema>;
+export type PhaseProgressType = z.infer<typeof PhaseProgressSchema>;
 export type RegistrationData = z.infer<typeof RegistrationDataSchema>;
 export type ProfileUpdate = z.infer<typeof ProfileUpdateSchema>;
 export type AddGoal = z.infer<typeof AddGoalSchema>;

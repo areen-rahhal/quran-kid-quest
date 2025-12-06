@@ -7,6 +7,35 @@ import {
 import { storageService } from './storageService';
 import { goalService } from './goalService';
 
+/**
+ * Ensure profile object is serializable and clean
+ */
+function cleanProfileForStorage(profile: Profile): Profile {
+  return {
+    id: profile.id,
+    name: profile.name,
+    type: profile.type,
+    avatar: profile.avatar,
+    email: profile.email,
+    age: profile.age,
+    currentGoal: profile.currentGoal,
+    goalsCount: profile.goalsCount,
+    streak: profile.streak,
+    goals: (profile.goals || []).map(goal => ({
+      id: goal.id,
+      name: goal.name,
+      status: goal.status,
+      completedSurahs: goal.completedSurahs,
+      totalSurahs: goal.totalSurahs,
+      phaseSize: goal.phaseSize,
+      phases: null, // Always null - don't store phases
+      currentUnitId: goal.currentUnitId,
+      completionDate: goal.completionDate,
+    })),
+    achievements: profile.achievements,
+  } as Profile;
+}
+
 export const profileService = {
   /**
    * Initialize profiles from storage or fallback to defaults
@@ -54,15 +83,17 @@ export const profileService = {
       email: data.email,
       avatar: data.avatar,
       goalsCount: 0,
+      goals: [],
     };
 
     const updatedProfiles = [...allProfiles, newParentProfile];
 
-    // Persist to storage
-    storageService.saveProfiles(updatedProfiles);
-    storageService.saveCurrentProfile(newParentProfile);
+    // Persist to storage with cleaned data
+    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
+    storageService.saveProfiles(cleanedProfiles);
+    storageService.saveCurrentProfile(cleanProfileForStorage(newParentProfile));
     storageService.saveRegistrationStatus(true);
-    storageService.saveParentProfile(newParentProfile);
+    storageService.saveParentProfile(cleanProfileForStorage(newParentProfile));
 
     return {
       profile: newParentProfile,
@@ -83,16 +114,18 @@ export const profileService = {
 
   /**
    * Add a goal to a profile
+   * @param phaseSize - Optional custom phase size (defaults to goal's defaultPhaseSize)
    */
   addGoal(
     profiles: Profile[],
     currentProfileId: string,
     goalId: string,
-    goalName: string
+    goalName: string,
+    phaseSize?: number
   ): { updatedProfiles: Profile[]; updatedCurrentProfile: Profile } {
     const updatedProfiles = profiles.map((profile) => {
       if (profile.id === currentProfileId) {
-        return goalService.addGoalToProfile(profile, goalId, goalName);
+        return goalService.addGoalToProfile(profile, goalId, goalName, phaseSize);
       }
       return profile;
     });
@@ -100,10 +133,11 @@ export const profileService = {
     const updatedCurrentProfile =
       updatedProfiles.find((p) => p.id === currentProfileId) || updatedProfiles[0];
 
-    // Persist to storage
-    storageService.saveProfiles(updatedProfiles);
+    // Persist to storage with cleaned data
+    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
+    storageService.saveProfiles(cleanedProfiles);
     if (updatedCurrentProfile) {
-      storageService.saveCurrentProfile(updatedCurrentProfile);
+      storageService.saveCurrentProfile(cleanProfileForStorage(updatedCurrentProfile));
     }
 
     return {
@@ -130,10 +164,11 @@ export const profileService = {
     const updatedCurrentProfile =
       updatedProfiles.find((p) => p.id === profileId) || updatedProfiles[0];
 
-    // Persist to storage
-    storageService.saveProfiles(updatedProfiles);
+    // Persist to storage with cleaned data
+    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
+    storageService.saveProfiles(cleanedProfiles);
     if (updatedCurrentProfile) {
-      storageService.saveCurrentProfile(updatedCurrentProfile);
+      storageService.saveCurrentProfile(cleanProfileForStorage(updatedCurrentProfile));
     }
 
     return {
@@ -153,14 +188,12 @@ export const profileService = {
     // Validate updates
     const validatedUpdates = ProfileUpdateSchema.parse(updates);
 
-    const updatedProfiles = profiles.map((profile): Profile => {
+    const updatedProfiles = profiles.map((profile) => {
       if (profile.id === profileId) {
-        // Merge the validated updates with the existing profile
-        // The original profile has required fields, updates only override what's provided
         return {
           ...profile,
           ...validatedUpdates,
-        } as Profile;
+        };
       }
       return profile;
     });
@@ -168,10 +201,11 @@ export const profileService = {
     const updatedCurrentProfile =
       updatedProfiles.find((p) => p.id === profileId) || updatedProfiles[0];
 
-    // Persist to storage
-    storageService.saveProfiles(updatedProfiles);
+    // Persist to storage with cleaned data
+    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
+    storageService.saveProfiles(cleanedProfiles);
     if (updatedCurrentProfile) {
-      storageService.saveCurrentProfile(updatedCurrentProfile);
+      storageService.saveCurrentProfile(cleanProfileForStorage(updatedCurrentProfile));
     }
 
     return {
@@ -192,6 +226,39 @@ export const profileService = {
    */
   profileExists(profiles: Profile[], profileId: string): boolean {
     return profiles.some((p) => p.id === profileId);
+  },
+
+  /**
+   * Update phase size for a goal in a profile
+   */
+  updateGoalPhaseSize(
+    profiles: Profile[],
+    profileId: string,
+    goalId: string,
+    newPhaseSize: number,
+    unitId?: number
+  ): { updatedProfiles: Profile[]; updatedCurrentProfile: Profile } {
+    const updatedProfiles = profiles.map((profile) => {
+      if (profile.id === profileId) {
+        return goalService.updateGoalPhaseSize(profile, goalId, newPhaseSize, unitId);
+      }
+      return profile;
+    });
+
+    const updatedCurrentProfile =
+      updatedProfiles.find((p) => p.id === profileId) || updatedProfiles[0];
+
+    // Persist to storage with cleaned data
+    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
+    storageService.saveProfiles(cleanedProfiles);
+    if (updatedCurrentProfile) {
+      storageService.saveCurrentProfile(cleanProfileForStorage(updatedCurrentProfile));
+    }
+
+    return {
+      updatedProfiles,
+      updatedCurrentProfile: updatedCurrentProfile || ({} as Profile),
+    };
   },
 
   /**

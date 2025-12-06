@@ -1,13 +1,46 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Profile, RegistrationData, ProfileUpdate } from '@/lib/validation';
 import { profileService } from '@/services/profileService';
+import { phaseService } from '@/services/phaseService';
+import { getGoalById } from '@/config/goals-data';
+
+/**
+ * Clean profile object before storing in localStorage
+ */
+function cleanProfileForStorage(profile: Profile): Profile {
+  return {
+    id: profile.id,
+    name: profile.name,
+    type: profile.type,
+    avatar: profile.avatar,
+    email: profile.email,
+    age: profile.age,
+    currentGoal: profile.currentGoal,
+    goalsCount: profile.goalsCount,
+    streak: profile.streak,
+    goals: (profile.goals || []).map(goal => ({
+      id: goal.id,
+      name: goal.name,
+      status: goal.status,
+      completedSurahs: goal.completedSurahs,
+      totalSurahs: goal.totalSurahs,
+      phaseSize: goal.phaseSize,
+      phases: null,
+      currentUnitId: goal.currentUnitId,
+      completionDate: goal.completionDate,
+    })),
+    achievements: profile.achievements,
+  } as Profile;
+}
 
 interface ProfileContextType {
   currentProfile: Profile;
   profiles: Profile[];
   switchProfile: (profileId: string) => void;
   registerParent: (data: RegistrationData) => Profile;
-  addGoal: (profileId: string, goalId: string, goalName: string) => void;
+  addGoal: (profileId: string, goalId: string, goalName: string, phaseSize?: number) => void;
+  addGoalWithPhaseSize: (profileId: string, goalId: string, goalName: string, phaseSize: number) => void;
+  updateGoalPhaseSize: (profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => void;
   updateProfile: (profileId: string, updates: ProfileUpdate) => void;
   deleteGoal: (profileId: string, goalId: string) => void;
   isRegistrationComplete: boolean;
@@ -16,16 +49,51 @@ interface ProfileContextType {
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
+// Helper function to initialize a goal without storing phases in memory
+function initializeGoalWithPhases(
+  goalId: string,
+  goalName: string,
+  status: 'in-progress' | 'completed' | 'paused',
+  completedSurahs: number,
+  totalSurahs: number
+) {
+  const goalConfig = getGoalById(goalId);
+  if (!goalConfig) return null;
+
+  const phaseSize = goalConfig.metadata.defaultPhaseSize;
+  let currentUnitId = undefined;
+
+  if (goalConfig.units && goalConfig.units.length > 0) {
+    currentUnitId = goalConfig.units[0].id.toString();
+  }
+
+  return {
+    id: goalId,
+    name: goalName,
+    status,
+    completedSurahs,
+    totalSurahs,
+    phaseSize,
+    phases: null,
+    currentUnitId,
+  };
+}
+
 // Mock profiles data
 const mockProfiles: Profile[] = [
   {
     id: '1',
     name: 'Aya',
     type: 'parent',
-    goalsCount: 0,
+    goalsCount: 2,
     email: 'aya@example.com',
     avatar: 'avatar-1',
+    currentGoal: 'Surah Al-Bakarah',
     streak: 0,
+    goals: [
+      initializeGoalWithPhases('surah-bakarah', 'Surah Al-Bakarah', 'in-progress', 0, 1),
+      initializeGoalWithPhases('surah-rahman', 'Surah Al-Rahman', 'in-progress', 0, 1),
+    ].filter(Boolean) as any[],
     achievements: {
       stars: 128,
       streak: 0,
@@ -42,21 +110,9 @@ const mockProfiles: Profile[] = [
     goalsCount: 2,
     streak: 12,
     goals: [
-      {
-        id: 'juz-29',
-        name: "Juz' 29",
-        status: 'in-progress',
-        completedSurahs: 4,
-        totalSurahs: 11,
-      },
-      {
-        id: 'juz-30',
-        name: "Juz' 30",
-        status: 'completed',
-        completedSurahs: 37,
-        totalSurahs: 37,
-      },
-    ],
+      initializeGoalWithPhases('juz-29', "Juz' 29", 'in-progress', 4, 11),
+      initializeGoalWithPhases('juz-30', "Juz' 30", 'completed', 37, 37),
+    ].filter(Boolean) as any[],
     achievements: {
       stars: 42,
       streak: 12,
@@ -70,17 +126,12 @@ const mockProfiles: Profile[] = [
     type: 'child',
     avatar: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fa3cffb81fbde4015ad8bedfb2e19a16e?format=webp&width=800',
     currentGoal: "Juz' 30",
-    goalsCount: 1,
+    goalsCount: 2,
     streak: 7,
     goals: [
-      {
-        id: 'juz-30',
-        name: "Juz' 30",
-        status: 'in-progress',
-        completedSurahs: 3,
-        totalSurahs: 37,
-      },
-    ],
+      initializeGoalWithPhases('juz-30', "Juz' 30", 'in-progress', 3, 37),
+      initializeGoalWithPhases('short-surahs', 'Short Surahs', 'in-progress', 0, 9),
+    ].filter(Boolean) as any[],
     achievements: {
       stars: 3,
       streak: 7,
@@ -92,12 +143,40 @@ const mockProfiles: Profile[] = [
 
 export function ProfileProvider({ children }: { children: ReactNode }) {
   const [profiles, setProfiles] = useState<Profile[]>(() => {
+    // Try to load from localStorage first
+    const storedProfiles = localStorage.getItem('profiles');
+    if (storedProfiles) {
+      try {
+        const parsed = JSON.parse(storedProfiles);
+        // Validate it's a proper array
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      } catch (e) {
+        // If parse fails, fall back to mock data
+      }
+    }
+    // Fall back to mock data if localStorage is empty or invalid
     return profileService.initializeProfiles(mockProfiles);
   });
   const [currentProfile, setCurrentProfile] = useState<Profile>(() => {
-    return profileService.initializeCurrentProfile(
-      profileService.initializeProfiles(mockProfiles)
-    );
+    // Try to load from localStorage first
+    const storedCurrentProfile = localStorage.getItem('currentProfile');
+    if (storedCurrentProfile) {
+      try {
+        const parsed = JSON.parse(storedCurrentProfile);
+        if (parsed && parsed.id) {
+          return parsed;
+        }
+      } catch (e) {
+        // If parse fails, fall back to initialization
+      }
+    }
+    // Fall back to initialization if localStorage is empty or invalid
+    const initialProfiles = localStorage.getItem('profiles')
+      ? JSON.parse(localStorage.getItem('profiles') || '[]')
+      : profileService.initializeProfiles(mockProfiles);
+    return profileService.initializeCurrentProfile(initialProfiles);
   });
   const [isRegistrationComplete, setIsRegistrationComplete] = useState<boolean>(() => {
     return profileService.initializeRegistrationStatus();
@@ -106,12 +185,40 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     return profileService.initializeParentProfile();
   });
 
+  // Debounce localStorage saves to prevent blocking the thread
   useEffect(() => {
-    localStorage.setItem('profiles', JSON.stringify(profiles));
+    const timer = setTimeout(() => {
+      try {
+        const cleanedProfiles = profiles.map(cleanProfileForStorage);
+        localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
+      } catch (error) {
+        console.error('Failed to save profiles to localStorage:', error);
+        // Clear old data to free up space
+        localStorage.removeItem('profiles');
+        try {
+          const cleanedProfiles = profiles.map(cleanProfileForStorage);
+          localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
+        } catch (e) {
+          console.error('Still failed after clearing:', e);
+        }
+      }
+    }, 300); // Wait 300ms after last change before saving
+
+    return () => clearTimeout(timer);
   }, [profiles]);
 
   useEffect(() => {
-    localStorage.setItem('currentProfile', JSON.stringify(currentProfile));
+    const timer = setTimeout(() => {
+      try {
+        const cleanedProfile = cleanProfileForStorage(currentProfile);
+        localStorage.setItem('currentProfile', JSON.stringify(cleanedProfile));
+      } catch (error) {
+        console.error('Failed to save currentProfile to localStorage:', error);
+        localStorage.removeItem('currentProfile');
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
   }, [currentProfile]);
 
   useEffect(() => {
@@ -120,7 +227,12 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (parentProfile) {
-      localStorage.setItem('parentProfile', JSON.stringify(parentProfile));
+      try {
+        const cleanedProfile = cleanProfileForStorage(parentProfile);
+        localStorage.setItem('parentProfile', JSON.stringify(cleanedProfile));
+      } catch (error) {
+        console.error('Failed to save parentProfile:', error);
+      }
     }
   }, [parentProfile]);
 
@@ -143,12 +255,31 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     return profile;
   };
 
-  const addGoal = (profileId: string, goalId: string, goalName: string) => {
+  const addGoal = (profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
     const { updatedProfiles, updatedCurrentProfile } = profileService.addGoal(
       profiles,
       profileId,
       goalId,
-      goalName
+      goalName,
+      phaseSize
+    );
+    setProfiles(updatedProfiles);
+    if (currentProfile.id === profileId) {
+      setCurrentProfile(updatedCurrentProfile);
+    }
+  };
+
+  const addGoalWithPhaseSize = (profileId: string, goalId: string, goalName: string, phaseSize: number) => {
+    addGoal(profileId, goalId, goalName, phaseSize);
+  };
+
+  const updateGoalPhaseSize = (profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => {
+    const { updatedProfiles, updatedCurrentProfile } = profileService.updateGoalPhaseSize(
+      profiles,
+      profileId,
+      goalId,
+      newPhaseSize,
+      unitId
     );
     setProfiles(updatedProfiles);
     if (currentProfile.id === profileId) {
@@ -185,6 +316,8 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         switchProfile,
         registerParent,
         addGoal,
+        addGoalWithPhaseSize,
+        updateGoalPhaseSize,
         updateProfile,
         deleteGoal,
         isRegistrationComplete,

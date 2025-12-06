@@ -142,21 +142,49 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
             {profile.goals.map((goal) => {
               const goalConfig = getGoal(goal.id);
               const goalName = goalConfig?.nameEnglish || goal.name;
+              const numUnits = goalConfig?.units?.length || 0;
+              const phaseSize = goal.phaseSize || goalConfig?.metadata?.defaultPhaseSize || 'N/A';
+              const statusColor = {
+                'in-progress': 'text-blue-600 bg-blue-50',
+                'completed': 'text-green-600 bg-green-50',
+                'paused': 'text-amber-600 bg-amber-50',
+              };
+              const statusLabel = {
+                'in-progress': 'In Progress',
+                'completed': 'Completed',
+                'paused': 'Paused',
+              };
 
               return (
                 <div
                   key={goal.id}
-                  className="flex items-center justify-between p-4 bg-gradient-to-r from-primary/5 to-transparent rounded-lg border border-primary/10 hover:border-primary/20 transition-colors"
+                  className="p-4 bg-gradient-to-r from-primary/5 to-transparent rounded-lg border border-primary/10 hover:border-primary/20 transition-colors space-y-3"
                 >
-                  <span className="font-medium text-foreground">{goalName}</span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleDeleteGoal(goal.id)}
-                    className="h-8 w-8 text-destructive hover:bg-destructive/10"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium text-foreground">{goalName}</span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDeleteGoal(goal.id)}
+                      className="h-8 w-8 text-destructive hover:bg-destructive/10"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3 text-xs">
+                    <div className="p-2 bg-white/50 rounded border border-primary/10">
+                      <p className="text-muted-foreground mb-1">Units</p>
+                      <p className="font-semibold text-foreground">{numUnits}</p>
+                    </div>
+                    <div className="p-2 bg-white/50 rounded border border-primary/10">
+                      <p className="text-muted-foreground mb-1">Phase Size</p>
+                      <p className="font-semibold text-foreground">{phaseSize}</p>
+                    </div>
+                    <div className={`p-2 rounded border border-primary/10 ${statusColor[goal.status as keyof typeof statusColor] || 'bg-white/50'}`}>
+                      <p className="text-muted-foreground mb-1">Status</p>
+                      <p className="font-semibold">{statusLabel[goal.status as keyof typeof statusLabel] || goal.status}</p>
+                    </div>
+                  </div>
                 </div>
               );
             })}

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Lottie from "lottie-react";
 import { TopNavBar } from "@/components/TopNavBar";
 import { GoalHeader } from "@/components/GoalHeader";
 import { VerticalProgressBar } from "@/components/VerticalProgressBar";
@@ -11,10 +10,9 @@ import { useProfile } from "@/contexts/ProfileContext";
 import { useGoals } from "@/hooks/useGoals";
 import { BaseUnit } from "@/types/goals";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Target, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import pencilMascot from "@/assets/pencil-mascot.json";
 
 const Goals = () => {
   const { toast } = useToast();
@@ -92,10 +90,10 @@ const Goals = () => {
   const goalsCompleted = currentProfile.achievements?.goalsCompleted || 0;
 
   const handleUnitClick = (unit: Unit) => {
-    toast({
-      title: t('goals.opening', { name: unit.name }),
-      description: t('goals.learningDesc', { arabicName: unit.arabicName }),
-    });
+    const currentGoal = currentProfile.goals?.[currentGoalIndex];
+    if (currentGoal) {
+      navigate(`/unit-path/${currentProfile.id}/${currentGoal.id}/${unit.id}`);
+    }
   };
 
   // Check if user has goals
@@ -150,6 +148,7 @@ const Goals = () => {
   const goalData = getGoalData();
   const hasMultipleGoals = currentProfile.goals && currentProfile.goals.length > 1;
 
+
   const handlePrevGoal = () => {
     if (currentProfile.goals && currentProfile.goals.length > 0) {
       setCurrentGoalIndex((prev) => (prev - 1 + currentProfile.goals!.length) % currentProfile.goals!.length);
@@ -164,21 +163,6 @@ const Goals = () => {
 
   // Calculate completed count dynamically from goal data
   const completedCount = goalData ? goalData.units.filter(unit => unit.status === "completed").length : 0;
-
-  // Find in-progress unit and calculate its position
-  const inProgressUnitIndex = goalData ? goalData.units.findIndex(unit => unit.status === "in-progress") : -1;
-  const columnsPerRow = 4;
-  const unitRow = Math.floor(inProgressUnitIndex / columnsPerRow);
-  const unitColumn = inProgressUnitIndex % columnsPerRow;
-
-  // Calculate mascot position (each unit ~80px + 8px gap)
-  const mascotTop = unitRow * 88;
-  const isLastColumn = unitColumn === 3;
-
-  // Position mascot on the right for columns 0-2, on the left for column 3
-  const mascotPositioning = isLastColumn
-    ? { right: '10%' }  // Position on the left side when in last column
-    : { left: `calc(${unitColumn * 25 + 10}% + 0.375rem)` };  // Position on the right for other columns
 
   // If no goals, show empty state
   if (!hasGoals) {
@@ -285,18 +269,6 @@ const Goals = () => {
                   onUnitClick={handleUnitClick}
                 />
 
-                {/* Pencil Mascot - Positioned dynamically on in-progress unit */}
-                {inProgressUnitIndex !== -1 && (
-                  <div
-                    className="absolute w-36 h-36 pointer-events-none z-10"
-                    style={{
-                      ...mascotPositioning,
-                      top: `${mascotTop}px`
-                    }}
-                  >
-                    <Lottie animationData={pencilMascot} loop={true} />
-                  </div>
-                )}
               </div>
             </div>
 
@@ -325,6 +297,7 @@ const Goals = () => {
             )}
           </>
         )}
+
       </div>
     </div>
   );
