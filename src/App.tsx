@@ -8,6 +8,7 @@ import { ProfileProvider } from "@/contexts/ProfileContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import Index from "./pages/Index";
 import Goals from "./pages/Goals";
+import UnitPath from "./pages/UnitPath";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import VerifyEmail from "./pages/VerifyEmail";
