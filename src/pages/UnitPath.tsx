@@ -57,6 +57,7 @@ const UnitPath = () => {
     <div className="min-h-screen bg-gradient-soft islamic-pattern flex flex-col">
       {/* Top Navigation */}
       <TopNavBar
+        onBack={() => navigate(-1)}
         achievements={{
           stars: profile.achievements?.stars || 0,
           streak: profile.achievements?.streak || 0,
@@ -67,20 +68,6 @@ const UnitPath = () => {
 
       {/* Content */}
       <div className="flex-1 container max-w-md mx-auto p-4 pb-8 space-y-6 flex flex-col">
-        {/* Header with Back Button */}
-        <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => navigate(-1)}
-            className="h-10 w-10"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </Button>
-          <h1 className="text-xl font-bold text-foreground">
-            {t('goals.unitPath') || 'Unit Path'}
-          </h1>
-        </div>
 
         {/* Unit Header Card */}
         <Card className="bg-gradient-to-r from-primary to-primary/80 border-none text-white rounded-2xl overflow-hidden">
