@@ -94,8 +94,10 @@ const Goals = () => {
   const goalsCompleted = currentProfile.achievements?.goalsCompleted || 0;
 
   const handleUnitClick = (unit: Unit) => {
-    setSelectedUnitId(unit.id);
-    setShowLearningPath(true);
+    const currentGoal = currentProfile.goals?.[currentGoalIndex];
+    if (currentGoal) {
+      navigate(`/unit-path/${currentProfile.id}/${currentGoal.id}/${unit.id}`);
+    }
   };
 
   // Check if user has goals
