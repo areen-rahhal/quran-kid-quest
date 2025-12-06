@@ -83,15 +83,17 @@ export const profileService = {
       email: data.email,
       avatar: data.avatar,
       goalsCount: 0,
+      goals: [],
     };
 
     const updatedProfiles = [...allProfiles, newParentProfile];
 
-    // Persist to storage
-    storageService.saveProfiles(updatedProfiles);
-    storageService.saveCurrentProfile(newParentProfile);
+    // Persist to storage with cleaned data
+    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
+    storageService.saveProfiles(cleanedProfiles);
+    storageService.saveCurrentProfile(cleanProfileForStorage(newParentProfile));
     storageService.saveRegistrationStatus(true);
-    storageService.saveParentProfile(newParentProfile);
+    storageService.saveParentProfile(cleanProfileForStorage(newParentProfile));
 
     return {
       profile: newParentProfile,
