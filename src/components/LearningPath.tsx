@@ -82,34 +82,6 @@ export const LearningPath = ({
 
   return (
     <div className={cn('flex flex-col gap-6', className)}>
-      {/* Header with unit info and progress */}
-      <div className="flex flex-col gap-3">
-        <div className="flex items-start justify-between">
-          <div>
-            <h3 className="text-lg font-bold text-foreground">{unit.name}</h3>
-            <p className="text-sm text-muted-foreground">
-              {totalPhases} {totalPhases === 1 ? 'phase' : 'phases'} • {unit.versesCount} verses
-            </p>
-          </div>
-
-          {/* Progress percentage */}
-          <div className="text-right">
-            <div className="text-2xl font-bold text-primary">{completionPercentage}%</div>
-            <p className="text-xs text-muted-foreground">
-              {completedCount}/{totalPhases} complete
-            </p>
-          </div>
-        </div>
-
-        {/* Progress bar */}
-        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-          <div
-            className="bg-gradient-primary h-full transition-all duration-300"
-            style={{ width: `${completionPercentage}%` }}
-          />
-        </div>
-      </div>
-
       {/* Learning path container */}
       <div className="relative">
         {/* Vertical connector lines */}
