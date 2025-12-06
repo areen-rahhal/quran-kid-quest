@@ -69,15 +69,13 @@ const UnitPath = () => {
       <div className="flex-1 container max-w-md mx-auto p-4 pb-8 space-y-6 flex flex-col">
 
         {/* Unit Header Card */}
-        <Card className="bg-gradient-to-r from-primary to-primary/80 border-none text-white rounded-2xl overflow-hidden">
-          <CardHeader className="pb-0">
-            <CardTitle className="text-3xl font-bold">
+        <Card className="bg-gradient-to-r from-primary to-primary/80 border-none text-white rounded-3xl overflow-hidden">
+          <CardContent className="p-8 text-center space-y-2">
+            <h2 className="text-4xl font-bold">
               {selectedUnit.name}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-2">
-            <p className="text-white/90">
-              {phaseProgresses.length} {t('goals.phases') || 'phases'} · {selectedUnit.versesCount}{' '}
+            </h2>
+            <p className="text-2xl font-semibold text-white/95">
+              {phaseProgresses.length} {t('goals.phases') || 'Phases'} · {selectedUnit.versesCount}{' '}
               {t('goals.verses') || 'Ayat'}
             </p>
           </CardContent>
