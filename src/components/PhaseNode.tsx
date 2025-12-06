@@ -1,6 +1,5 @@
 import { cn } from '@/lib/utils';
 import React from 'react';
-import { cn } from '@/lib/utils';
 import { Phase } from '@/types/phases';
 import { Check, Circle } from 'lucide-react';
 
