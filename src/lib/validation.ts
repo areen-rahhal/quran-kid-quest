@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { z } from 'zod';
 import type { Profile, Achievements } from '@/types/profile';
 import type { GoalProgress, PhaseProgress as PhaseProgressType } from '@/types/goals';
 import type { Phase, PhaseProgress } from '@/types/phases';
