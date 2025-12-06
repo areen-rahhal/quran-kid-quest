@@ -20,7 +20,7 @@ interface ProfileContextType {
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
-// Helper function to initialize phases for a goal
+// Helper function to initialize a goal without storing phases in memory
 function initializeGoalWithPhases(
   goalId: string,
   goalName: string,
@@ -32,11 +32,9 @@ function initializeGoalWithPhases(
   if (!goalConfig) return null;
 
   const phaseSize = goalConfig.metadata.defaultPhaseSize;
-  let phases = [];
   let currentUnitId = undefined;
 
   if (goalConfig.units && goalConfig.units.length > 0) {
-    phases = phaseService.initializePhaseProgress(goalConfig.units[0], phaseSize);
     currentUnitId = goalConfig.units[0].id.toString();
   }
 
@@ -47,7 +45,7 @@ function initializeGoalWithPhases(
     completedSurahs,
     totalSurahs,
     phaseSize,
-    phases,
+    phases: null,
     currentUnitId,
   };
 }
