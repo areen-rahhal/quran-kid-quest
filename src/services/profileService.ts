@@ -7,6 +7,35 @@ import {
 import { storageService } from './storageService';
 import { goalService } from './goalService';
 
+/**
+ * Ensure profile object is serializable and clean
+ */
+function cleanProfileForStorage(profile: Profile): Profile {
+  return {
+    id: profile.id,
+    name: profile.name,
+    type: profile.type,
+    avatar: profile.avatar,
+    email: profile.email,
+    age: profile.age,
+    currentGoal: profile.currentGoal,
+    goalsCount: profile.goalsCount,
+    streak: profile.streak,
+    goals: (profile.goals || []).map(goal => ({
+      id: goal.id,
+      name: goal.name,
+      status: goal.status,
+      completedSurahs: goal.completedSurahs,
+      totalSurahs: goal.totalSurahs,
+      phaseSize: goal.phaseSize,
+      phases: null, // Always null - don't store phases
+      currentUnitId: goal.currentUnitId,
+      completionDate: goal.completionDate,
+    })),
+    achievements: profile.achievements,
+  } as Profile;
+}
+
 export const profileService = {
   /**
    * Initialize profiles from storage or fallback to defaults
