@@ -23,6 +23,16 @@ interface LearningPathConnectorProps {
   color?: string;
 
   /**
+   * Width of the SVG in pixels
+   */
+  svgWidth?: number;
+
+  /**
+   * Top offset for the connector line (CSS value)
+   */
+  topOffset?: string;
+
+  /**
    * CSS classes to apply to the SVG
    */
   className?: string;
@@ -32,6 +42,8 @@ export const LearningPathConnector = ({
   phaseCount,
   phaseHeight = 150,
   color = 'currentColor',
+  svgWidth = 80,
+  topOffset = '4rem',
   className = '',
 }: LearningPathConnectorProps) => {
   if (phaseCount < 2) {
