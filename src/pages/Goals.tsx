@@ -329,38 +329,6 @@ const Goals = () => {
           </>
         )}
 
-        {/* Learning Path Modal */}
-        {showLearningPath && selectedUnitPhasesData && (
-          <div className="fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center animate-in fade-in">
-            <Card className="w-full md:w-2/3 lg:w-1/2 max-h-[90vh] overflow-y-auto rounded-t-2xl md:rounded-2xl md:m-4">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 sticky top-0 bg-background z-10 border-b">
-                <div>
-                  <CardTitle>{selectedUnitPhasesData.unit.name}</CardTitle>
-                  <CardDescription>Learning Path</CardDescription>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => {
-                    setShowLearningPath(false);
-                    setSelectedUnitId(null);
-                  }}
-                  className="h-8 w-8"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </CardHeader>
-              <CardContent className="p-6">
-                <LearningPath
-                  unit={selectedUnitPhasesData.unit}
-                  phases={selectedUnitPhasesData.phases}
-                  phaseProgresses={selectedUnitPhasesData.phaseProgresses}
-                  isInteractive={false}
-                />
-              </CardContent>
-            </Card>
-          </div>
-        )}
       </div>
     </div>
   );
