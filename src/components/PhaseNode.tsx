@@ -66,23 +66,16 @@ export const PhaseNode = ({ phase, status, onClick, isSelected = false }: PhaseN
       >
         {status === 'completed' ? (
           getStatusIcon()
-        ) : status === 'in-progress' ? (
-          <div className="flex flex-col items-center">
-            <span className="text-sm font-bold">{phase.sequenceNumber}</span>
-            {getStatusIcon()}
-          </div>
         ) : (
-          <span className="text-sm font-bold">{phase.sequenceNumber}</span>
+          <div className="flex flex-col items-center justify-center gap-0.5">
+            <span className="text-lg font-bold">{phase.sequenceNumber}</span>
+            <span className="text-xs font-semibold">{verseRangeDisplay}</span>
+          </div>
         )}
       </button>
 
-      {/* Verse range label */}
-      <div className="text-xs text-center text-muted-foreground font-medium mt-1 min-w-12">
-        {verseRangeDisplay}
-      </div>
-
       {/* Optional: Show phase count text */}
-      <div className="text-xs text-center text-muted-foreground">
+      <div className="text-xs text-center text-muted-foreground mt-1">
         {phase.versesCount} {phase.versesCount === 1 ? 'verse' : 'verses'}
       </div>
     </div>
