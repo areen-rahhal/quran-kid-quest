@@ -198,9 +198,9 @@ export function isValidPhaseSize(unit: BaseUnit, phaseSize: number): boolean {
 }
 
 /**
- * Get suggested phrase size range for a unit
+ * Get suggested phase size range for a unit
  */
-export function getPhraseSizeRange(unit: BaseUnit): { min: number; max: number; recommended: number } {
+export function getPhaseSizeRange(unit: BaseUnit): { min: number; max: number; recommended: number } {
   const versesCount = unit.versesCount;
 
   // Recommend at least 1 verse per phase, at most all verses
@@ -227,7 +227,6 @@ export function getPhraseSizeRange(unit: BaseUnit): { min: number; max: number; 
  * This is called when phases are needed rather than storing them
  */
 export function generatePhaseProgressForGoal(goalId: string, phaseSize: number): PhaseProgress[] | null {
-  const { getGoalById } = require('@/config/goals-data');
   const goalConfig = getGoalById(goalId);
 
   if (!goalConfig || !goalConfig.units || goalConfig.units.length === 0) {
@@ -252,6 +251,6 @@ export const phaseService = {
   getPhaseById,
   getUnitPhases,
   isValidPhaseSize,
-  getPhraseSizeRange,
+  getPhaseSizeRange,
   generatePhaseProgressForGoal,
 };

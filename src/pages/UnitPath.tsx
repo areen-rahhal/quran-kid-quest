@@ -13,7 +13,6 @@ import { LearningPath } from "@/components/LearningPath";
 
 const UnitPath = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const { profileId, goalId, unitId } = useParams<{
     profileId: string;
     goalId: string;
