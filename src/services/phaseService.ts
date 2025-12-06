@@ -7,6 +7,7 @@
 import { BaseUnit } from '@/lib/validation';
 import { Phase, PhaseProgress, PhaseStatus, PhaseMetrics } from '@/types/phases';
 import { Goal } from '@/types/goals';
+import { getGoalById } from '@/config/goals-data';
 
 /**
  * Generate phases from a unit based on phase size
