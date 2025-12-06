@@ -158,11 +158,27 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   });
 
   useEffect(() => {
-    localStorage.setItem('profiles', JSON.stringify(profiles));
+    try {
+      localStorage.setItem('profiles', JSON.stringify(profiles));
+    } catch (error) {
+      console.error('Failed to save profiles to localStorage:', error);
+      // Clear old data to free up space
+      localStorage.removeItem('profiles');
+      try {
+        localStorage.setItem('profiles', JSON.stringify(profiles));
+      } catch (e) {
+        console.error('Still failed after clearing:', e);
+      }
+    }
   }, [profiles]);
 
   useEffect(() => {
-    localStorage.setItem('currentProfile', JSON.stringify(currentProfile));
+    try {
+      localStorage.setItem('currentProfile', JSON.stringify(currentProfile));
+    } catch (error) {
+      console.error('Failed to save currentProfile to localStorage:', error);
+      localStorage.removeItem('currentProfile');
+    }
   }, [currentProfile]);
 
   useEffect(() => {
