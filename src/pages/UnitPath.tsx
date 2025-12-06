@@ -75,8 +75,7 @@ const UnitPath = () => {
               {selectedUnit.name}
             </h2>
             <p className="text-2xl font-semibold text-white/95">
-              {phaseProgresses.length} {t('goals.phases') || 'Phases'} · {selectedUnit.versesCount}{' '}
-              {t('goals.verses') || 'Ayat'}
+              {phaseProgresses.length} Phases - {selectedUnit.versesCount} Verses
             </p>
           </CardContent>
         </Card>
