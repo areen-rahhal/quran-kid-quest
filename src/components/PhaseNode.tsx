@@ -73,11 +73,6 @@ export const PhaseNode = ({ phase, status, onClick, isSelected = false }: PhaseN
           </div>
         )}
       </button>
-
-      {/* Optional: Show phase count text */}
-      <div className="text-xs text-center text-muted-foreground mt-1">
-        {phase.versesCount} {phase.versesCount === 1 ? 'verse' : 'verses'}
-      </div>
     </div>
   );
 };
