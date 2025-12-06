@@ -46,7 +46,7 @@ export const LearningPathConnector = ({
       width={svgWidth}
       height={svgHeight}
       viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-      className={`absolute left-1/2 transform -translate-x-1/2 pointer-events-none ${className}`}
+      className={`absolute left-1/2 transform -translate-x-1/2 pointer-events-none -z-10 ${className}`}
       style={{ top: '4rem' }} // Align with first phase node
     >
       {/* Draw vertical connecting lines between nodes */}
