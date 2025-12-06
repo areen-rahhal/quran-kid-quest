@@ -53,6 +53,14 @@ export function useGoals() {
     return phaseService.getPhraseSizeRange(unit);
   };
 
+  /**
+   * Generate phase progress on-demand for a goal
+   * This is used to generate phases when they're needed instead of storing them
+   */
+  const generateGoalPhases = (goalId: string, phaseSize: number): PhaseProgress[] => {
+    return phaseService.generatePhaseProgressForGoal(goalId, phaseSize) || [];
+  };
+
   return {
     allGoals,
     getGoal,
@@ -62,5 +70,6 @@ export function useGoals() {
     getNextPhase,
     isValidPhaseSize,
     getPhraseSizeRange,
+    generateGoalPhases,
   };
 }
