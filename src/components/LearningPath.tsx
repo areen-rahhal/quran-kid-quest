@@ -92,7 +92,7 @@ export const LearningPath = ({
         />
 
         {/* Phase nodes */}
-        <div className="flex flex-col gap-20 items-center pt-4" dir={isArabic ? 'rtl' : 'ltr'}>
+        <div className="flex flex-col gap-20 items-center pt-4 relative z-10" dir={isArabic ? 'rtl' : 'ltr'}>
           {phases.map((phase, index) => {
             const status = getPhaseStatus(phase);
             const isSelected = selectedPhaseId === phase.id;
