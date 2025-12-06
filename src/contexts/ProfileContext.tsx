@@ -188,13 +188,15 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('profiles', JSON.stringify(profiles));
+      const cleanedProfiles = profiles.map(cleanProfileForStorage);
+      localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
     } catch (error) {
       console.error('Failed to save profiles to localStorage:', error);
       // Clear old data to free up space
       localStorage.removeItem('profiles');
       try {
-        localStorage.setItem('profiles', JSON.stringify(profiles));
+        const cleanedProfiles = profiles.map(cleanProfileForStorage);
+        localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
       } catch (e) {
         console.error('Still failed after clearing:', e);
       }
@@ -203,7 +205,8 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('currentProfile', JSON.stringify(currentProfile));
+      const cleanedProfile = cleanProfileForStorage(currentProfile);
+      localStorage.setItem('currentProfile', JSON.stringify(cleanedProfile));
     } catch (error) {
       console.error('Failed to save currentProfile to localStorage:', error);
       localStorage.removeItem('currentProfile');
