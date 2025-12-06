@@ -4,6 +4,35 @@ import { profileService } from '@/services/profileService';
 import { phaseService } from '@/services/phaseService';
 import { getGoalById } from '@/config/goals-data';
 
+/**
+ * Clean profile object before storing in localStorage
+ */
+function cleanProfileForStorage(profile: Profile): Profile {
+  return {
+    id: profile.id,
+    name: profile.name,
+    type: profile.type,
+    avatar: profile.avatar,
+    email: profile.email,
+    age: profile.age,
+    currentGoal: profile.currentGoal,
+    goalsCount: profile.goalsCount,
+    streak: profile.streak,
+    goals: (profile.goals || []).map(goal => ({
+      id: goal.id,
+      name: goal.name,
+      status: goal.status,
+      completedSurahs: goal.completedSurahs,
+      totalSurahs: goal.totalSurahs,
+      phaseSize: goal.phaseSize,
+      phases: null,
+      currentUnitId: goal.currentUnitId,
+      completionDate: goal.completionDate,
+    })),
+    achievements: profile.achievements,
+  } as Profile;
+}
+
 interface ProfileContextType {
   currentProfile: Profile;
   profiles: Profile[];
