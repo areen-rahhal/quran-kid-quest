@@ -70,11 +70,11 @@ const UnitPath = () => {
 
         {/* Unit Header Card */}
         <Card className="bg-gradient-to-r from-primary to-primary/80 border-none text-white rounded-3xl overflow-hidden">
-          <CardContent className="p-8 text-center space-y-2">
-            <h2 className="text-4xl font-bold">
+          <CardContent className="p-6 text-left space-y-1">
+            <h2 className="text-3xl font-bold">
               {selectedUnit.name}
             </h2>
-            <p className="text-2xl font-semibold text-white/95">
+            <p className="text-lg font-semibold text-white/95">
               {phaseProgresses.length} Phases - {selectedUnit.versesCount} Verses
             </p>
           </CardContent>
