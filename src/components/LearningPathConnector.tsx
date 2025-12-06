@@ -37,7 +37,8 @@ export const LearningPathConnector = ({
   }
 
   // Calculate SVG dimensions
-  const connectorHeight = (phaseCount - 1) * phaseHeight + 40; // Extra space for margins
+  // Don't extend beyond the last phase to avoid overlapping with the diamond
+  const connectorHeight = (phaseCount - 1) * phaseHeight;
   const svgHeight = connectorHeight;
   const svgWidth = 80; // Width for centering the line
 
