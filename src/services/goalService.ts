@@ -27,12 +27,8 @@ export const goalService = {
     // Determine phase size
     const effectivePhaseSize = phaseSize || goalConfig.metadata.defaultPhaseSize;
 
-    // Generate phases for the first unit as default
-    let phases: PhaseProgress[] = [];
-    if (goalConfig.units && goalConfig.units.length > 0) {
-      phases = phaseService.initializePhaseProgress(goalConfig.units[0], effectivePhaseSize);
-    }
-
+    // Don't store phases in localStorage - generate on-demand instead
+    // This prevents localStorage quota exceeded errors
     const newGoal: GoalProgress = {
       id: goalId,
       name: goalName,
@@ -40,7 +36,7 @@ export const goalService = {
       completedSurahs: 0,
       totalSurahs: totalSurahs,
       phaseSize: effectivePhaseSize,
-      phases,
+      phases: null,
       currentUnitId: goalConfig.units?.[0]?.id.toString(),
     };
 
