@@ -300,16 +300,16 @@ describe('phaseService', () => {
     });
   });
 
-  describe('getPhraseSizeRange', () => {
+  describe('getPhaseSizeRange', () => {
     it('should return valid range', () => {
-      const range = phaseService.getPhraseSizeRange(mockUnit);
+      const range = phaseService.getPhaseSizeRange(mockUnit);
       expect(range.min).toBe(1);
       expect(range.max).toBe(mockUnit.versesCount);
       expect(range.recommended).toBeGreaterThan(0);
     });
 
     it('should have reasonable recommended size', () => {
-      const range = phaseService.getPhraseSizeRange(mockUnit);
+      const range = phaseService.getPhaseSizeRange(mockUnit);
       expect(range.recommended).toBeGreaterThanOrEqual(range.min);
       expect(range.recommended).toBeLessThanOrEqual(range.max);
     });
