@@ -25,9 +25,18 @@ export const storageService = {
    */
   saveProfiles(profiles: Profile[]): void {
     try {
-      localStorage.setItem(STORAGE_KEYS.PROFILES, JSON.stringify(profiles));
+      const serialized = JSON.stringify(profiles);
+      localStorage.setItem(STORAGE_KEYS.PROFILES, serialized);
     } catch (error) {
       console.error('Failed to save profiles:', error);
+      // Try to clear and retry as last resort
+      try {
+        localStorage.removeItem(STORAGE_KEYS.PROFILES);
+        const serialized = JSON.stringify(profiles);
+        localStorage.setItem(STORAGE_KEYS.PROFILES, serialized);
+      } catch (retryError) {
+        console.error('Failed to save profiles even after clearing:', retryError);
+      }
     }
   },
 
