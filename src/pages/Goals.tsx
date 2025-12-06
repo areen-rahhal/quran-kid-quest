@@ -152,35 +152,6 @@ const Goals = () => {
   const goalData = getGoalData();
   const hasMultipleGoals = currentProfile.goals && currentProfile.goals.length > 1;
 
-  // Get phases for selected unit
-  const getSelectedUnitPhasesData = () => {
-    if (!selectedUnitId || !goalData) {
-      return null;
-    }
-
-    const selectedUnit = goalData.units.find(u => u.id === selectedUnitId);
-    if (!selectedUnit) {
-      return null;
-    }
-
-    // Get the current goal to access phase size
-    const currentGoal = currentProfile.goals?.[currentGoalIndex];
-    const phaseSize = currentGoal?.phaseSize || 5; // Default phase size
-
-    // Generate phases for this unit
-    const phases = phaseService.generatePhasesForUnit(selectedUnit, phaseSize);
-
-    // Generate phase progress on-demand (phases are not stored in localStorage anymore)
-    const phaseProgresses = phaseService.initializePhaseProgress(selectedUnit, phaseSize);
-
-    return {
-      unit: selectedUnit,
-      phases,
-      phaseProgresses,
-    };
-  };
-
-  const selectedUnitPhasesData = showLearningPath ? getSelectedUnitPhasesData() : null;
 
   const handlePrevGoal = () => {
     if (currentProfile.goals && currentProfile.goals.length > 0) {
