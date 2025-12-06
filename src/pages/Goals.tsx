@@ -286,18 +286,6 @@ const Goals = () => {
                   onUnitClick={handleUnitClick}
                 />
 
-                {/* Pencil Mascot - Positioned dynamically on in-progress unit */}
-                {inProgressUnitIndex !== -1 && (
-                  <div
-                    className="absolute w-36 h-36 pointer-events-none z-10"
-                    style={{
-                      ...mascotPositioning,
-                      top: `${mascotTop}px`
-                    }}
-                  >
-                    <Lottie animationData={pencilMascot} loop={true} />
-                  </div>
-                )}
               </div>
             </div>
 
