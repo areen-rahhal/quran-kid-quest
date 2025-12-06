@@ -55,7 +55,6 @@ export const LearningPathConnector = ({
   // Subtract half the phaseHeight to stop at the middle of the last phase
   const connectorHeight = (phaseCount - 1.5) * phaseHeight;
   const svgHeight = Math.max(0, connectorHeight);
-  const svgWidth = 80; // Width for centering the line
 
   return (
     <svg
@@ -63,7 +62,7 @@ export const LearningPathConnector = ({
       height={svgHeight}
       viewBox={`0 0 ${svgWidth} ${svgHeight}`}
       className={`absolute left-1/2 transform -translate-x-1/2 pointer-events-none -z-10 ${className}`}
-      style={{ top: '4rem' }} // Align with first phase node
+      style={{ top: topOffset }} // Align with first phase node
     >
       {/* Draw vertical connecting lines between nodes */}
       {Array.from({ length: phaseCount - 1 }).map((_, index) => {
