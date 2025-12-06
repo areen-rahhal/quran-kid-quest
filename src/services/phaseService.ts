@@ -30,13 +30,19 @@ export function generatePhasesForUnit(unit: BaseUnit, phaseSize: number): Phase[
   const totalVerses = unit.versesCount;
   const numPhases = Math.ceil(totalVerses / effectivePhaseSize);
 
-  // Parse start verse to get surah number
-  const [surahNumber] = unit.startVerse.split(':').map(Number);
+  // Parse start and end verse to get surah number and actual verse numbers
+  const [surahNumber, unitStartVerseNum] = unit.startVerse.split(':').map(Number);
+  const [, unitEndVerseNum] = unit.endVerse.split(':').map(Number);
 
   for (let i = 0; i < numPhases; i++) {
-    const versesStart = i * effectivePhaseSize + 1;
-    const versesEnd = Math.min((i + 1) * effectivePhaseSize, totalVerses);
-    const versesCount = versesEnd - versesStart + 1;
+    // Calculate verse positions within the unit
+    const relativeStart = i * effectivePhaseSize;
+    const relativeEnd = Math.min((i + 1) * effectivePhaseSize - 1, totalVerses - 1);
+    const versesCount = relativeEnd - relativeStart + 1;
+
+    // Convert to actual verse numbers in the surah
+    const versesStart = unitStartVerseNum + relativeStart;
+    const versesEnd = unitStartVerseNum + relativeEnd;
 
     // Calculate actual verse strings
     const startVerse = `${surahNumber}:${versesStart}`;
