@@ -170,8 +170,8 @@ const Goals = () => {
     // Generate phases for this unit
     const phases = phaseService.generatePhasesForUnit(selectedUnit, phaseSize);
 
-    // Get phase progress, or create empty progress if none exists
-    const phaseProgresses = currentGoal?.phases || phaseService.initializePhaseProgress(selectedUnit, phaseSize);
+    // Generate phase progress on-demand (phases are not stored in localStorage anymore)
+    const phaseProgresses = phaseService.initializePhaseProgress(selectedUnit, phaseSize);
 
     return {
       unit: selectedUnit,
