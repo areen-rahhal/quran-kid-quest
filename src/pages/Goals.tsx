@@ -10,7 +10,7 @@ import { useProfile } from "@/contexts/ProfileContext";
 import { useGoals } from "@/hooks/useGoals";
 import { BaseUnit } from "@/types/goals";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Target, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
