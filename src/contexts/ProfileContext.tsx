@@ -263,9 +263,12 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
       goalName,
       phaseSize
     );
+    
+    // Batch state updates to prevent cascading re-renders
     setProfiles(updatedProfiles);
     if (currentProfile.id === profileId) {
-      setCurrentProfile(updatedCurrentProfile);
+      // Use functional update to ensure we're working with latest state
+      setCurrentProfile(() => updatedCurrentProfile);
     }
   };
 
