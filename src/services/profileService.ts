@@ -127,13 +127,6 @@ export const profileService = {
     const updatedCurrentProfile =
       updatedProfiles.find((p) => p.id === currentProfileId) || updatedProfiles[0];
 
-    // Persist immediately for safety
-    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
-    storageService.saveProfiles(cleanedProfiles);
-    if (updatedCurrentProfile) {
-      storageService.saveCurrentProfile(cleanProfileForStorage(updatedCurrentProfile));
-    }
-
     return {
       updatedProfiles,
       updatedCurrentProfile: updatedCurrentProfile || ({} as Profile),
@@ -157,13 +150,6 @@ export const profileService = {
 
     const updatedCurrentProfile =
       updatedProfiles.find((p) => p.id === profileId) || updatedProfiles[0];
-
-    // Persist immediately
-    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
-    storageService.saveProfiles(cleanedProfiles);
-    if (updatedCurrentProfile) {
-      storageService.saveCurrentProfile(cleanProfileForStorage(updatedCurrentProfile));
-    }
 
     return {
       updatedProfiles,
@@ -194,13 +180,6 @@ export const profileService = {
 
     const updatedCurrentProfile =
       updatedProfiles.find((p) => p.id === profileId) || updatedProfiles[0];
-
-    // Persist immediately
-    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
-    storageService.saveProfiles(cleanedProfiles);
-    if (updatedCurrentProfile) {
-      storageService.saveCurrentProfile(cleanProfileForStorage(updatedCurrentProfile));
-    }
 
     return {
       updatedProfiles,
@@ -241,13 +220,6 @@ export const profileService = {
 
     const updatedCurrentProfile =
       updatedProfiles.find((p) => p.id === profileId) || updatedProfiles[0];
-
-    // Persist immediately
-    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
-    storageService.saveProfiles(cleanedProfiles);
-    if (updatedCurrentProfile) {
-      storageService.saveCurrentProfile(cleanProfileForStorage(updatedCurrentProfile));
-    }
 
     return {
       updatedProfiles,
