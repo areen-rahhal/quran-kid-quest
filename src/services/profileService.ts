@@ -97,18 +97,17 @@ export const profileService = {
 
   /**
    * Switch to a different profile
-   * Note: Storage persistence is handled by the ProfileContext provider
    */
   switchProfile(profiles: Profile[], profileId: string): Profile | null {
     const profile = profiles.find((p) => p.id === profileId);
     if (!profile) return null;
 
+    storageService.saveCurrentProfile(profile);
     return profile;
   },
 
   /**
    * Add a goal to a profile
-   * Note: Storage persistence is handled by the ProfileContext provider
    * @param phaseSize - Optional custom phase size (defaults to goal's defaultPhaseSize)
    */
   addGoal(
@@ -128,6 +127,13 @@ export const profileService = {
     const updatedCurrentProfile =
       updatedProfiles.find((p) => p.id === currentProfileId) || updatedProfiles[0];
 
+    // Persist immediately for safety
+    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
+    storageService.saveProfiles(cleanedProfiles);
+    if (updatedCurrentProfile) {
+      storageService.saveCurrentProfile(cleanProfileForStorage(updatedCurrentProfile));
+    }
+
     return {
       updatedProfiles,
       updatedCurrentProfile: updatedCurrentProfile || ({} as Profile),
@@ -136,7 +142,6 @@ export const profileService = {
 
   /**
    * Delete a goal from a profile
-   * Note: Storage persistence is handled by the ProfileContext provider
    */
   deleteGoal(
     profiles: Profile[],
@@ -153,6 +158,13 @@ export const profileService = {
     const updatedCurrentProfile =
       updatedProfiles.find((p) => p.id === profileId) || updatedProfiles[0];
 
+    // Persist immediately
+    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
+    storageService.saveProfiles(cleanedProfiles);
+    if (updatedCurrentProfile) {
+      storageService.saveCurrentProfile(cleanProfileForStorage(updatedCurrentProfile));
+    }
+
     return {
       updatedProfiles,
       updatedCurrentProfile: updatedCurrentProfile || ({} as Profile),
@@ -161,7 +173,6 @@ export const profileService = {
 
   /**
    * Update profile details
-   * Note: Storage persistence is handled by the ProfileContext provider
    */
   updateProfile(
     profiles: Profile[],
@@ -183,6 +194,13 @@ export const profileService = {
 
     const updatedCurrentProfile =
       updatedProfiles.find((p) => p.id === profileId) || updatedProfiles[0];
+
+    // Persist immediately
+    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
+    storageService.saveProfiles(cleanedProfiles);
+    if (updatedCurrentProfile) {
+      storageService.saveCurrentProfile(cleanProfileForStorage(updatedCurrentProfile));
+    }
 
     return {
       updatedProfiles,
@@ -206,7 +224,6 @@ export const profileService = {
 
   /**
    * Update phase size for a goal in a profile
-   * Note: Storage persistence is handled by the ProfileContext provider
    */
   updateGoalPhaseSize(
     profiles: Profile[],
@@ -224,6 +241,13 @@ export const profileService = {
 
     const updatedCurrentProfile =
       updatedProfiles.find((p) => p.id === profileId) || updatedProfiles[0];
+
+    // Persist immediately
+    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
+    storageService.saveProfiles(cleanedProfiles);
+    if (updatedCurrentProfile) {
+      storageService.saveCurrentProfile(cleanProfileForStorage(updatedCurrentProfile));
+    }
 
     return {
       updatedProfiles,
