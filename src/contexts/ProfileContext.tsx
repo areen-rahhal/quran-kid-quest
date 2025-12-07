@@ -241,15 +241,11 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   };
 
   const registerParent = (data: RegistrationData): Profile => {
-    // Compute once, use for both updates and return
     const { profile, updatedProfiles } = profileService.registerParent(data, profiles);
-
-    // Update all related state
     setProfiles(updatedProfiles);
     setCurrentProfile(profile);
     setParentProfile(profile);
     setIsRegistrationComplete(true);
-
     return profile;
   };
 
