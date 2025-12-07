@@ -370,11 +370,24 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         goalName,
         phaseSize
       );
-      // Also update currentProfile if it's the one being modified
-      if (currentProfile.id === profileId) {
-        setCurrentProfile(updatedCurrentProfile);
-      }
       return updatedProfiles;
+    });
+
+    // Update currentProfile separately - must be done outside setState
+    setCurrentProfile((prevProfile) => {
+      if (prevProfile.id === profileId) {
+        // Get the updated profile from the new profiles array
+        // We need to call the service again to get updatedCurrentProfile
+        const { updatedCurrentProfile } = profileService.addGoal(
+          profiles,
+          profileId,
+          goalId,
+          goalName,
+          phaseSize
+        );
+        return updatedCurrentProfile;
+      }
+      return prevProfile;
     });
   };
 
@@ -385,44 +398,73 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   const updateGoalPhaseSize = (profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => {
     // Use functional setState to avoid stale closures
     setProfiles((prevProfiles) => {
-      const { updatedProfiles, updatedCurrentProfile } = profileService.updateGoalPhaseSize(
+      const { updatedProfiles } = profileService.updateGoalPhaseSize(
         prevProfiles,
         profileId,
         goalId,
         newPhaseSize,
         unitId
       );
-      if (currentProfile.id === profileId) {
-        setCurrentProfile(updatedCurrentProfile);
-      }
       return updatedProfiles;
+    });
+
+    // Update currentProfile separately
+    setCurrentProfile((prevProfile) => {
+      if (prevProfile.id === profileId) {
+        const { updatedCurrentProfile } = profileService.updateGoalPhaseSize(
+          profiles,
+          profileId,
+          goalId,
+          newPhaseSize,
+          unitId
+        );
+        return updatedCurrentProfile;
+      }
+      return prevProfile;
     });
   };
 
   const updateProfile = (profileId: string, updates: ProfileUpdate) => {
     // Use functional setState to avoid stale closures
     setProfiles((prevProfiles) => {
-      const { updatedProfiles, updatedCurrentProfile } =
+      const { updatedProfiles } =
         profileService.updateProfile(prevProfiles, profileId, updates);
-      if (currentProfile.id === profileId) {
-        setCurrentProfile(updatedCurrentProfile);
-      }
       return updatedProfiles;
+    });
+
+    // Update currentProfile separately
+    setCurrentProfile((prevProfile) => {
+      if (prevProfile.id === profileId) {
+        const { updatedCurrentProfile } =
+          profileService.updateProfile(profiles, profileId, updates);
+        return updatedCurrentProfile;
+      }
+      return prevProfile;
     });
   };
 
   const deleteGoal = (profileId: string, goalId: string) => {
     // Use functional setState to avoid stale closures
     setProfiles((prevProfiles) => {
-      const { updatedProfiles, updatedCurrentProfile } = profileService.deleteGoal(
+      const { updatedProfiles } = profileService.deleteGoal(
         prevProfiles,
         profileId,
         goalId
       );
-      if (currentProfile.id === profileId) {
-        setCurrentProfile(updatedCurrentProfile);
-      }
       return updatedProfiles;
+    });
+
+    // Update currentProfile separately
+    setCurrentProfile((prevProfile) => {
+      if (prevProfile.id === profileId) {
+        const { updatedCurrentProfile } = profileService.deleteGoal(
+          profiles,
+          profileId,
+          goalId
+        );
+        return updatedCurrentProfile;
+      }
+      return prevProfile;
     });
   };
 
