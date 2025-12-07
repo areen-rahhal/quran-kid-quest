@@ -185,105 +185,30 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     return profileService.initializeParentProfile();
   });
 
-  // Non-blocking debounced localStorage saves using requestIdleCallback
-  // This prevents blocking the main thread when serializing large objects
+  // Debounced localStorage saves
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-    let idleCallbackId: number;
-
-    const scheduleProfilesSave = () => {
-      // Use requestIdleCallback if available (modern browsers), fallback to setTimeout
-      if ('requestIdleCallback' in window) {
-        idleCallbackId = requestIdleCallback(
-          () => {
-            try {
-              const cleanedProfiles = profiles.map(cleanProfileForStorage);
-              localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
-            } catch (error) {
-              console.error('Failed to save profiles to localStorage:', error);
-              // Clear old data to free up space if quota exceeded
-              try {
-                localStorage.removeItem('profiles');
-                const cleanedProfiles = profiles.map(cleanProfileForStorage);
-                localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
-              } catch (e) {
-                console.error('Still failed after clearing:', e);
-              }
-            }
-          },
-          { timeout: 1000 } // Ensure save happens within 1 second even if thread is busy
-        );
-      } else {
-        // Fallback for browsers without requestIdleCallback
-        timeoutId = setTimeout(() => {
-          try {
-            const cleanedProfiles = profiles.map(cleanProfileForStorage);
-            localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
-          } catch (error) {
-            console.error('Failed to save profiles to localStorage:', error);
-            try {
-              localStorage.removeItem('profiles');
-              const cleanedProfiles = profiles.map(cleanProfileForStorage);
-              localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
-            } catch (e) {
-              console.error('Still failed after clearing:', e);
-            }
-          }
-        }, 300);
+    const timer = setTimeout(() => {
+      try {
+        const cleanedProfiles = profiles.map(cleanProfileForStorage);
+        localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
+      } catch (error) {
+        console.error('Failed to save profiles:', error);
       }
-    };
-
-    // Debounce: wait 300ms before scheduling the save
-    timeoutId = setTimeout(scheduleProfilesSave, 300);
-
-    return () => {
-      clearTimeout(timeoutId);
-      if ('cancelIdleCallback' in window && idleCallbackId) {
-        cancelIdleCallback(idleCallbackId);
-      }
-    };
+    }, 300);
+    return () => clearTimeout(timer);
   }, [profiles]);
 
-  // Non-blocking debounced currentProfile save
+  // Debounced currentProfile save
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-    let idleCallbackId: number;
-
-    const scheduleCurrentProfileSave = () => {
-      if ('requestIdleCallback' in window) {
-        idleCallbackId = requestIdleCallback(
-          () => {
-            try {
-              const cleanedProfile = cleanProfileForStorage(currentProfile);
-              localStorage.setItem('currentProfile', JSON.stringify(cleanedProfile));
-            } catch (error) {
-              console.error('Failed to save currentProfile to localStorage:', error);
-              localStorage.removeItem('currentProfile');
-            }
-          },
-          { timeout: 1000 }
-        );
-      } else {
-        timeoutId = setTimeout(() => {
-          try {
-            const cleanedProfile = cleanProfileForStorage(currentProfile);
-            localStorage.setItem('currentProfile', JSON.stringify(cleanedProfile));
-          } catch (error) {
-            console.error('Failed to save currentProfile to localStorage:', error);
-            localStorage.removeItem('currentProfile');
-          }
-        }, 300);
+    const timer = setTimeout(() => {
+      try {
+        const cleanedProfile = cleanProfileForStorage(currentProfile);
+        localStorage.setItem('currentProfile', JSON.stringify(cleanedProfile));
+      } catch (error) {
+        console.error('Failed to save currentProfile:', error);
       }
-    };
-
-    timeoutId = setTimeout(scheduleCurrentProfileSave, 300);
-
-    return () => {
-      clearTimeout(timeoutId);
-      if ('cancelIdleCallback' in window && idleCallbackId) {
-        cancelIdleCallback(idleCallbackId);
-      }
-    };
+    }, 300);
+    return () => clearTimeout(timer);
   }, [currentProfile]);
 
   // Save registration status (small data, synchronous is okay)
@@ -291,53 +216,21 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('isRegistrationComplete', String(isRegistrationComplete));
   }, [isRegistrationComplete]);
 
-  // Save parent profile using non-blocking approach
+  // Debounced parentProfile save
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-    let idleCallbackId: number;
-
-    const scheduleParentProfileSave = () => {
-      if ('requestIdleCallback' in window) {
-        idleCallbackId = requestIdleCallback(
-          () => {
-            if (parentProfile) {
-              try {
-                const cleanedProfile = cleanProfileForStorage(parentProfile);
-                localStorage.setItem('parentProfile', JSON.stringify(cleanedProfile));
-              } catch (error) {
-                console.error('Failed to save parentProfile:', error);
-              }
-            }
-          },
-          { timeout: 1000 }
-        );
+    const timer = setTimeout(() => {
+      if (parentProfile) {
+        try {
+          const cleanedProfile = cleanProfileForStorage(parentProfile);
+          localStorage.setItem('parentProfile', JSON.stringify(cleanedProfile));
+        } catch (error) {
+          console.error('Failed to save parentProfile:', error);
+        }
       } else {
-        timeoutId = setTimeout(() => {
-          if (parentProfile) {
-            try {
-              const cleanedProfile = cleanProfileForStorage(parentProfile);
-              localStorage.setItem('parentProfile', JSON.stringify(cleanedProfile));
-            } catch (error) {
-              console.error('Failed to save parentProfile:', error);
-            }
-          }
-        }, 300);
+        localStorage.removeItem('parentProfile');
       }
-    };
-
-    if (parentProfile) {
-      timeoutId = setTimeout(scheduleParentProfileSave, 300);
-    } else {
-      // If no parent profile, remove from storage
-      localStorage.removeItem('parentProfile');
-    }
-
-    return () => {
-      clearTimeout(timeoutId);
-      if ('cancelIdleCallback' in window && idleCallbackId) {
-        cancelIdleCallback(idleCallbackId);
-      }
-    };
+    }, 300);
+    return () => clearTimeout(timer);
   }, [parentProfile]);
 
   const switchProfile = (profileId: string) => {
