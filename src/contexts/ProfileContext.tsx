@@ -55,7 +55,7 @@ const mockProfiles: Profile[] = [
     type: 'parent',
     goalsCount: 0,
     email: 'aya@example.com',
-    avatar: 'avatar-1',
+    avatar: 'avatar-deer',
     currentGoal: undefined,
     streak: 0,
     goals: [],
