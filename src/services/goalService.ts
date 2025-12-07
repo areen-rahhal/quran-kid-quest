@@ -6,6 +6,7 @@ import { PhaseProgress } from '@/types/phases';
 export const goalService = {
   /**
    * Add a goal to a profile with phase initialization
+   * Idempotent: if goal already exists, returns profile unchanged
    * @param profile - The learner's profile
    * @param goalId - The goal to add
    * @param goalName - The goal's display name
@@ -17,6 +18,11 @@ export const goalService = {
     goalName: string,
     phaseSize?: number
   ): Profile {
+    // Check if goal already exists (idempotency)
+    if (this.hasGoal(profile, goalId)) {
+      return profile;
+    }
+
     const goalConfig = getGoalById(goalId);
     if (!goalConfig) {
       throw new Error(`Goal with id ${goalId} not found`);
