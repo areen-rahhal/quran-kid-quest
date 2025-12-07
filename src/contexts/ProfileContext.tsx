@@ -361,21 +361,19 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   };
 
   const addGoal = (profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
-    setProfiles((prevProfiles) => {
-      const { updatedProfiles, updatedCurrentProfile } = profileService.addGoal(
-        prevProfiles,
-        profileId,
-        goalId,
-        goalName,
-        phaseSize
-      );
-      // Find the edited profile in updatedProfiles and update currentProfile if it's the same
-      const editedProfile = updatedProfiles.find(p => p.id === profileId);
-      if (editedProfile && updatedCurrentProfile && editedProfile.id === updatedCurrentProfile.id) {
-        setCurrentProfile(updatedCurrentProfile);
-      }
-      return updatedProfiles;
-    });
+    // Call service once to get both updates
+    const { updatedProfiles, updatedCurrentProfile } = profileService.addGoal(
+      profiles,
+      profileId,
+      goalId,
+      goalName,
+      phaseSize
+    );
+    // Update state - React 18 will batch both updates together
+    setProfiles(updatedProfiles);
+    if (updatedCurrentProfile.id === profileId) {
+      setCurrentProfile(updatedCurrentProfile);
+    }
   };
 
   const addGoalWithPhaseSize = (profileId: string, goalId: string, goalName: string, phaseSize: number) => {
@@ -383,47 +381,38 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   };
 
   const updateGoalPhaseSize = (profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => {
-    setProfiles((prevProfiles) => {
-      const { updatedProfiles, updatedCurrentProfile } = profileService.updateGoalPhaseSize(
-        prevProfiles,
-        profileId,
-        goalId,
-        newPhaseSize,
-        unitId
-      );
-      const editedProfile = updatedProfiles.find(p => p.id === profileId);
-      if (editedProfile && updatedCurrentProfile && editedProfile.id === updatedCurrentProfile.id) {
-        setCurrentProfile(updatedCurrentProfile);
-      }
-      return updatedProfiles;
-    });
+    const { updatedProfiles, updatedCurrentProfile } = profileService.updateGoalPhaseSize(
+      profiles,
+      profileId,
+      goalId,
+      newPhaseSize,
+      unitId
+    );
+    setProfiles(updatedProfiles);
+    if (updatedCurrentProfile.id === profileId) {
+      setCurrentProfile(updatedCurrentProfile);
+    }
   };
 
   const updateProfile = (profileId: string, updates: ProfileUpdate) => {
-    setProfiles((prevProfiles) => {
-      const { updatedProfiles, updatedCurrentProfile } =
-        profileService.updateProfile(prevProfiles, profileId, updates);
-      const editedProfile = updatedProfiles.find(p => p.id === profileId);
-      if (editedProfile && updatedCurrentProfile && editedProfile.id === updatedCurrentProfile.id) {
-        setCurrentProfile(updatedCurrentProfile);
-      }
-      return updatedProfiles;
-    });
+    const { updatedProfiles, updatedCurrentProfile } =
+      profileService.updateProfile(profiles, profileId, updates);
+    setProfiles(updatedProfiles);
+    if (updatedCurrentProfile.id === profileId) {
+      setCurrentProfile(updatedCurrentProfile);
+    }
   };
 
   const deleteGoal = (profileId: string, goalId: string) => {
-    setProfiles((prevProfiles) => {
-      const { updatedProfiles, updatedCurrentProfile } = profileService.deleteGoal(
-        prevProfiles,
-        profileId,
-        goalId
-      );
-      const editedProfile = updatedProfiles.find(p => p.id === profileId);
-      if (editedProfile && updatedCurrentProfile && editedProfile.id === updatedCurrentProfile.id) {
-        setCurrentProfile(updatedCurrentProfile);
-      }
-      return updatedProfiles;
-    });
+    const { updatedProfiles, updatedCurrentProfile } = profileService.deleteGoal(
+      profiles,
+      profileId,
+      goalId
+    );
+    setProfiles(updatedProfiles);
+    if (updatedCurrentProfile.id === profileId) {
+      setCurrentProfile(updatedCurrentProfile);
+    }
   };
 
   return (
