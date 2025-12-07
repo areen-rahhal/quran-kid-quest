@@ -81,8 +81,14 @@ export const GoalsModalMenu = ({ profile, isOpen, onClose }: GoalsModalMenuProps
                 <button
                   key={goal.id}
                   onClick={(e) => {
-                    e.stopPropagation();
-                    if (!isAdded) handleGoalSelect(goal.id, goal.nameEnglish);
+                    try {
+                      e.stopPropagation();
+                      if (!isAdded) handleGoalSelect(goal.id, goal.nameEnglish);
+                    } catch (error) {
+                      console.error('[goalButton onClick] error:', error);
+                      // Still close the modal even if there's an error
+                      onClose();
+                    }
                   }}
                   disabled={isAdded}
                   className={`w-full p-4 rounded-lg border-2 transition-all text-left
