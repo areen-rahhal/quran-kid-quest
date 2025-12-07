@@ -348,16 +348,15 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   };
 
   const registerParent = (data: RegistrationData): Profile => {
-    // Use functional setState to avoid stale closures
-    setProfiles((prevProfiles) => {
-      const { profile, updatedProfiles } = profileService.registerParent(data, prevProfiles);
-      setCurrentProfile(profile);
-      setParentProfile(profile);
-      setIsRegistrationComplete(true);
-      return updatedProfiles;
-    });
-    // Return the profile created in the functional update
-    const { profile } = profileService.registerParent(data, profiles);
+    // Compute once, use for both updates and return
+    const { profile, updatedProfiles } = profileService.registerParent(data, profiles);
+
+    // Update all related state
+    setProfiles(updatedProfiles);
+    setCurrentProfile(profile);
+    setParentProfile(profile);
+    setIsRegistrationComplete(true);
+
     return profile;
   };
 
