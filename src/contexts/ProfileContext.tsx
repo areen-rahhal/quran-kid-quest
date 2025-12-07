@@ -361,7 +361,6 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   };
 
   const addGoal = useCallback((profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
-    // Use functional setState to always read fresh state
     setProfiles((prevProfiles) => {
       const { updatedProfiles, updatedCurrentProfile } = profileService.addGoal(
         prevProfiles,
@@ -370,10 +369,12 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         goalName,
         phaseSize
       );
-      // Update currentProfile if it's the edited profile
-      if (updatedCurrentProfile.id === profileId) {
-        setCurrentProfile(updatedCurrentProfile);
-      }
+      // Schedule currentProfile update for next render
+      setTimeout(() => {
+        if (updatedCurrentProfile.id === profileId) {
+          setCurrentProfile(updatedCurrentProfile);
+        }
+      }, 0);
       return updatedProfiles;
     });
   }, []);
@@ -391,9 +392,11 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         newPhaseSize,
         unitId
       );
-      if (updatedCurrentProfile.id === profileId) {
-        setCurrentProfile(updatedCurrentProfile);
-      }
+      setTimeout(() => {
+        if (updatedCurrentProfile.id === profileId) {
+          setCurrentProfile(updatedCurrentProfile);
+        }
+      }, 0);
       return updatedProfiles;
     });
   }, []);
@@ -402,9 +405,11 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     setProfiles((prevProfiles) => {
       const { updatedProfiles, updatedCurrentProfile } =
         profileService.updateProfile(prevProfiles, profileId, updates);
-      if (updatedCurrentProfile.id === profileId) {
-        setCurrentProfile(updatedCurrentProfile);
-      }
+      setTimeout(() => {
+        if (updatedCurrentProfile.id === profileId) {
+          setCurrentProfile(updatedCurrentProfile);
+        }
+      }, 0);
       return updatedProfiles;
     });
   }, []);
@@ -416,9 +421,11 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         profileId,
         goalId
       );
-      if (updatedCurrentProfile.id === profileId) {
-        setCurrentProfile(updatedCurrentProfile);
-      }
+      setTimeout(() => {
+        if (updatedCurrentProfile.id === profileId) {
+          setCurrentProfile(updatedCurrentProfile);
+        }
+      }, 0);
       return updatedProfiles;
     });
   }, []);
