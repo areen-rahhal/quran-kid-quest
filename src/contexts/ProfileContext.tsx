@@ -124,9 +124,14 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 
   // Keep currentProfile in sync when profiles change
   useEffect(() => {
+    console.log('[SYNC EFFECT] profiles changed, current profiles count:', profiles.length);
+    console.log('[SYNC EFFECT] looking for profile with id:', currentProfile.id);
     const updatedProfile = profiles.find(p => p.id === currentProfile.id);
+    console.log('[SYNC EFFECT] found updated profile:', updatedProfile?.name, 'goals:', updatedProfile?.goals?.length);
     if (updatedProfile && updatedProfile !== currentProfile) {
+      console.log('[SYNC EFFECT] calling setCurrentProfile');
       setCurrentProfile(updatedProfile);
+      console.log('[SYNC EFFECT] setCurrentProfile done');
     }
   }, [profiles]);
 
@@ -195,17 +200,27 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   };
 
   const addGoal = useCallback((profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
-    setProfiles((prevProfiles) => {
-      const { updatedProfiles, updatedCurrentProfile } = profileService.addGoal(
-        prevProfiles,
-        profileId,
-        goalId,
-        goalName,
-        phaseSize
-      );
-      // Don't call setState here - let the useEffect handle currentProfile sync
-      return updatedProfiles;
-    });
+    console.log('[addGoal] called with:', { profileId, goalId, goalName });
+    try {
+      setProfiles((prevProfiles) => {
+        console.log('[addGoal] setProfiles callback - prevProfiles count:', prevProfiles.length);
+        const { updatedProfiles, updatedCurrentProfile } = profileService.addGoal(
+          prevProfiles,
+          profileId,
+          goalId,
+          goalName,
+          phaseSize
+        );
+        console.log('[addGoal] service returned updatedProfiles count:', updatedProfiles.length);
+        console.log('[addGoal] updatedCurrentProfile:', updatedCurrentProfile.name, 'goals:', updatedCurrentProfile.goals?.length);
+        // Don't call setState here - let the useEffect handle currentProfile sync
+        return updatedProfiles;
+      });
+      console.log('[addGoal] setProfiles call completed');
+    } catch (error) {
+      console.error('[addGoal] ERROR:', error);
+      throw error;
+    }
   }, []);
 
   const addGoalWithPhaseSize = (profileId: string, goalId: string, goalName: string, phaseSize: number) => {
