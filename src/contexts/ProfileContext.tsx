@@ -102,6 +102,7 @@ const mockProfiles: Profile[] = [
 
 export function ProfileProvider({ children }: { children: ReactNode }) {
   const [profiles, setProfiles] = useState<Profile[]>(() => {
+    console.log('[INIT] Initializing profiles...');
     // CLEAR ALL OLD DATA - Fresh start
     localStorage.removeItem('profiles');
     localStorage.removeItem('currentProfile');
@@ -109,7 +110,9 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem('isRegistrationComplete');
 
     // Always start with fresh clean mock data (no goals)
-    return profileService.initializeProfiles(mockProfiles);
+    const initialized = profileService.initializeProfiles(mockProfiles);
+    console.log('[INIT] Profiles initialized:', initialized.length, 'profiles');
+    return initialized;
   });
   const [currentProfile, setCurrentProfile] = useState<Profile>(() => {
     // Always start with first profile from fresh mock data
