@@ -185,17 +185,6 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     return profileService.initializeParentProfile();
   });
 
-  // Sync currentProfile if the profile was updated in the profiles array
-  useEffect(() => {
-    const currentProfileId = currentProfile?.id;
-    if (!currentProfileId) return;
-
-    const updatedProfile = profiles.find(p => p.id === currentProfileId);
-    if (updatedProfile && JSON.stringify(updatedProfile) !== JSON.stringify(currentProfile)) {
-      setCurrentProfile(updatedProfile);
-    }
-  }, [profiles]);
-
   // Debounced localStorage saves
   useEffect(() => {
     const timer = setTimeout(() => {
