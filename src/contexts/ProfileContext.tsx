@@ -112,20 +112,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     return profileService.initializeProfiles(mockProfiles);
   });
   const [currentProfile, setCurrentProfile] = useState<Profile>(() => {
-    // Try to load from localStorage first
-    const storedCurrentProfile = localStorage.getItem('currentProfile');
-    if (storedCurrentProfile) {
-      try {
-        const parsed = JSON.parse(storedCurrentProfile);
-        if (parsed && parsed.id && parsed.name) {
-          return parsed;
-        }
-      } catch (e) {
-        // If parse fails, clear corrupted data
-        localStorage.removeItem('currentProfile');
-      }
-    }
-    // Fall back to first mock profile
+    // Always start with first profile from fresh mock data
     return mockProfiles[0] || ({} as Profile);
   });
   const [isRegistrationComplete, setIsRegistrationComplete] = useState<boolean>(() => {
