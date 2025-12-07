@@ -12,20 +12,35 @@ interface GoalsModalMenuProps {
 }
 
 export const GoalsModalMenu = ({ profile, isOpen, onClose }: GoalsModalMenuProps) => {
+  console.log('[GoalsModalMenu] rendered, isOpen:', isOpen, 'profile:', profile?.name);
   const { t, i18n } = useTranslation();
   const { allGoals } = useGoals();
+  console.log('[GoalsModalMenu] allGoals loaded:', allGoals?.length);
   const { addGoal } = useProfile();
   const isArabic = i18n.language === 'ar';
 
   // Get IDs of goals already added to this profile
   const addedGoalIds = new Set(profile.goals?.map(g => g.id) || []);
+  console.log('[GoalsModalMenu] addedGoalIds:', Array.from(addedGoalIds));
 
   const handleGoalSelect = (goalId: string, goalName: string) => {
-    addGoal(profile.id, goalId, goalName);
-    onClose();
+    console.log('[handleGoalSelect] called with goalId:', goalId, 'goalName:', goalName);
+    try {
+      addGoal(profile.id, goalId, goalName);
+      console.log('[handleGoalSelect] addGoal completed');
+      onClose();
+    } catch (error) {
+      console.error('[handleGoalSelect] ERROR:', error);
+      throw error;
+    }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    console.log('[GoalsModalMenu] not open, returning null');
+    return null;
+  }
+
+  console.log('[GoalsModalMenu] rendering modal with', allGoals?.length, 'goals');
 
   return (
     <div
