@@ -79,25 +79,22 @@ function initializeGoalWithPhases(
   };
 }
 
-// Mock profiles data
+// Mock profiles data - CLEAN with no goals (start fresh)
 const mockProfiles: Profile[] = [
   {
     id: '1',
     name: 'Aya',
     type: 'parent',
-    goalsCount: 2,
+    goalsCount: 0,
     email: 'aya@example.com',
     avatar: 'avatar-1',
-    currentGoal: 'Surah Al-Bakarah',
+    currentGoal: undefined,
     streak: 0,
-    goals: [
-      initializeGoalWithPhases('surah-bakarah', 'Surah Al-Bakarah', 'in-progress', 0, 1),
-      initializeGoalWithPhases('surah-rahman', 'Surah Al-Rahman', 'in-progress', 0, 1),
-    ].filter(Boolean) as any[],
+    goals: [],
     achievements: {
-      stars: 128,
+      stars: 0,
       streak: 0,
-      recitations: 45,
+      recitations: 0,
       goalsCompleted: 0,
     },
   },
@@ -106,18 +103,15 @@ const mockProfiles: Profile[] = [
     name: 'Waleed',
     type: 'child',
     avatar: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fcc50a4fcacab42d49c80a89631bc6bec?format=webp&width=800',
-    currentGoal: "Juz' 29",
-    goalsCount: 2,
-    streak: 12,
-    goals: [
-      initializeGoalWithPhases('juz-29', "Juz' 29", 'in-progress', 4, 11),
-      initializeGoalWithPhases('juz-30', "Juz' 30", 'completed', 37, 37),
-    ].filter(Boolean) as any[],
+    currentGoal: undefined,
+    goalsCount: 0,
+    streak: 0,
+    goals: [],
     achievements: {
-      stars: 42,
-      streak: 12,
-      recitations: 45,
-      goalsCompleted: 1,
+      stars: 0,
+      streak: 0,
+      recitations: 0,
+      goalsCompleted: 0,
     },
   },
   {
@@ -125,17 +119,14 @@ const mockProfiles: Profile[] = [
     name: 'Zain',
     type: 'child',
     avatar: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fa3cffb81fbde4015ad8bedfb2e19a16e?format=webp&width=800',
-    currentGoal: "Juz' 30",
-    goalsCount: 2,
-    streak: 7,
-    goals: [
-      initializeGoalWithPhases('juz-30', "Juz' 30", 'in-progress', 3, 37),
-      initializeGoalWithPhases('short-surahs', 'Short Surahs', 'in-progress', 0, 9),
-    ].filter(Boolean) as any[],
+    currentGoal: undefined,
+    goalsCount: 0,
+    streak: 0,
+    goals: [],
     achievements: {
-      stars: 3,
-      streak: 7,
-      recitations: 3,
+      stars: 0,
+      streak: 0,
+      recitations: 0,
       goalsCompleted: 0,
     },
   },
