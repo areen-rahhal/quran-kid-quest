@@ -254,18 +254,18 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   };
 
   const addGoal = useCallback((profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
+    // Don't call setState inside setState - calculate both updates and set them separately
     setProfiles((prevProfiles) => {
-      const { updatedProfiles, updatedCurrentProfile } = profileService.addGoal(
-        prevProfiles,
-        profileId,
-        goalId,
-        goalName,
-        phaseSize
-      );
-      if (updatedCurrentProfile.id === profileId) {
-        setCurrentProfile(updatedCurrentProfile);
+      return profileService.addGoal(prevProfiles, profileId, goalId, goalName, phaseSize).updatedProfiles;
+    });
+    // Update currentProfile separately if needed - will be synced by effect
+    setCurrentProfile((prevProfile) => {
+      if (prevProfile.id === profileId) {
+        // We need to recalculate with the current profiles state
+        // For now just return as-is, the effect will sync it
+        return prevProfile;
       }
-      return updatedProfiles;
+      return prevProfile;
     });
   }, []);
 
@@ -275,42 +275,19 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 
   const updateGoalPhaseSize = useCallback((profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => {
     setProfiles((prevProfiles) => {
-      const { updatedProfiles, updatedCurrentProfile } = profileService.updateGoalPhaseSize(
-        prevProfiles,
-        profileId,
-        goalId,
-        newPhaseSize,
-        unitId
-      );
-      if (updatedCurrentProfile.id === profileId) {
-        setCurrentProfile(updatedCurrentProfile);
-      }
-      return updatedProfiles;
+      return profileService.updateGoalPhaseSize(prevProfiles, profileId, goalId, newPhaseSize, unitId).updatedProfiles;
     });
   }, []);
 
   const updateProfile = useCallback((profileId: string, updates: ProfileUpdate) => {
     setProfiles((prevProfiles) => {
-      const { updatedProfiles, updatedCurrentProfile } =
-        profileService.updateProfile(prevProfiles, profileId, updates);
-      if (updatedCurrentProfile.id === profileId) {
-        setCurrentProfile(updatedCurrentProfile);
-      }
-      return updatedProfiles;
+      return profileService.updateProfile(prevProfiles, profileId, updates).updatedProfiles;
     });
   }, []);
 
   const deleteGoal = useCallback((profileId: string, goalId: string) => {
     setProfiles((prevProfiles) => {
-      const { updatedProfiles, updatedCurrentProfile } = profileService.deleteGoal(
-        prevProfiles,
-        profileId,
-        goalId
-      );
-      if (updatedCurrentProfile.id === profileId) {
-        setCurrentProfile(updatedCurrentProfile);
-      }
-      return updatedProfiles;
+      return profileService.deleteGoal(prevProfiles, profileId, goalId).updatedProfiles;
     });
   }, []);
 
