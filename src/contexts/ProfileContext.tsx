@@ -185,55 +185,159 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     return profileService.initializeParentProfile();
   });
 
-  // Debounce localStorage saves to prevent blocking the thread
+  // Non-blocking debounced localStorage saves using requestIdleCallback
+  // This prevents blocking the main thread when serializing large objects
   useEffect(() => {
-    const timer = setTimeout(() => {
-      try {
-        const cleanedProfiles = profiles.map(cleanProfileForStorage);
-        localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
-      } catch (error) {
-        console.error('Failed to save profiles to localStorage:', error);
-        // Clear old data to free up space
-        localStorage.removeItem('profiles');
-        try {
-          const cleanedProfiles = profiles.map(cleanProfileForStorage);
-          localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
-        } catch (e) {
-          console.error('Still failed after clearing:', e);
-        }
-      }
-    }, 300); // Wait 300ms after last change before saving
+    let timeoutId: NodeJS.Timeout;
+    let idleCallbackId: number;
 
-    return () => clearTimeout(timer);
+    const scheduleProfilesSave = () => {
+      // Use requestIdleCallback if available (modern browsers), fallback to setTimeout
+      if ('requestIdleCallback' in window) {
+        idleCallbackId = requestIdleCallback(
+          () => {
+            try {
+              const cleanedProfiles = profiles.map(cleanProfileForStorage);
+              localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
+            } catch (error) {
+              console.error('Failed to save profiles to localStorage:', error);
+              // Clear old data to free up space if quota exceeded
+              try {
+                localStorage.removeItem('profiles');
+                const cleanedProfiles = profiles.map(cleanProfileForStorage);
+                localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
+              } catch (e) {
+                console.error('Still failed after clearing:', e);
+              }
+            }
+          },
+          { timeout: 1000 } // Ensure save happens within 1 second even if thread is busy
+        );
+      } else {
+        // Fallback for browsers without requestIdleCallback
+        timeoutId = setTimeout(() => {
+          try {
+            const cleanedProfiles = profiles.map(cleanProfileForStorage);
+            localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
+          } catch (error) {
+            console.error('Failed to save profiles to localStorage:', error);
+            try {
+              localStorage.removeItem('profiles');
+              const cleanedProfiles = profiles.map(cleanProfileForStorage);
+              localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
+            } catch (e) {
+              console.error('Still failed after clearing:', e);
+            }
+          }
+        }, 300);
+      }
+    };
+
+    // Debounce: wait 300ms before scheduling the save
+    timeoutId = setTimeout(scheduleProfilesSave, 300);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if ('cancelIdleCallback' in window && idleCallbackId) {
+        cancelIdleCallback(idleCallbackId);
+      }
+    };
   }, [profiles]);
 
+  // Non-blocking debounced currentProfile save
   useEffect(() => {
-    const timer = setTimeout(() => {
-      try {
-        const cleanedProfile = cleanProfileForStorage(currentProfile);
-        localStorage.setItem('currentProfile', JSON.stringify(cleanedProfile));
-      } catch (error) {
-        console.error('Failed to save currentProfile to localStorage:', error);
-        localStorage.removeItem('currentProfile');
-      }
-    }, 300);
+    let timeoutId: NodeJS.Timeout;
+    let idleCallbackId: number;
 
-    return () => clearTimeout(timer);
+    const scheduleCurrentProfileSave = () => {
+      if ('requestIdleCallback' in window) {
+        idleCallbackId = requestIdleCallback(
+          () => {
+            try {
+              const cleanedProfile = cleanProfileForStorage(currentProfile);
+              localStorage.setItem('currentProfile', JSON.stringify(cleanedProfile));
+            } catch (error) {
+              console.error('Failed to save currentProfile to localStorage:', error);
+              localStorage.removeItem('currentProfile');
+            }
+          },
+          { timeout: 1000 }
+        );
+      } else {
+        timeoutId = setTimeout(() => {
+          try {
+            const cleanedProfile = cleanProfileForStorage(currentProfile);
+            localStorage.setItem('currentProfile', JSON.stringify(cleanedProfile));
+          } catch (error) {
+            console.error('Failed to save currentProfile to localStorage:', error);
+            localStorage.removeItem('currentProfile');
+          }
+        }, 300);
+      }
+    };
+
+    timeoutId = setTimeout(scheduleCurrentProfileSave, 300);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if ('cancelIdleCallback' in window && idleCallbackId) {
+        cancelIdleCallback(idleCallbackId);
+      }
+    };
   }, [currentProfile]);
 
+  // Save registration status (small data, synchronous is okay)
   useEffect(() => {
     localStorage.setItem('isRegistrationComplete', String(isRegistrationComplete));
   }, [isRegistrationComplete]);
 
+  // Save parent profile using non-blocking approach
   useEffect(() => {
-    if (parentProfile) {
-      try {
-        const cleanedProfile = cleanProfileForStorage(parentProfile);
-        localStorage.setItem('parentProfile', JSON.stringify(cleanedProfile));
-      } catch (error) {
-        console.error('Failed to save parentProfile:', error);
+    let timeoutId: NodeJS.Timeout;
+    let idleCallbackId: number;
+
+    const scheduleParentProfileSave = () => {
+      if ('requestIdleCallback' in window) {
+        idleCallbackId = requestIdleCallback(
+          () => {
+            if (parentProfile) {
+              try {
+                const cleanedProfile = cleanProfileForStorage(parentProfile);
+                localStorage.setItem('parentProfile', JSON.stringify(cleanedProfile));
+              } catch (error) {
+                console.error('Failed to save parentProfile:', error);
+              }
+            }
+          },
+          { timeout: 1000 }
+        );
+      } else {
+        timeoutId = setTimeout(() => {
+          if (parentProfile) {
+            try {
+              const cleanedProfile = cleanProfileForStorage(parentProfile);
+              localStorage.setItem('parentProfile', JSON.stringify(cleanedProfile));
+            } catch (error) {
+              console.error('Failed to save parentProfile:', error);
+            }
+          }
+        }, 300);
       }
+    };
+
+    if (parentProfile) {
+      timeoutId = setTimeout(scheduleParentProfileSave, 300);
+    } else {
+      // If no parent profile, remove from storage
+      localStorage.removeItem('parentProfile');
     }
+
+    return () => {
+      clearTimeout(timeoutId);
+      if ('cancelIdleCallback' in window && idleCallbackId) {
+        cancelIdleCallback(idleCallbackId);
+      }
+    };
   }, [parentProfile]);
 
   const switchProfile = (profileId: string) => {
@@ -244,29 +348,35 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   };
 
   const registerParent = (data: RegistrationData): Profile => {
-    const { profile, updatedProfiles } = profileService.registerParent(
-      data,
-      profiles
-    );
-    setProfiles(updatedProfiles);
-    setCurrentProfile(profile);
-    setParentProfile(profile);
-    setIsRegistrationComplete(true);
+    // Use functional setState to avoid stale closures
+    setProfiles((prevProfiles) => {
+      const { profile, updatedProfiles } = profileService.registerParent(data, prevProfiles);
+      setCurrentProfile(profile);
+      setParentProfile(profile);
+      setIsRegistrationComplete(true);
+      return updatedProfiles;
+    });
+    // Return the profile created in the functional update
+    const { profile } = profileService.registerParent(data, profiles);
     return profile;
   };
 
   const addGoal = (profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
-    const { updatedProfiles, updatedCurrentProfile } = profileService.addGoal(
-      profiles,
-      profileId,
-      goalId,
-      goalName,
-      phaseSize
-    );
-    setProfiles(updatedProfiles);
-    if (currentProfile.id === profileId) {
-      setCurrentProfile(updatedCurrentProfile);
-    }
+    // Use functional setState to avoid stale closures in race conditions
+    setProfiles((prevProfiles) => {
+      const { updatedProfiles, updatedCurrentProfile } = profileService.addGoal(
+        prevProfiles,
+        profileId,
+        goalId,
+        goalName,
+        phaseSize
+      );
+      // Also update currentProfile if it's the one being modified
+      if (currentProfile.id === profileId) {
+        setCurrentProfile(updatedCurrentProfile);
+      }
+      return updatedProfiles;
+    });
   };
 
   const addGoalWithPhaseSize = (profileId: string, goalId: string, goalName: string, phaseSize: number) => {
@@ -274,38 +384,47 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   };
 
   const updateGoalPhaseSize = (profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => {
-    const { updatedProfiles, updatedCurrentProfile } = profileService.updateGoalPhaseSize(
-      profiles,
-      profileId,
-      goalId,
-      newPhaseSize,
-      unitId
-    );
-    setProfiles(updatedProfiles);
-    if (currentProfile.id === profileId) {
-      setCurrentProfile(updatedCurrentProfile);
-    }
+    // Use functional setState to avoid stale closures
+    setProfiles((prevProfiles) => {
+      const { updatedProfiles, updatedCurrentProfile } = profileService.updateGoalPhaseSize(
+        prevProfiles,
+        profileId,
+        goalId,
+        newPhaseSize,
+        unitId
+      );
+      if (currentProfile.id === profileId) {
+        setCurrentProfile(updatedCurrentProfile);
+      }
+      return updatedProfiles;
+    });
   };
 
   const updateProfile = (profileId: string, updates: ProfileUpdate) => {
-    const { updatedProfiles, updatedCurrentProfile } =
-      profileService.updateProfile(profiles, profileId, updates);
-    setProfiles(updatedProfiles);
-    if (currentProfile.id === profileId) {
-      setCurrentProfile(updatedCurrentProfile);
-    }
+    // Use functional setState to avoid stale closures
+    setProfiles((prevProfiles) => {
+      const { updatedProfiles, updatedCurrentProfile } =
+        profileService.updateProfile(prevProfiles, profileId, updates);
+      if (currentProfile.id === profileId) {
+        setCurrentProfile(updatedCurrentProfile);
+      }
+      return updatedProfiles;
+    });
   };
 
   const deleteGoal = (profileId: string, goalId: string) => {
-    const { updatedProfiles, updatedCurrentProfile } = profileService.deleteGoal(
-      profiles,
-      profileId,
-      goalId
-    );
-    setProfiles(updatedProfiles);
-    if (currentProfile.id === profileId) {
-      setCurrentProfile(updatedCurrentProfile);
-    }
+    // Use functional setState to avoid stale closures
+    setProfiles((prevProfiles) => {
+      const { updatedProfiles, updatedCurrentProfile } = profileService.deleteGoal(
+        prevProfiles,
+        profileId,
+        goalId
+      );
+      if (currentProfile.id === profileId) {
+        setCurrentProfile(updatedCurrentProfile);
+      }
+      return updatedProfiles;
+    });
   };
 
   return (
