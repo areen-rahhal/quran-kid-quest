@@ -1,4 +1,4 @@
-import { GoalProgress, PhaseProgress } from './goals';
+import type { GoalProgress } from './goals';
 
 export interface Achievements {
   stars: number;

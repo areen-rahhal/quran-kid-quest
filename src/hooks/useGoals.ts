@@ -49,8 +49,8 @@ export function useGoals() {
   /**
    * Get recommended phase size range for a unit
    */
-  const getPhraseSizeRange = (unit: BaseUnit) => {
-    return phaseService.getPhraseSizeRange(unit);
+  const getPhaseSizeRange = (unit: BaseUnit) => {
+    return phaseService.getPhaseSizeRange(unit);
   };
 
   /**
@@ -69,7 +69,7 @@ export function useGoals() {
     getPhaseMetrics,
     getNextPhase,
     isValidPhaseSize,
-    getPhraseSizeRange,
+    getPhaseSizeRange,
     generateGoalPhases,
   };
 }
