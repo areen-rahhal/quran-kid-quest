@@ -144,6 +144,14 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     return profileService.initializeParentProfile();
   });
 
+  // Keep currentProfile in sync when profiles change
+  useEffect(() => {
+    const updatedProfile = profiles.find(p => p.id === currentProfile.id);
+    if (updatedProfile && updatedProfile !== currentProfile) {
+      setCurrentProfile(updatedProfile);
+    }
+  }, [profiles]);
+
   // Debounced localStorage saves
   useEffect(() => {
     const timer = setTimeout(() => {
