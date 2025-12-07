@@ -369,8 +369,11 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         goalName,
         phaseSize
       );
-      // Also update currentProfile if this is the edited profile
-      setCurrentProfile(updatedCurrentProfile);
+      // Find the edited profile in updatedProfiles and update currentProfile if it's the same
+      const editedProfile = updatedProfiles.find(p => p.id === profileId);
+      if (editedProfile && updatedCurrentProfile && editedProfile.id === updatedCurrentProfile.id) {
+        setCurrentProfile(updatedCurrentProfile);
+      }
       return updatedProfiles;
     });
   };
@@ -388,7 +391,10 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         newPhaseSize,
         unitId
       );
-      setCurrentProfile(updatedCurrentProfile);
+      const editedProfile = updatedProfiles.find(p => p.id === profileId);
+      if (editedProfile && updatedCurrentProfile && editedProfile.id === updatedCurrentProfile.id) {
+        setCurrentProfile(updatedCurrentProfile);
+      }
       return updatedProfiles;
     });
   };
@@ -397,7 +403,10 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     setProfiles((prevProfiles) => {
       const { updatedProfiles, updatedCurrentProfile } =
         profileService.updateProfile(prevProfiles, profileId, updates);
-      setCurrentProfile(updatedCurrentProfile);
+      const editedProfile = updatedProfiles.find(p => p.id === profileId);
+      if (editedProfile && updatedCurrentProfile && editedProfile.id === updatedCurrentProfile.id) {
+        setCurrentProfile(updatedCurrentProfile);
+      }
       return updatedProfiles;
     });
   };
@@ -409,7 +418,10 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         profileId,
         goalId
       );
-      setCurrentProfile(updatedCurrentProfile);
+      const editedProfile = updatedProfiles.find(p => p.id === profileId);
+      if (editedProfile && updatedCurrentProfile && editedProfile.id === updatedCurrentProfile.id) {
+        setCurrentProfile(updatedCurrentProfile);
+      }
       return updatedProfiles;
     });
   };
