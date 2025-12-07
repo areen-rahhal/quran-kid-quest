@@ -75,12 +75,11 @@ const Goals = () => {
       goal => goal.name === currentProfile.currentGoal
     );
 
-    if (activeGoalIndex !== -1) {
-      setCurrentGoalIndex(activeGoalIndex);
-    } else {
-      setCurrentGoalIndex(0);
-    }
-  }, [currentProfile.id, hasAppliedUrlParams, searchParams]);
+    const newIndex = activeGoalIndex !== -1 ? activeGoalIndex : 0;
+    
+    // Only update if the index actually changed to prevent re-render loops
+    setCurrentGoalIndex(prev => prev === newIndex ? prev : newIndex);
+  }, [currentProfile.goals?.length, currentProfile.currentGoal, hasAppliedUrlParams, searchParams]);
 
 
   // Get achievements directly from current profile
