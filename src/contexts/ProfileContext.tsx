@@ -102,13 +102,22 @@ const mockProfiles: Profile[] = [
 
 export function ProfileProvider({ children }: { children: ReactNode }) {
   const [profiles, setProfiles] = useState<Profile[]>(() => {
-    // CLEAR OLD CORRUPTED DATA ON FRESH START
-    // This ensures we start with clean mock profiles
-    localStorage.removeItem('profiles');
-    localStorage.removeItem('currentProfile');
-    localStorage.removeItem('parentProfile');
-
-    // Use fresh clean mock data
+    // Try to load from localStorage first
+    const storedProfiles = localStorage.getItem('profiles');
+    if (storedProfiles) {
+      try {
+        const parsed = JSON.parse(storedProfiles);
+        // Validate it's a proper array with valid structure
+        if (Array.isArray(parsed) && parsed.length > 0 && parsed[0]?.id && parsed[0]?.name) {
+          return parsed;
+        }
+      } catch (e) {
+        // If parse fails, clear corrupted data and use fresh mock data
+        localStorage.removeItem('profiles');
+        localStorage.removeItem('currentProfile');
+      }
+    }
+    // Fall back to fresh clean mock data
     return profileService.initializeProfiles(mockProfiles);
   });
   const [currentProfile, setCurrentProfile] = useState<Profile>(() => {
