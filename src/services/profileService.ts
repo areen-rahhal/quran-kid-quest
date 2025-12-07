@@ -193,7 +193,7 @@ export const profileService = {
         return {
           ...profile,
           ...validatedUpdates,
-        };
+        } as Profile;
       }
       return profile;
     });
@@ -209,8 +209,8 @@ export const profileService = {
     }
 
     return {
-      updatedProfiles,
-      updatedCurrentProfile: updatedCurrentProfile || ({} as Profile),
+      updatedProfiles: updatedProfiles as Profile[],
+      updatedCurrentProfile: updatedCurrentProfile as Profile,
     };
   },
 

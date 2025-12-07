@@ -1,12 +1,13 @@
 import { z } from 'zod';
 import type { Profile, Achievements } from '@/types/profile';
-import type { GoalProgress, PhaseProgress as PhaseProgressType } from '@/types/goals';
+import type { GoalProgress } from '@/types/goals';
 import type { Phase, PhaseProgress } from '@/types/phases';
 
 // Re-export canonical types
 export type { Profile, Achievements } from '@/types/profile';
-export type { BaseUnit, GoalProgress } from '@/types/goals';
-export type { Phase, PhaseProgress } from '@/types/phases';
+export type { GoalProgress, PhaseProgress } from '@/types/goals';
+export type { Phase } from '@/types/phases';
+export type { BaseUnit } from '@/types/goals';
 
 // Base enums
 export const ProfileTypeSchema = z.enum(['parent', 'child']);
@@ -56,6 +57,9 @@ export const GoalProgressSchema = z.object({
   completionDate: z.string().datetime().optional(),
   currentUnitId: z.string().optional(),
 });
+
+// Goal Progress schema for updates (allows partial goals)
+export const GoalProgressUpdateSchema = GoalProgressSchema;
 
 // Base Unit schema
 export const BaseUnitSchema = z.object({
@@ -160,7 +164,7 @@ export const DeleteGoalSchema = z.object({
 });
 
 // Additional type exports (from Zod inference)
-export type BaseUnit = z.infer<typeof BaseUnitSchema>;
+export type BaseUnitSchema = z.infer<typeof BaseUnitSchema>;
 export type GoalMetadata = z.infer<typeof GoalMetadataSchema>;
 export type GoalConfig = z.infer<typeof GoalConfigSchema>;
 export type PhaseSchemaType = z.infer<typeof PhaseSchema>;
