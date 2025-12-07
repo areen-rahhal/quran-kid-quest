@@ -254,18 +254,8 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   };
 
   const addGoal = useCallback((profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
-    // Don't call setState inside setState - calculate both updates and set them separately
     setProfiles((prevProfiles) => {
       return profileService.addGoal(prevProfiles, profileId, goalId, goalName, phaseSize).updatedProfiles;
-    });
-    // Update currentProfile separately if needed - will be synced by effect
-    setCurrentProfile((prevProfile) => {
-      if (prevProfile.id === profileId) {
-        // We need to recalculate with the current profiles state
-        // For now just return as-is, the effect will sync it
-        return prevProfile;
-      }
-      return prevProfile;
     });
   }, []);
 
