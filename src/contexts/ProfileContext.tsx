@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { Profile, RegistrationData, ProfileUpdate } from '@/lib/validation';
 import { profileService } from '@/services/profileService';
 import { phaseService } from '@/services/phaseService';
@@ -360,60 +360,68 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     return profile;
   };
 
-  const addGoal = (profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
-    // Call service once to get both updates
-    const { updatedProfiles, updatedCurrentProfile } = profileService.addGoal(
-      profiles,
-      profileId,
-      goalId,
-      goalName,
-      phaseSize
-    );
-    // Update state - React 18 will batch both updates together
-    setProfiles(updatedProfiles);
-    if (updatedCurrentProfile.id === profileId) {
-      setCurrentProfile(updatedCurrentProfile);
-    }
-  };
+  const addGoal = useCallback((profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
+    // Use functional setState to always read fresh state
+    setProfiles((prevProfiles) => {
+      const { updatedProfiles, updatedCurrentProfile } = profileService.addGoal(
+        prevProfiles,
+        profileId,
+        goalId,
+        goalName,
+        phaseSize
+      );
+      // Update currentProfile if it's the edited profile
+      if (updatedCurrentProfile.id === profileId) {
+        setCurrentProfile(updatedCurrentProfile);
+      }
+      return updatedProfiles;
+    });
+  }, []);
 
   const addGoalWithPhaseSize = (profileId: string, goalId: string, goalName: string, phaseSize: number) => {
     addGoal(profileId, goalId, goalName, phaseSize);
   };
 
-  const updateGoalPhaseSize = (profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => {
-    const { updatedProfiles, updatedCurrentProfile } = profileService.updateGoalPhaseSize(
-      profiles,
-      profileId,
-      goalId,
-      newPhaseSize,
-      unitId
-    );
-    setProfiles(updatedProfiles);
-    if (updatedCurrentProfile.id === profileId) {
-      setCurrentProfile(updatedCurrentProfile);
-    }
-  };
+  const updateGoalPhaseSize = useCallback((profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => {
+    setProfiles((prevProfiles) => {
+      const { updatedProfiles, updatedCurrentProfile } = profileService.updateGoalPhaseSize(
+        prevProfiles,
+        profileId,
+        goalId,
+        newPhaseSize,
+        unitId
+      );
+      if (updatedCurrentProfile.id === profileId) {
+        setCurrentProfile(updatedCurrentProfile);
+      }
+      return updatedProfiles;
+    });
+  }, []);
 
-  const updateProfile = (profileId: string, updates: ProfileUpdate) => {
-    const { updatedProfiles, updatedCurrentProfile } =
-      profileService.updateProfile(profiles, profileId, updates);
-    setProfiles(updatedProfiles);
-    if (updatedCurrentProfile.id === profileId) {
-      setCurrentProfile(updatedCurrentProfile);
-    }
-  };
+  const updateProfile = useCallback((profileId: string, updates: ProfileUpdate) => {
+    setProfiles((prevProfiles) => {
+      const { updatedProfiles, updatedCurrentProfile } =
+        profileService.updateProfile(prevProfiles, profileId, updates);
+      if (updatedCurrentProfile.id === profileId) {
+        setCurrentProfile(updatedCurrentProfile);
+      }
+      return updatedProfiles;
+    });
+  }, []);
 
-  const deleteGoal = (profileId: string, goalId: string) => {
-    const { updatedProfiles, updatedCurrentProfile } = profileService.deleteGoal(
-      profiles,
-      profileId,
-      goalId
-    );
-    setProfiles(updatedProfiles);
-    if (updatedCurrentProfile.id === profileId) {
-      setCurrentProfile(updatedCurrentProfile);
-    }
-  };
+  const deleteGoal = useCallback((profileId: string, goalId: string) => {
+    setProfiles((prevProfiles) => {
+      const { updatedProfiles, updatedCurrentProfile } = profileService.deleteGoal(
+        prevProfiles,
+        profileId,
+        goalId
+      );
+      if (updatedCurrentProfile.id === profileId) {
+        setCurrentProfile(updatedCurrentProfile);
+      }
+      return updatedProfiles;
+    });
+  }, []);
 
   return (
     <ProfileContext.Provider
