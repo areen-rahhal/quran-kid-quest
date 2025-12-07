@@ -49,36 +49,6 @@ interface ProfileContextType {
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
-// Helper function to initialize a goal without storing phases in memory
-function initializeGoalWithPhases(
-  goalId: string,
-  goalName: string,
-  status: 'in-progress' | 'completed' | 'paused',
-  completedSurahs: number,
-  totalSurahs: number
-) {
-  const goalConfig = getGoalById(goalId);
-  if (!goalConfig) return null;
-
-  const phaseSize = goalConfig.metadata.defaultPhaseSize;
-  let currentUnitId = undefined;
-
-  if (goalConfig.units && goalConfig.units.length > 0) {
-    currentUnitId = goalConfig.units[0].id.toString();
-  }
-
-  return {
-    id: goalId,
-    name: goalName,
-    status,
-    completedSurahs,
-    totalSurahs,
-    phaseSize,
-    phases: null,
-    currentUnitId,
-  };
-}
-
 // Mock profiles data - CLEAN with no goals (start fresh)
 const mockProfiles: Profile[] = [
   {
