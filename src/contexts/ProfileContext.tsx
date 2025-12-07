@@ -126,18 +126,16 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     if (storedCurrentProfile) {
       try {
         const parsed = JSON.parse(storedCurrentProfile);
-        if (parsed && parsed.id) {
+        if (parsed && parsed.id && parsed.name) {
           return parsed;
         }
       } catch (e) {
-        // If parse fails, fall back to initialization
+        // If parse fails, clear and fall back to initialization
+        localStorage.removeItem('currentProfile');
       }
     }
-    // Fall back to initialization if localStorage is empty or invalid
-    const initialProfiles = localStorage.getItem('profiles')
-      ? JSON.parse(localStorage.getItem('profiles') || '[]')
-      : profileService.initializeProfiles(mockProfiles);
-    return profileService.initializeCurrentProfile(initialProfiles);
+    // Fall back to first profile from profiles array
+    return profiles[0] || ({} as Profile);
   });
   const [isRegistrationComplete, setIsRegistrationComplete] = useState<boolean>(() => {
     return profileService.initializeRegistrationStatus();
