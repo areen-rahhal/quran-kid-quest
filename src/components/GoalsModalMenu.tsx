@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+import { memo, useTranslation } from 'react-i18next';
 import { useGoals } from '@/hooks/useGoals';
 import { useProfile } from '@/contexts/ProfileContext';
 import { X } from 'lucide-react';
@@ -11,7 +11,7 @@ interface GoalsModalMenuProps {
   onClose: () => void;
 }
 
-export const GoalsModalMenu = ({ profile, isOpen, onClose }: GoalsModalMenuProps) => {
+const GoalsModalMenuComponent = ({ profile, isOpen, onClose }: GoalsModalMenuProps) => {
   console.log('[GoalsModalMenu] rendered, isOpen:', isOpen, 'profile:', profile?.name);
   const { t, i18n } = useTranslation();
   const { allGoals } = useGoals();
@@ -120,3 +120,5 @@ export const GoalsModalMenu = ({ profile, isOpen, onClose }: GoalsModalMenuProps
     </div>
   );
 };
+
+export const GoalsModalMenu = memo(GoalsModalMenuComponent);
