@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { Profile, RegistrationData, ProfileUpdate } from '@/lib/validation';
 import { profileService } from '@/services/profileService';
 
@@ -208,60 +208,54 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     return profile;
   };
 
-  const addGoal = (profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
-    // Get updated data from service
-    const { updatedProfiles, updatedCurrentProfile } = profileService.addGoal(
-      profiles,
-      profileId,
-      goalId,
-      goalName,
-      phaseSize
-    );
-    // Update state - separate calls to avoid nested setState
-    setProfiles(updatedProfiles);
-    if (updatedCurrentProfile.id === profileId) {
-      setCurrentProfile(updatedCurrentProfile);
-    }
-  };
+  const addGoal = useCallback((profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
+    setProfiles((prevProfiles) => {
+      const { updatedProfiles, updatedCurrentProfile } = profileService.addGoal(
+        prevProfiles,
+        profileId,
+        goalId,
+        goalName,
+        phaseSize
+      );
+      // Don't call setState here - let the useEffect handle currentProfile sync
+      return updatedProfiles;
+    });
+  }, []);
 
   const addGoalWithPhaseSize = (profileId: string, goalId: string, goalName: string, phaseSize: number) => {
     addGoal(profileId, goalId, goalName, phaseSize);
   };
 
-  const updateGoalPhaseSize = (profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => {
-    const { updatedProfiles, updatedCurrentProfile } = profileService.updateGoalPhaseSize(
-      profiles,
-      profileId,
-      goalId,
-      newPhaseSize,
-      unitId
-    );
-    setProfiles(updatedProfiles);
-    if (updatedCurrentProfile.id === profileId) {
-      setCurrentProfile(updatedCurrentProfile);
-    }
-  };
+  const updateGoalPhaseSize = useCallback((profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => {
+    setProfiles((prevProfiles) => {
+      const { updatedProfiles } = profileService.updateGoalPhaseSize(
+        prevProfiles,
+        profileId,
+        goalId,
+        newPhaseSize,
+        unitId
+      );
+      return updatedProfiles;
+    });
+  }, []);
 
-  const updateProfile = (profileId: string, updates: ProfileUpdate) => {
-    const { updatedProfiles, updatedCurrentProfile } =
-      profileService.updateProfile(profiles, profileId, updates);
-    setProfiles(updatedProfiles);
-    if (updatedCurrentProfile.id === profileId) {
-      setCurrentProfile(updatedCurrentProfile);
-    }
-  };
+  const updateProfile = useCallback((profileId: string, updates: ProfileUpdate) => {
+    setProfiles((prevProfiles) => {
+      const { updatedProfiles } = profileService.updateProfile(prevProfiles, profileId, updates);
+      return updatedProfiles;
+    });
+  }, []);
 
-  const deleteGoal = (profileId: string, goalId: string) => {
-    const { updatedProfiles, updatedCurrentProfile } = profileService.deleteGoal(
-      profiles,
-      profileId,
-      goalId
-    );
-    setProfiles(updatedProfiles);
-    if (updatedCurrentProfile.id === profileId) {
-      setCurrentProfile(updatedCurrentProfile);
-    }
-  };
+  const deleteGoal = useCallback((profileId: string, goalId: string) => {
+    setProfiles((prevProfiles) => {
+      const { updatedProfiles } = profileService.deleteGoal(
+        prevProfiles,
+        profileId,
+        goalId
+      );
+      return updatedProfiles;
+    });
+  }, []);
 
   return (
     <ProfileContext.Provider
