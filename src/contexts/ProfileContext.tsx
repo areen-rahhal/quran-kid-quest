@@ -262,12 +262,9 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         goalName,
         phaseSize
       );
-      // Schedule currentProfile update for next render
-      setTimeout(() => {
-        if (updatedCurrentProfile.id === profileId) {
-          setCurrentProfile(updatedCurrentProfile);
-        }
-      }, 0);
+      if (updatedCurrentProfile.id === profileId) {
+        setCurrentProfile(updatedCurrentProfile);
+      }
       return updatedProfiles;
     });
   }, []);
@@ -285,11 +282,9 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         newPhaseSize,
         unitId
       );
-      setTimeout(() => {
-        if (updatedCurrentProfile.id === profileId) {
-          setCurrentProfile(updatedCurrentProfile);
-        }
-      }, 0);
+      if (updatedCurrentProfile.id === profileId) {
+        setCurrentProfile(updatedCurrentProfile);
+      }
       return updatedProfiles;
     });
   }, []);
@@ -298,11 +293,9 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     setProfiles((prevProfiles) => {
       const { updatedProfiles, updatedCurrentProfile } =
         profileService.updateProfile(prevProfiles, profileId, updates);
-      setTimeout(() => {
-        if (updatedCurrentProfile.id === profileId) {
-          setCurrentProfile(updatedCurrentProfile);
-        }
-      }, 0);
+      if (updatedCurrentProfile.id === profileId) {
+        setCurrentProfile(updatedCurrentProfile);
+      }
       return updatedProfiles;
     });
   }, []);
@@ -314,11 +307,9 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         profileId,
         goalId
       );
-      setTimeout(() => {
-        if (updatedCurrentProfile.id === profileId) {
-          setCurrentProfile(updatedCurrentProfile);
-        }
-      }, 0);
+      if (updatedCurrentProfile.id === profileId) {
+        setCurrentProfile(updatedCurrentProfile);
+      }
       return updatedProfiles;
     });
   }, []);
