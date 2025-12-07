@@ -18,13 +18,16 @@ export const goalService = {
     goalName: string,
     phaseSize?: number
   ): Profile {
+    console.log('[goalService.addGoalToProfile] called with profile:', profile.name, 'goalId:', goalId);
     // Check if goal already exists (idempotency)
     if (this.hasGoal(profile, goalId)) {
+      console.log('[goalService.addGoalToProfile] goal already exists, returning unchanged');
       return profile;
     }
 
     const goalConfig = getGoalById(goalId);
     if (!goalConfig) {
+      console.error('[goalService.addGoalToProfile] Goal config not found for:', goalId);
       throw new Error(`Goal with id ${goalId} not found`);
     }
 
@@ -32,6 +35,8 @@ export const goalService = {
 
     // Determine phase size
     const effectivePhaseSize = phaseSize || goalConfig.metadata.defaultPhaseSize;
+
+    console.log('[goalService.addGoalToProfile] creating new goal:', goalName, 'phaseSize:', effectivePhaseSize);
 
     // Don't store phases in localStorage - generate on-demand instead
     // This prevents localStorage quota exceeded errors
@@ -47,13 +52,17 @@ export const goalService = {
     };
 
     const updatedGoals = [...(profile.goals || []), newGoal];
+    console.log('[goalService.addGoalToProfile] updated goals count:', updatedGoals.length);
 
-    return {
+    const result = {
       ...profile,
       goals: updatedGoals,
       goalsCount: updatedGoals.length,
       currentGoal: goalName,
     };
+
+    console.log('[goalService.addGoalToProfile] returning updated profile:', result.name, 'goals:', result.goals?.length);
+    return result;
   },
 
   /**
