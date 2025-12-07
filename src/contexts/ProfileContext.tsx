@@ -137,12 +137,16 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 
   // Debounced localStorage saves
   useEffect(() => {
+    console.log('[STORAGE EFFECT] profiles changed, scheduling save in 300ms');
     const timer = setTimeout(() => {
+      console.log('[STORAGE EFFECT] saving profiles to localStorage');
       try {
         const cleanedProfiles = profiles.map(cleanProfileForStorage);
+        console.log('[STORAGE EFFECT] cleaned profiles count:', cleanedProfiles.length);
         localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
+        console.log('[STORAGE EFFECT] save complete');
       } catch (error) {
-        console.error('Failed to save profiles:', error);
+        console.error('[STORAGE EFFECT] Failed to save profiles:', error);
       }
     }, 300);
     return () => clearTimeout(timer);
