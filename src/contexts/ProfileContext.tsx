@@ -130,12 +130,12 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
           return parsed;
         }
       } catch (e) {
-        // If parse fails, clear and fall back to initialization
+        // If parse fails, clear corrupted data
         localStorage.removeItem('currentProfile');
       }
     }
-    // Fall back to first profile from profiles array
-    return profiles[0] || ({} as Profile);
+    // Fall back to first mock profile
+    return mockProfiles[0] || ({} as Profile);
   });
   const [isRegistrationComplete, setIsRegistrationComplete] = useState<boolean>(() => {
     return profileService.initializeRegistrationStatus();
