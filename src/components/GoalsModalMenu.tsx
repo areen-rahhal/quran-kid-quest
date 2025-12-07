@@ -28,7 +28,11 @@ export const GoalsModalMenu = ({ profile, isOpen, onClose }: GoalsModalMenuProps
     try {
       addGoal(profile.id, goalId, goalName);
       console.log('[handleGoalSelect] addGoal completed');
-      onClose();
+      // Delay close slightly to allow event to finish processing
+      setTimeout(() => {
+        console.log('[handleGoalSelect] closing modal');
+        onClose();
+      }, 0);
     } catch (error) {
       console.error('[handleGoalSelect] ERROR:', error);
       throw error;
