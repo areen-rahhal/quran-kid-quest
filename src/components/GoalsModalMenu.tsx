@@ -1,4 +1,5 @@
-import { memo, useTranslation } from 'react-i18next';
+import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useGoals } from '@/hooks/useGoals';
 import { useProfile } from '@/contexts/ProfileContext';
 import { X } from 'lucide-react';
