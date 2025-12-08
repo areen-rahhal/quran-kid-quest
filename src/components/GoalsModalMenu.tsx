@@ -39,19 +39,19 @@ const GoalsModalMenuComponent = ({ profileId, isOpen, onClose }: GoalsModalMenuP
       console.log('[handleGoalSelect] Starting goal selection:', { profileId, goalId, goalName });
       addGoal(profileId, goalId, goalName);
       console.log('[handleGoalSelect] Goal added successfully, closing modal');
-      // Delay close slightly to allow event to finish processing
+      // Delay close to ensure state updates complete before modal closes
       setTimeout(() => {
         console.log('[handleGoalSelect] Closing modal after goal addition');
         onClose();
         setIsProcessing(false);
-      }, 100);
+      }, 200);
     } catch (error) {
       console.error('[handleGoalSelect] ERROR:', error);
       // Close modal even if there's an error
       setTimeout(() => {
         onClose();
         setIsProcessing(false);
-      }, 100);
+      }, 200);
     }
   };
 
