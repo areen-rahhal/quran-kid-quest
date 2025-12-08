@@ -1,35 +1,7 @@
-import { createContext, useContext, useState, useEffect, useCallback, useMemo, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { Profile, RegistrationData, ProfileUpdate } from '@/lib/validation';
 import { profileService } from '@/services/profileService';
-
-/**
- * Clean profile object before storing in localStorage
- */
-function cleanProfileForStorage(profile: Profile): Profile {
-  return {
-    id: profile.id,
-    name: profile.name,
-    type: profile.type,
-    avatar: profile.avatar,
-    email: profile.email,
-    age: profile.age,
-    currentGoal: profile.currentGoal,
-    goalsCount: profile.goalsCount,
-    streak: profile.streak,
-    goals: (profile.goals || []).map(goal => ({
-      id: goal.id,
-      name: goal.name,
-      status: goal.status,
-      completedSurahs: goal.completedSurahs,
-      totalSurahs: goal.totalSurahs,
-      phaseSize: goal.phaseSize,
-      phases: null,
-      currentUnitId: goal.currentUnitId,
-      completionDate: goal.completionDate,
-    })),
-    achievements: profile.achievements,
-  } as Profile;
-}
+import { supabaseProfileService } from '@/services/supabaseProfileService';
 
 interface ProfileContextType {
   currentProfile: Profile;
@@ -43,279 +15,230 @@ interface ProfileContextType {
   deleteGoal: (profileId: string, goalId: string) => void;
   isRegistrationComplete: boolean;
   parentProfile: Profile | null;
+  isLoading: boolean;
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
-// Mock profiles data - CLEAN with no goals (start fresh)
-const mockProfiles: Profile[] = [
-  {
-    id: '1',
-    name: 'Aya',
-    type: 'parent',
-    goalsCount: 0,
-    email: 'aya@example.com',
-    avatar: 'avatar-deer',
-    currentGoal: undefined,
+// Default empty profile
+const defaultEmptyProfile: Profile = {
+  id: 'unknown',
+  name: 'Unknown',
+  type: 'child',
+  goals: [],
+  goalsCount: 0,
+  achievements: {
+    stars: 0,
     streak: 0,
-    goals: [],
-    achievements: {
-      stars: 0,
-      streak: 0,
-      recitations: 0,
-      goalsCompleted: 0,
-    },
+    recitations: 0,
+    goalsCompleted: 0,
   },
-  {
-    id: '2',
-    name: 'Waleed',
-    type: 'child',
-    avatar: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fcc50a4fcacab42d49c80a89631bc6bec?format=webp&width=800',
-    currentGoal: undefined,
-    goalsCount: 0,
-    streak: 0,
-    goals: [],
-    achievements: {
-      stars: 0,
-      streak: 0,
-      recitations: 0,
-      goalsCompleted: 0,
-    },
-  },
-  {
-    id: '3',
-    name: 'Zain',
-    type: 'child',
-    avatar: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fa3cffb81fbde4015ad8bedfb2e19a16e?format=webp&width=800',
-    currentGoal: undefined,
-    goalsCount: 0,
-    streak: 0,
-    goals: [],
-    achievements: {
-      stars: 0,
-      streak: 0,
-      recitations: 0,
-      goalsCompleted: 0,
-    },
-  },
-];
+};
 
 export function ProfileProvider({ children }: { children: ReactNode }) {
-  const [profiles, setProfiles] = useState<Profile[]>(() => {
-    console.log('[INIT] Initializing profiles...');
-    // Load profiles from storage or use mock data as fallback
-    const initialized = profileService.initializeProfiles(mockProfiles);
-    console.log('[INIT] Profiles initialized:', initialized.length, 'profiles');
-    return initialized;
-  });
-  const [currentProfile, setCurrentProfile] = useState<Profile>(() => {
-    // Always start with first profile from fresh mock data
-    const initialProfile = mockProfiles[0];
-    if (!initialProfile) {
-      console.warn('[ProfileProvider] No mock profiles available for initialization');
-      return mockProfiles[0] || ({
-        id: 'unknown',
-        name: 'Unknown',
-        type: 'child',
-        goals: [],
-        goalsCount: 0,
-      } as Profile);
-    }
-    return initialProfile;
-  });
-  const [isRegistrationComplete, setIsRegistrationComplete] = useState<boolean>(() => {
-    return profileService.initializeRegistrationStatus();
-  });
-  const [parentProfile, setParentProfile] = useState<Profile | null>(() => {
-    return profileService.initializeParentProfile();
-  });
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [currentProfile, setCurrentProfile] = useState<Profile>(defaultEmptyProfile);
+  const [isRegistrationComplete, setIsRegistrationComplete] = useState<boolean>(false);
+  const [parentProfile, setParentProfile] = useState<Profile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Keep currentProfile in sync when profiles change
+  // Initialize profiles from Supabase
   useEffect(() => {
-    console.log('[SYNC EFFECT] profiles changed, current profiles count:', profiles.length);
-    console.log('[SYNC EFFECT] looking for profile with id:', currentProfile.id);
+    const initializeProfiles = async () => {
+      try {
+        console.log('[ProfileProvider] Initializing profiles from Supabase');
+        setIsLoading(true);
 
-    // Safety check: ensure currentProfile has an id
-    if (!currentProfile?.id) {
-      console.log('[SYNC EFFECT] currentProfile has no id, resetting to first profile');
-      if (profiles.length > 0) {
-        setCurrentProfile(profiles[0]);
+        // Load all profiles
+        const loadedProfiles = await supabaseProfileService.loadProfiles();
+        console.log('[ProfileProvider] Loaded profiles:', loadedProfiles.length);
+
+        if (loadedProfiles.length === 0) {
+          console.log('[ProfileProvider] No profiles in Supabase, creating defaults');
+          // Create default profiles if none exist
+          const defaultProfiles = await createDefaultProfiles();
+          setProfiles(defaultProfiles);
+          if (defaultProfiles.length > 0) {
+            setCurrentProfile(defaultProfiles[0]);
+          }
+        } else {
+          // Load each profile with its goals
+          const profilesWithGoals = await Promise.all(
+            loadedProfiles.map(profile => supabaseProfileService.loadProfileWithGoals(profile.id))
+          );
+          const validProfiles = profilesWithGoals.filter(p => p !== null) as Profile[];
+          setProfiles(validProfiles);
+          if (validProfiles.length > 0) {
+            setCurrentProfile(validProfiles[0]);
+          }
+        }
+
+        // Load registration status
+        const regStatus = localStorage.getItem('isRegistrationComplete') === 'true';
+        setIsRegistrationComplete(regStatus);
+
+        // Load parent profile from localStorage temporarily (can migrate later)
+        const parentData = localStorage.getItem('parentProfile');
+        if (parentData) {
+          try {
+            setParentProfile(JSON.parse(parentData));
+          } catch (e) {
+            console.error('Failed to parse parent profile', e);
+          }
+        }
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error('[ProfileProvider] Error initializing profiles:', error);
+        setIsLoading(false);
       }
-      return;
-    }
+    };
 
-    // Find the updated profile in the new profiles array
-    const updatedProfile = profiles.find(p => p.id === currentProfile.id);
-    console.log('[SYNC EFFECT] found updated profile:', updatedProfile?.name, 'goals:', updatedProfile?.goals?.length);
+    initializeProfiles();
+  }, []);
 
-    // If profile not found, switch to first profile
-    if (!updatedProfile) {
-      console.log('[SYNC EFFECT] currentProfile not found in profiles, resetting to first');
-      if (profiles.length > 0) {
-        setCurrentProfile(profiles[0]);
-      }
-      return;
-    }
-
-    // Only update if the profile's content actually changed (use content-based comparison, not reference equality)
-    // Check if goals count or profile data changed
-    if (updatedProfile.goals?.length !== currentProfile.goals?.length ||
-        updatedProfile.name !== currentProfile.name ||
-        updatedProfile.goalsCount !== currentProfile.goalsCount) {
-      console.log('[SYNC EFFECT] calling setCurrentProfile due to content change');
-      setCurrentProfile(updatedProfile);
-      console.log('[SYNC EFFECT] setCurrentProfile done');
+  const switchProfile = useCallback((profileId: string) => {
+    const profile = profiles.find(p => p.id === profileId);
+    if (profile) {
+      console.log('[switchProfile] Switching to profile:', profile.name);
+      setCurrentProfile(profile);
     }
   }, [profiles]);
 
-  // Consolidated debounced localStorage saves for all profile data
-  useEffect(() => {
-    console.log('[STORAGE EFFECT] Profile data changed, scheduling save in 300ms');
-    const timer = setTimeout(() => {
-      console.log('[STORAGE EFFECT] Saving all profile data to localStorage');
-      try {
-        // Save profiles array
-        const cleanedProfiles = profiles.map(cleanProfileForStorage);
-        const profilesSerialized = JSON.stringify(cleanedProfiles);
-        const storedProfiles = localStorage.getItem('profiles');
-
-        if (storedProfiles !== profilesSerialized) {
-          console.log('[STORAGE EFFECT] Saving profiles, count:', cleanedProfiles.length);
-          localStorage.setItem('profiles', profilesSerialized);
-        } else {
-          console.log('[STORAGE EFFECT] Profiles unchanged, skipping write');
-        }
-
-        // Save currentProfile
-        const cleanedCurrentProfile = cleanProfileForStorage(currentProfile);
-        const currentProfileSerialized = JSON.stringify(cleanedCurrentProfile);
-        const storedCurrentProfile = localStorage.getItem('currentProfile');
-
-        if (storedCurrentProfile !== currentProfileSerialized) {
-          console.log('[STORAGE EFFECT] Saving currentProfile:', currentProfile.name);
-          localStorage.setItem('currentProfile', currentProfileSerialized);
-        } else {
-          console.log('[STORAGE EFFECT] CurrentProfile unchanged, skipping write');
-        }
-
-        console.log('[STORAGE EFFECT] Save complete');
-      } catch (error) {
-        console.error('[STORAGE EFFECT] Failed to save profile data:', error);
-      }
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [profiles, currentProfile]);
-
-  // Save registration status (small data, synchronous is okay)
-  useEffect(() => {
-    localStorage.setItem('isRegistrationComplete', String(isRegistrationComplete));
-  }, [isRegistrationComplete]);
-
-  // Debounced parentProfile save
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (parentProfile) {
-        try {
-          const cleanedProfile = cleanProfileForStorage(parentProfile);
-          localStorage.setItem('parentProfile', JSON.stringify(cleanedProfile));
-        } catch (error) {
-          console.error('Failed to save parentProfile:', error);
-        }
-      } else {
-        localStorage.removeItem('parentProfile');
-      }
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [parentProfile]);
-
-  const switchProfile = (profileId: string) => {
-    const profile = profileService.switchProfile(profiles, profileId);
-    if (profile) {
-      setCurrentProfile(profile);
-    }
-  };
-
-  const registerParent = (data: RegistrationData): Profile => {
+  const registerParent = useCallback((data: RegistrationData): Profile => {
+    console.log('[registerParent] Registering parent:', data.parentName);
     const { profile, updatedProfiles } = profileService.registerParent(data, profiles);
-    setProfiles(updatedProfiles);
-    setCurrentProfile(profile);
+    
+    // Save to localStorage for now (can migrate to Supabase later)
+    localStorage.setItem('parentProfile', JSON.stringify(profile));
+    localStorage.setItem('isRegistrationComplete', 'true');
+    
     setParentProfile(profile);
     setIsRegistrationComplete(true);
     return profile;
-  };
-
-  const addGoal = useCallback((profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
-    console.log('[addGoal] called with:', { profileId, goalId, goalName });
-
-    // Validate that profile exists
-    const targetProfile = profiles.find(p => p.id === profileId);
-    if (!targetProfile) {
-      console.error('[addGoal] Profile not found:', profileId);
-      return;
-    }
-
-    // Validate that goal doesn't already exist (idempotency check)
-    if (targetProfile.goals?.some(g => g.id === goalId)) {
-      console.warn('[addGoal] Goal already exists for this profile:', goalId);
-      return;
-    }
-
-    try {
-      setProfiles((prevProfiles) => {
-        console.log('[addGoal] setProfiles callback - prevProfiles count:', prevProfiles.length);
-        const { updatedProfiles, updatedCurrentProfile } = profileService.addGoal(
-          prevProfiles,
-          profileId,
-          goalId,
-          goalName,
-          phaseSize
-        );
-        console.log('[addGoal] service returned updatedProfiles count:', updatedProfiles.length);
-        console.log('[addGoal] updatedCurrentProfile:', updatedCurrentProfile.name, 'goals:', updatedCurrentProfile.goals?.length);
-        // Don't call setState here - let the useEffect handle currentProfile sync
-        return updatedProfiles;
-      });
-      console.log('[addGoal] setProfiles call completed');
-    } catch (error) {
-      console.error('[addGoal] ERROR:', error);
-      throw error;
-    }
   }, [profiles]);
 
-  const addGoalWithPhaseSize = (profileId: string, goalId: string, goalName: string, phaseSize: number) => {
+  const addGoal = useCallback(async (profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
+    console.log('[addGoal] Adding goal:', { profileId, goalId, goalName });
+    
+    try {
+      // Validate profile exists
+      const targetProfile = profiles.find(p => p.id === profileId);
+      if (!targetProfile) {
+        console.error('[addGoal] Profile not found:', profileId);
+        return;
+      }
+
+      // Check if goal already exists
+      if (targetProfile.goals?.some(g => g.id === goalId)) {
+        console.warn('[addGoal] Goal already exists');
+        return;
+      }
+
+      // Add to Supabase
+      const success = await supabaseProfileService.addGoalToProfile(profileId, goalId, goalName, phaseSize);
+      
+      if (success) {
+        // Reload the profile with updated goals
+        const updatedProfile = await supabaseProfileService.loadProfileWithGoals(profileId);
+        if (updatedProfile) {
+          // Update profiles array
+          setProfiles(prevProfiles =>
+            prevProfiles.map(p => p.id === profileId ? updatedProfile : p)
+          );
+          // Update current profile if it's the one we just modified
+          if (currentProfile.id === profileId) {
+            setCurrentProfile(updatedProfile);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('[addGoal] Error:', error);
+    }
+  }, [profiles, currentProfile]);
+
+  const addGoalWithPhaseSize = useCallback((profileId: string, goalId: string, goalName: string, phaseSize: number) => {
     addGoal(profileId, goalId, goalName, phaseSize);
-  };
+  }, [addGoal]);
 
-  const updateGoalPhaseSize = useCallback((profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => {
-    setProfiles((prevProfiles) => {
-      const { updatedProfiles } = profileService.updateGoalPhaseSize(
-        prevProfiles,
-        profileId,
-        goalId,
-        newPhaseSize,
-        unitId
-      );
-      return updatedProfiles;
-    });
-  }, []);
+  const updateGoalPhaseSize = useCallback(async (profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => {
+    console.log('[updateGoalPhaseSize] Updating:', { profileId, goalId, newPhaseSize });
+    
+    try {
+      // Update in Supabase
+      const { error } = await supabaseProfileService.supabase
+        .from('goals')
+        .update({
+          phase_size: newPhaseSize,
+          current_unit_id: unitId?.toString(),
+          updated_at: new Date().toISOString(),
+        })
+        .eq('profile_id', profileId)
+        .eq('goal_id', goalId);
 
-  const updateProfile = useCallback((profileId: string, updates: ProfileUpdate) => {
-    setProfiles((prevProfiles) => {
-      const { updatedProfiles } = profileService.updateProfile(prevProfiles, profileId, updates);
-      return updatedProfiles;
-    });
-  }, []);
+      if (error) {
+        console.error('[updateGoalPhaseSize] Error:', error);
+        return;
+      }
 
-  const deleteGoal = useCallback((profileId: string, goalId: string) => {
-    setProfiles((prevProfiles) => {
-      const { updatedProfiles } = profileService.deleteGoal(
-        prevProfiles,
-        profileId,
-        goalId
-      );
-      return updatedProfiles;
-    });
-  }, []);
+      // Reload profile
+      const updatedProfile = await supabaseProfileService.loadProfileWithGoals(profileId);
+      if (updatedProfile) {
+        setProfiles(prevProfiles =>
+          prevProfiles.map(p => p.id === profileId ? updatedProfile : p)
+        );
+        if (currentProfile.id === profileId) {
+          setCurrentProfile(updatedProfile);
+        }
+      }
+    } catch (error) {
+      console.error('[updateGoalPhaseSize] Exception:', error);
+    }
+  }, [currentProfile]);
+
+  const updateProfile = useCallback(async (profileId: string, updates: ProfileUpdate) => {
+    console.log('[updateProfile] Updating profile:', profileId);
+    
+    try {
+      const success = await supabaseProfileService.updateProfile(profileId, updates);
+      if (success) {
+        // Reload profile
+        const updatedProfile = await supabaseProfileService.loadProfileWithGoals(profileId);
+        if (updatedProfile) {
+          setProfiles(prevProfiles =>
+            prevProfiles.map(p => p.id === profileId ? updatedProfile : p)
+          );
+          if (currentProfile.id === profileId) {
+            setCurrentProfile(updatedProfile);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('[updateProfile] Error:', error);
+    }
+  }, [currentProfile]);
+
+  const deleteGoal = useCallback(async (profileId: string, goalId: string) => {
+    console.log('[deleteGoal] Deleting goal:', { profileId, goalId });
+    
+    try {
+      const success = await supabaseProfileService.deleteGoalFromProfile(profileId, goalId);
+      if (success) {
+        // Reload profile
+        const updatedProfile = await supabaseProfileService.loadProfileWithGoals(profileId);
+        if (updatedProfile) {
+          setProfiles(prevProfiles =>
+            prevProfiles.map(p => p.id === profileId ? updatedProfile : p)
+          );
+          if (currentProfile.id === profileId) {
+            setCurrentProfile(updatedProfile);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('[deleteGoal] Error:', error);
+    }
+  }, [currentProfile]);
 
   return (
     <ProfileContext.Provider
@@ -331,6 +254,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         deleteGoal,
         isRegistrationComplete,
         parentProfile,
+        isLoading,
       }}
     >
       {children}
@@ -339,3 +263,67 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 }
 
 export { ProfileContext };
+
+/**
+ * Create default profiles in Supabase
+ */
+async function createDefaultProfiles(): Promise<Profile[]> {
+  const defaultProfiles: Profile[] = [
+    {
+      id: 'profile-aya-' + Date.now(),
+      name: 'Aya',
+      type: 'parent',
+      avatar: 'avatar-deer',
+      email: 'aya@example.com',
+      goalsCount: 0,
+      streak: 0,
+      goals: [],
+      achievements: {
+        stars: 0,
+        streak: 0,
+        recitations: 0,
+        goalsCompleted: 0,
+      },
+    },
+    {
+      id: 'profile-waleed-' + Date.now(),
+      name: 'Waleed',
+      type: 'child',
+      avatar: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fcc50a4fcacab42d49c80a89631bc6bec?format=webp&width=800',
+      goalsCount: 0,
+      streak: 0,
+      goals: [],
+      achievements: {
+        stars: 0,
+        streak: 0,
+        recitations: 0,
+        goalsCompleted: 0,
+      },
+    },
+    {
+      id: 'profile-zain-' + Date.now(),
+      name: 'Zain',
+      type: 'child',
+      avatar: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fa3cffb81fbde4015ad8bedfb2e19a16e?format=webp&width=800',
+      goalsCount: 0,
+      streak: 0,
+      goals: [],
+      achievements: {
+        stars: 0,
+        streak: 0,
+        recitations: 0,
+        goalsCompleted: 0,
+      },
+    },
+  ];
+
+  const savedProfiles: Profile[] = [];
+  for (const profile of defaultProfiles) {
+    const saved = await supabaseProfileService.saveProfile(profile);
+    if (saved) {
+      savedProfiles.push(saved);
+    }
+  }
+
+  return savedProfiles;
+}
