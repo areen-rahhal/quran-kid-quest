@@ -126,11 +126,34 @@ const Onboarding = () => {
                   </Select>
                 </div>
                 <Button
-                  onClick={() => selectedGoal && navigate("/goals")}
-                  disabled={!selectedGoal}
+                  onClick={async () => {
+                    if (!selectedGoal || !currentProfile) return;
+
+                    setIsAddingGoal(true);
+                    try {
+                      const goalConfig = getGoalById(selectedGoal);
+                      if (!goalConfig) {
+                        console.error("Goal not found:", selectedGoal);
+                        return;
+                      }
+
+                      await addGoal(
+                        currentProfile.id,
+                        selectedGoal,
+                        goalConfig.nameEnglish
+                      );
+
+                      navigate("/goals");
+                    } catch (error) {
+                      console.error("Error adding goal:", error);
+                    } finally {
+                      setIsAddingGoal(false);
+                    }
+                  }}
+                  disabled={!selectedGoal || isAddingGoal}
                   className="w-full bg-secondary text-secondary-foreground font-semibold hover:bg-secondary/90"
                 >
-                  Continue
+                  {isAddingGoal ? "Adding Goal..." : "Continue"}
                 </Button>
               </CardContent>
             </Card>
