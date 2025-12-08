@@ -228,6 +228,14 @@ export const profileService = {
   },
 
   /**
+   * Validate child count (max 3 per parent)
+   */
+  validateChildCountLimit(profiles: Profile[], parentId: string): boolean {
+    const childCount = profiles.filter(p => p.parentId === parentId && p.type === 'child').length;
+    return childCount < 3;
+  },
+
+  /**
    * Clear all stored data
    */
   clearAll(): void {
