@@ -131,10 +131,18 @@ const Onboarding = () => {
                 </div>
                 <Button
                   onClick={async () => {
-                    if (!selectedGoal || !canAddGoal) return;
+                    if (!selectedGoal || !canAddGoal) {
+                      console.warn('Cannot add goal:', { selectedGoal, canAddGoal, isLoading, isProfileValid });
+                      return;
+                    }
 
                     setIsAddingGoal(true);
                     try {
+                      if (!isProfileValid) {
+                        console.error("Profile is not valid yet. Waiting for profiles to load.");
+                        return;
+                      }
+
                       const goalConfig = getGoalById(selectedGoal);
                       if (!goalConfig) {
                         console.error("Goal not found:", selectedGoal);
