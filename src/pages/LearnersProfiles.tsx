@@ -2,10 +2,14 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Card } from "@/components/ui/card";
 import { useProfile } from "@/hooks/useProfile";
-import { ChevronLeft, UserPlus, RefreshCw } from "lucide-react";
+import { ChevronLeft, UserPlus, RefreshCw, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProfileCard } from "@/components/ProfileCard";
+import { ChildProfileForm } from "@/components/ChildProfileForm";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
+import { Profile } from "@/lib/validation";
 
 const LearnersProfiles = () => {
   const navigate = useNavigate();
