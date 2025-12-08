@@ -140,16 +140,19 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     console.log('[registerParent] Registering parent:', data.parentName);
     const { profile, updatedProfiles } = profileService.registerParent(data, profiles);
 
-    // Save parent profile to Supabase
+    // Save parent profile to Supabase (no parentId for parent profiles)
     const savedProfile = await supabaseProfileService.saveProfile(profile);
 
     if (savedProfile) {
       // Use the profile from Supabase (has correct UUID)
       localStorage.setItem('parentProfile', JSON.stringify(savedProfile));
       localStorage.setItem('isRegistrationComplete', 'true');
+      localStorage.setItem('currentParentId', savedProfile.id);
 
       setParentProfile(savedProfile);
+      setCurrentParentId(savedProfile.id);
       setProfiles(prev => [...prev, savedProfile]);
+      setCurrentProfile(savedProfile);
       setIsRegistrationComplete(true);
       console.log('[registerParent] Parent profile saved successfully:', savedProfile.id);
       return savedProfile;
@@ -158,13 +161,43 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
       console.error('[registerParent] Failed to save to Supabase, using local profile');
       localStorage.setItem('parentProfile', JSON.stringify(profile));
       localStorage.setItem('isRegistrationComplete', 'true');
+      localStorage.setItem('currentParentId', profile.id);
 
       setParentProfile(profile);
+      setCurrentParentId(profile.id);
       setProfiles(prev => [...prev, profile]);
+      setCurrentProfile(profile);
       setIsRegistrationComplete(true);
       return profile;
     }
   }, [profiles]);
+
+  const createChildProfile = useCallback(async (childData: Omit<Profile, 'id'>): Promise<Profile | null> => {
+    if (!currentParentId) {
+      console.error('[createChildProfile] No current parent ID set');
+      return null;
+    }
+
+    console.log('[createChildProfile] Creating child for parent:', currentParentId);
+
+    // Validate child count limit
+    if (!profileService.validateChildCountLimit(profiles, currentParentId)) {
+      console.error('[createChildProfile] Parent already has 3 children');
+      return null;
+    }
+
+    // Create child profile in Supabase
+    const savedChild = await supabaseProfileService.createChildProfile(currentParentId, childData);
+
+    if (savedChild) {
+      console.log('[createChildProfile] Child profile created successfully:', savedChild.id);
+      setProfiles(prev => [...prev, savedChild]);
+      return savedChild;
+    } else {
+      console.error('[createChildProfile] Failed to create child profile');
+      return null;
+    }
+  }, [currentParentId, profiles]);
 
   const addGoal = useCallback(async (profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
     console.log('[addGoal] Adding goal:', { profileId, goalId, goalName });
