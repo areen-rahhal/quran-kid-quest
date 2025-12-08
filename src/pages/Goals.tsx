@@ -97,6 +97,23 @@ const Goals = () => {
     }
   }, [hasAppliedUrlParams, isLoading, profiles, currentProfile.id, currentProfile.type, searchParams, switchProfile]);
 
+  // Reset goal index when profile switches via ProfileSwitcher
+  useEffect(() => {
+    // Only reset if URL params have been applied (i.e., we're no longer in initial load)
+    if (!hasAppliedUrlParams) {
+      return;
+    }
+
+    // Check if URL params indicate an explicit goal selection
+    const hasUrlGoalId = searchParams.get('goalId');
+    if (hasUrlGoalId) {
+      return;
+    }
+
+    // Reset to first goal when profile changes
+    setCurrentGoalIndex(0);
+  }, [currentProfile.id, hasAppliedUrlParams, searchParams]);
+
   // Sync currentGoalIndex when profile changes (use active goal if not set from URL)
   useEffect(() => {
     // Safety check: ensure currentProfile and goals exist
