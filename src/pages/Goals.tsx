@@ -34,9 +34,18 @@ const Goals = () => {
     const profileId = searchParams.get('profileId');
     const goalId = searchParams.get('goalId');
 
+    // Determine which profile to use
+    let selectedProfileId = profileId;
+
+    // If no profileId provided, default to parent profile
+    if (!selectedProfileId && profiles.length > 0) {
+      const parentProfile = profiles.find(p => p.type === 'parent');
+      selectedProfileId = parentProfile?.id;
+    }
+
     // Only process if we have a profileId
-    if (profileId) {
-      const selectedProfile = profiles.find(p => p.id === profileId);
+    if (selectedProfileId) {
+      const selectedProfile = profiles.find(p => p.id === selectedProfileId);
 
       if (selectedProfile) {
         // Find and set the goal index if goalId is provided, BEFORE switching
@@ -49,14 +58,14 @@ const Goals = () => {
           }
         }
 
-        switchProfile(profileId);
+        switchProfile(selectedProfileId);
         setHasAppliedUrlParams(true);
 
         // Clean up URL parameters so menu switches work properly
         navigate('/goals', { replace: true });
       }
     }
-  }, []);
+  }, [profiles]);
 
   // Sync currentGoalIndex when profile changes (use active goal if not set from URL)
   useEffect(() => {
