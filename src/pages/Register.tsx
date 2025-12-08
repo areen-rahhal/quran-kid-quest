@@ -71,7 +71,7 @@ const Register = () => {
       // Simulate registration delay
       await new Promise(resolve => setTimeout(resolve, 800));
 
-      registerParent({
+      await registerParent({
         email: formData.email,
         password: formData.password,
         parentName: formData.parentName,
