@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback, useMemo, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef, ReactNode } from 'react';
 import { Profile, RegistrationData, ProfileUpdate } from '@/lib/validation';
 import { profileService } from '@/services/profileService';
 
@@ -119,6 +119,12 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     return profileService.initializeParentProfile();
   });
 
+  // Track current profile ID to avoid stale closures
+  const currentProfileIdRef = useRef(currentProfile.id);
+  useEffect(() => {
+    currentProfileIdRef.current = currentProfile.id;
+  }, [currentProfile.id]);
+
   // Memoize profile lookup to avoid O(n) search on every profiles change
   const profilesMap = useMemo(() => {
     const map = new Map<string, Profile>();
@@ -129,10 +135,12 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   // Keep currentProfile in sync when profiles change
   useEffect(() => {
     console.log('[SYNC EFFECT] profiles changed, current profiles count:', profiles.length);
-    console.log('[SYNC EFFECT] looking for profile with id:', currentProfile.id);
+    console.log('[SYNC EFFECT] looking for profile with id:', currentProfileIdRef.current);
+
+    const profileId = currentProfileIdRef.current;
 
     // If currentProfile is not found in the new profiles array, use first profile
-    if (!currentProfile.id || !profilesMap.has(currentProfile.id)) {
+    if (!profileId || !profilesMap.has(profileId)) {
       console.log('[SYNC EFFECT] currentProfile not found in profiles, resetting to first');
       if (profiles.length > 0) {
         setCurrentProfile(profiles[0]);
@@ -140,7 +148,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const updatedProfile = profilesMap.get(currentProfile.id);
+    const updatedProfile = profilesMap.get(profileId);
     console.log('[SYNC EFFECT] found updated profile:', updatedProfile?.name, 'goals:', updatedProfile?.goals?.length);
     if (updatedProfile && updatedProfile !== currentProfile) {
       console.log('[SYNC EFFECT] calling setCurrentProfile');
