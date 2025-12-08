@@ -118,38 +118,6 @@ const LearnersProfiles = () => {
             </div>
           </Card>
         )}
-
-        {/* Child Profile Form - Show when clicked */}
-        {showChildForm && (
-          <Card className="p-6 bg-card border-2 border-primary">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-foreground">{t('learnersProfiles.createNewChild')}</h3>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setShowChildForm(false)}
-                disabled={isCreatingChild}
-                className="h-8 w-8"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-            <ChildProfileForm
-              onSubmit={handleCreateChildProfile}
-              onCancel={() => setShowChildForm(false)}
-              isLoading={isCreatingChild}
-            />
-          </Card>
-        )}
-
-        {/* Max Children Reached Message */}
-        {!canAddMoreChildren && (
-          <Card className="p-4 bg-accent/50 border border-primary/30">
-            <p className="text-sm text-foreground text-center">
-              {t('learnersProfiles.maxChildrenReached')}
-            </p>
-          </Card>
-        )}
       </div>
     </div>
   );
