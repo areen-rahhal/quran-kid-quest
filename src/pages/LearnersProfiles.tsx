@@ -142,7 +142,6 @@ const LearnersProfiles = () => {
               </div>
               <div className="text-center">
                 <p className="text-lg font-bold text-foreground">Add Child Profile.</p>
-                <p className="text-sm text-muted-foreground">CTA</p>
               </div>
             </div>
           </Card>
