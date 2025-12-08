@@ -270,9 +270,8 @@ export { ProfileContext };
  * Create default profiles in Supabase
  */
 async function createDefaultProfiles(): Promise<Profile[]> {
-  const defaultProfiles: Profile[] = [
+  const defaultProfiles: Omit<Profile, 'id'>[] = [
     {
-      id: 'profile-aya-' + Date.now(),
       name: 'Aya',
       type: 'parent',
       avatar: 'avatar-deer',
@@ -288,7 +287,6 @@ async function createDefaultProfiles(): Promise<Profile[]> {
       },
     },
     {
-      id: 'profile-waleed-' + Date.now(),
       name: 'Waleed',
       type: 'child',
       avatar: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fcc50a4fcacab42d49c80a89631bc6bec?format=webp&width=800',
@@ -303,7 +301,6 @@ async function createDefaultProfiles(): Promise<Profile[]> {
       },
     },
     {
-      id: 'profile-zain-' + Date.now(),
       name: 'Zain',
       type: 'child',
       avatar: 'https://cdn.builder.io/api/v1/image/assets%2F8575fa54a5454f989a158bbc14ee390c%2Fa3cffb81fbde4015ad8bedfb2e19a16e?format=webp&width=800',
@@ -321,7 +318,9 @@ async function createDefaultProfiles(): Promise<Profile[]> {
 
   const savedProfiles: Profile[] = [];
   for (const profile of defaultProfiles) {
-    const saved = await supabaseProfileService.saveProfile(profile);
+    // Add a temporary ID for the profile object (will be replaced by Supabase UUID)
+    const profileWithId = { ...profile, id: 'temp-' + Date.now() } as Profile;
+    const saved = await supabaseProfileService.saveProfile(profileWithId);
     if (saved) {
       savedProfiles.push(saved);
     }
