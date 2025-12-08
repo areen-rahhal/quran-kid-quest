@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useMemo, ReactNode } from 'react';
 import { Profile, RegistrationData, ProfileUpdate } from '@/lib/validation';
 import { profileService } from '@/services/profileService';
 
