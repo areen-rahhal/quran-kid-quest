@@ -40,6 +40,11 @@ const LearnersProfiles = () => {
     navigate('/add-child-profile');
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   // Separate parent and child profiles
   const parentProfile = profiles.find(p => p.type === 'parent');
   const childProfiles = profiles.filter(p => p.type === 'child');
