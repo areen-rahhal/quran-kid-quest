@@ -20,6 +20,7 @@ interface ProfileSwitcherProps {
 }
 
 export const ProfileSwitcher = ({ open, onOpenChange }: ProfileSwitcherProps) => {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { currentProfile, profiles, switchProfile, currentParentId } = useProfile();
 
