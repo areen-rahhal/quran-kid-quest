@@ -60,7 +60,8 @@ const Goals = () => {
 
   // Sync currentGoalIndex when profile changes (use active goal if not set from URL)
   useEffect(() => {
-    if (!currentProfile.goals || currentProfile.goals.length === 0) {
+    // Safety check: ensure currentProfile and goals exist
+    if (!currentProfile?.id || !currentProfile?.goals || currentProfile.goals.length === 0) {
       return;
     }
 
@@ -90,6 +91,10 @@ const Goals = () => {
   const goalsCompleted = currentProfile.achievements?.goalsCompleted || 0;
 
   const handleUnitClick = (unit: Unit) => {
+    if (!currentProfile?.id) {
+      console.warn('[handleUnitClick] currentProfile not properly initialized');
+      return;
+    }
     const currentGoal = currentProfile.goals?.[currentGoalIndex];
     if (currentGoal) {
       navigate(`/unit-path/${currentProfile.id}/${currentGoal.id}/${unit.id}`);
@@ -150,14 +155,16 @@ const Goals = () => {
 
 
   const handlePrevGoal = () => {
-    if (currentProfile.goals && currentProfile.goals.length > 0) {
-      setCurrentGoalIndex((prev) => (prev - 1 + currentProfile.goals!.length) % currentProfile.goals!.length);
+    const goals = currentProfile?.goals;
+    if (goals && goals.length > 0) {
+      setCurrentGoalIndex((prev) => (prev - 1 + goals.length) % goals.length);
     }
   };
 
   const handleNextGoal = () => {
-    if (currentProfile.goals && currentProfile.goals.length > 0) {
-      setCurrentGoalIndex((prev) => (prev + 1) % currentProfile.goals!.length);
+    const goals = currentProfile?.goals;
+    if (goals && goals.length > 0) {
+      setCurrentGoalIndex((prev) => (prev + 1) % goals.length);
     }
   };
 
