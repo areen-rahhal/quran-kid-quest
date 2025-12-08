@@ -83,6 +83,8 @@ const Goals = () => {
       return;
     }
 
+    console.log('[Goals] Profile changed to:', currentProfile.name, 'Type:', currentProfile.type, 'Goals:', currentProfile.goals?.length);
+
     // Check if URL params indicate an explicit goal selection
     const urlGoalId = searchParams.get('goalId');
     if (urlGoalId) {
@@ -90,6 +92,7 @@ const Goals = () => {
       const goalIndex = currentProfile.goals?.findIndex(goal => goal.id === urlGoalId) ?? -1;
       if (goalIndex !== -1) {
         setCurrentGoalIndex(goalIndex);
+        console.log('[Goals] Set goal index from URL:', goalIndex);
       }
       return;
     }
@@ -102,11 +105,15 @@ const Goals = () => {
 
       if (activeGoalIndex !== -1) {
         setCurrentGoalIndex(activeGoalIndex);
+        console.log('[Goals] Set goal index to active goal:', activeGoalIndex);
       } else {
         setCurrentGoalIndex(0);
+        console.log('[Goals] No active goal, set to first goal (index 0)');
       }
+    } else {
+      console.log('[Goals] Profile has no goals');
     }
-  }, [currentProfile.id, hasAppliedUrlParams, searchParams]);
+  }, [currentProfile.id, currentProfile.goals?.length, hasAppliedUrlParams, searchParams]);
 
 
   // Get achievements directly from current profile
