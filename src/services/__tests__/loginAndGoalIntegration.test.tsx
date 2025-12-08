@@ -56,7 +56,7 @@ const MockLoginSimulator = ({ onUserSelected }: { onUserSelected: (profileId: st
 // Component that shows goal creation after "login"
 const OnboardingWithGoalCreation = () => {
   const { currentProfile, parentProfile, addGoal } = useProfile();
-  const [selectedGoal, setSelectedGoal] = React.useState('');
+  const [selectedGoal, setSelectedGoal] = useState('');
 
   const handleAddGoal = async () => {
     if (selectedGoal && currentProfile) {
@@ -247,9 +247,9 @@ describe('Login and Goal Creation Integration', () => {
 
       const TestGoalIsolationComponent = () => {
         const { profiles, currentProfile, parentProfile, addGoal } = useProfile();
-        const [currentParentGoals, setCurrentParentGoals] = React.useState(0);
+        const [currentParentGoals, setCurrentParentGoals] = useState(0);
 
-        React.useEffect(() => {
+        useEffect(() => {
           // Track goals for current parent
           const parent = profiles.find(p => p.type === 'parent' && p.id === parentProfile?.id);
           setCurrentParentGoals(parent?.goals?.length || 0);
@@ -325,7 +325,7 @@ describe('Login and Goal Creation Integration', () => {
 
     it('should have currentProfile under correct parent', () => {
       const TestParentChildRelationshipComponent = () => {
-        const { currentProfile, parentProfile, profiles } = useProfile();
+        const { currentProfile, parentProfile } = useProfile();
 
         // Find if currentProfile belongs to parentProfile
         const isChildOfParent = currentProfile.parentId === parentProfile?.id || 
