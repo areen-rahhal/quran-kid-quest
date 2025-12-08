@@ -108,6 +108,7 @@ export const ProfileSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   type: ProfileTypeSchema,
+  parentId: z.string().uuid().optional(),
   avatar: z.string().optional(),
   currentGoal: z.string().optional(),
   goals: z.array(GoalProgressSchema).optional(),
