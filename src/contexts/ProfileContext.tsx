@@ -227,13 +227,19 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 
   const addGoal = useCallback(async (profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
     console.log('[addGoal] Adding goal:', { profileId, goalId, goalName });
-    
+
     try {
+      // Validate profile ID is valid (not the default placeholder)
+      if (!profileId || profileId === 'unknown') {
+        console.error('[addGoal] Invalid profile ID:', profileId);
+        throw new Error('Profile not loaded yet. Please wait for profiles to load.');
+      }
+
       // Validate profile exists
       const targetProfile = profiles.find(p => p.id === profileId);
       if (!targetProfile) {
         console.error('[addGoal] Profile not found:', profileId);
-        return;
+        throw new Error(`Profile with ID ${profileId} not found in loaded profiles.`);
       }
 
       // Check if goal already exists
