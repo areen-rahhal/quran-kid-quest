@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useMemo, ReactNode } from 'react';
 import { Profile, RegistrationData, ProfileUpdate } from '@/lib/validation';
 import { profileService } from '@/services/profileService';
 
@@ -119,18 +119,25 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     return profileService.initializeParentProfile();
   });
 
+  // Memoize profile lookup to avoid O(n) search on every profiles change
+  const profilesMap = useMemo(() => {
+    const map = new Map<string, Profile>();
+    profiles.forEach(p => map.set(p.id, p));
+    return map;
+  }, [profiles]);
+
   // Keep currentProfile in sync when profiles change
   useEffect(() => {
     console.log('[SYNC EFFECT] profiles changed, current profiles count:', profiles.length);
     console.log('[SYNC EFFECT] looking for profile with id:', currentProfile.id);
-    const updatedProfile = profiles.find(p => p.id === currentProfile.id);
+    const updatedProfile = profilesMap.get(currentProfile.id);
     console.log('[SYNC EFFECT] found updated profile:', updatedProfile?.name, 'goals:', updatedProfile?.goals?.length);
     if (updatedProfile && updatedProfile !== currentProfile) {
       console.log('[SYNC EFFECT] calling setCurrentProfile');
       setCurrentProfile(updatedProfile);
       console.log('[SYNC EFFECT] setCurrentProfile done');
     }
-  }, [profiles]);
+  }, [profiles, profilesMap, currentProfile]);
 
   // Debounced localStorage saves
   useEffect(() => {
