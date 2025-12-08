@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { ProfileProvider } from '@/contexts/ProfileContext';
 import { useProfile } from '@/contexts/ProfileContext';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 
 // Component to test goal addition
 const TestGoalAdditionComponent = () => {
