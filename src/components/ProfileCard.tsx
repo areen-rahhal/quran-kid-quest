@@ -161,7 +161,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
 
       {/* Goals Modal Menu */}
       <GoalsModalMenu
-        profile={profile}
+        profileId={profile.id}
         isOpen={isGoalsModalOpen}
         onClose={() => setIsGoalsModalOpen(false)}
       />
