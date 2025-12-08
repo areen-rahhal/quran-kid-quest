@@ -60,11 +60,11 @@ export const supabaseProfileService = {
    */
   async saveProfile(profile: Profile): Promise<Profile | null> {
     try {
-      console.log('[supabaseProfileService] Saving profile:', profile.name, 'id:', profile.id);
+      console.log('[supabaseProfileService] Saving profile:', profile.name);
+      // Don't include id - let Supabase generate UUID automatically
       const { data, error } = await supabase
         .from('profiles')
         .insert({
-          id: profile.id,
           name: profile.name,
           type: profile.type,
           avatar: profile.avatar,
@@ -97,7 +97,7 @@ export const supabaseProfileService = {
         return null;
       }
 
-      console.log('[supabaseProfileService] Profile saved successfully');
+      console.log('[supabaseProfileService] Profile saved successfully with id:', data?.id);
       return convertDbProfileToProfile(data);
     } catch (error) {
       console.error('[supabaseProfileService] Exception saving profile:', error instanceof Error ? error.message : String(error));
