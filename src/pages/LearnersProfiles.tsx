@@ -14,10 +14,7 @@ import { Profile } from "@/lib/validation";
 const LearnersProfiles = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { profiles, createChildProfile, currentParentId } = useProfile();
-  const { toast } = useToast();
-  const [showChildForm, setShowChildForm] = useState(false);
-  const [isCreatingChild, setIsCreatingChild] = useState(false);
+  const { profiles, currentParentId } = useProfile();
 
   // Sort profiles by streak (descending) - most active first
   const sortedProfiles = [...profiles].sort((a, b) => {
