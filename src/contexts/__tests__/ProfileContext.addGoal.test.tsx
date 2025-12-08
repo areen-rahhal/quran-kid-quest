@@ -288,7 +288,7 @@ describe('ProfileContext - Goal Addition to Correct Profile', () => {
     it('should prevent adding duplicate goals to same profile', async () => {
       const TestDuplicateGoalComponent = () => {
         const { currentProfile, addGoal } = useProfile();
-        const [addCount, setAddCount] = React.useState(0);
+        const [addCount, setAddCount] = useState(0);
 
         const handleAdd = async () => {
           await addGoal(currentProfile.id, 'juz-30', "Juz' 30");
@@ -305,9 +305,6 @@ describe('ProfileContext - Goal Addition to Correct Profile', () => {
           </div>
         );
       };
-
-      // Import React for this test component
-      const React = await import('react');
 
       renderWithProvider(<TestDuplicateGoalComponent />);
 
