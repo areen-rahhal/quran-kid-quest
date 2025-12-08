@@ -161,7 +161,8 @@ export const ProfileSwitcher = ({ open, onOpenChange }: ProfileSwitcherProps) =>
           <button
             onClick={() => {
               onOpenChange(false);
-              window.location.href = '/learners-profiles';
+              // Navigate to learners profiles page - currentParentId will be used from context
+              navigate('/learners-profiles');
             }}
             className="w-full flex items-center justify-center gap-2 p-4 rounded-xl border-2 border-border hover:border-primary/50 hover:bg-accent transition-all"
           >
