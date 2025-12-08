@@ -141,8 +141,8 @@ const LearnersProfiles = () => {
                 <Plus className="h-6 w-6 text-primary-foreground" />
               </div>
               <div className="text-center">
-                <p className="text-lg font-bold text-foreground">{t('learnersProfiles.addChildProfile')}</p>
-                <p className="text-sm text-muted-foreground">{childProfiles.length}/3 {t('learnersProfiles.childrenAdded')}</p>
+                <p className="text-lg font-bold text-foreground">Add Child Profile.</p>
+                <p className="text-sm text-muted-foreground">CTA</p>
               </div>
             </div>
           </Card>
