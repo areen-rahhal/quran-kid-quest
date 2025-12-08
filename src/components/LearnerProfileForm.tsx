@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useProfile } from '@/contexts/ProfileContext';
@@ -66,7 +66,7 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
     setSelectedAvatar(avatarId);
   };
 
-  const calculateAge = (dobString: string): number | null => {
+  const calculateAge = useCallback((dobString: string): number | null => {
     if (!dobString) return null;
     const dob = new Date(dobString);
     const today = new Date();
@@ -76,9 +76,9 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
       age--;
     }
     return age;
-  };
+  }, []);
 
-  const displayAge = calculateAge(dob);
+  const displayAge = useMemo(() => calculateAge(dob), [dob, calculateAge]);
 
   return (
     <div className="space-y-6">
