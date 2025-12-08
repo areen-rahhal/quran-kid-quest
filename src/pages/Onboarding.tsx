@@ -117,9 +117,11 @@ const Onboarding = () => {
                       <SelectValue placeholder="Choose a goal" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="juz-30">Juz' 30</SelectItem>
-                      <SelectItem value="juz-29">Juz' 29</SelectItem>
-                      <SelectItem value="surah-bakarah">Surah Al Bakarah</SelectItem>
+                      {GOAL_OPTIONS.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
