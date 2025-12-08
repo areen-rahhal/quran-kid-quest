@@ -4,10 +4,12 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BookOpen } from "lucide-react";
+import { useProfile } from "@/hooks/useProfile";
 
 const Login = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { currentParentId } = useProfile();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
