@@ -104,8 +104,6 @@ const renderWithProviders = (component: React.ReactElement) => {
   );
 };
 
-// Re-import React for the component
-import React from 'react';
 
 describe('Login and Goal Creation Integration', () => {
   beforeEach(() => {
