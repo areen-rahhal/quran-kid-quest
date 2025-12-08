@@ -163,10 +163,12 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 
   const updateGoalPhaseSize = useCallback(async (profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => {
     console.log('[updateGoalPhaseSize] Updating:', { profileId, goalId, newPhaseSize });
-    
+
     try {
+      const { supabase } = await import('@/lib/supabase');
+
       // Update in Supabase
-      const { error } = await supabaseProfileService.supabase
+      const { error } = await supabase
         .from('goals')
         .update({
           phase_size: newPhaseSize,
