@@ -60,7 +60,7 @@ export const supabaseProfileService = {
    */
   async saveProfile(profile: Profile): Promise<Profile | null> {
     try {
-      console.log('[supabaseProfileService] Saving profile:', profile.name);
+      console.log('[supabaseProfileService] Saving profile:', profile.name, 'id:', profile.id);
       const { data, error } = await supabase
         .from('profiles')
         .insert({
@@ -87,14 +87,20 @@ export const supabaseProfileService = {
         .single();
 
       if (error) {
-        console.error('[supabaseProfileService] Error saving profile:', error);
+        console.error('[supabaseProfileService] Error saving profile:', {
+          message: error.message,
+          code: error.code,
+          details: error.details,
+          hint: error.hint,
+          status: error.status,
+        });
         return null;
       }
 
       console.log('[supabaseProfileService] Profile saved successfully');
       return convertDbProfileToProfile(data);
     } catch (error) {
-      console.error('[supabaseProfileService] Exception saving profile:', error);
+      console.error('[supabaseProfileService] Exception saving profile:', error instanceof Error ? error.message : String(error));
       return null;
     }
   },
