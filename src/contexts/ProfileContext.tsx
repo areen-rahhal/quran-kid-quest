@@ -328,8 +328,10 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
       value={{
         currentProfile,
         profiles,
+        currentParentId,
         switchProfile,
         registerParent,
+        createChildProfile,
         addGoal,
         addGoalWithPhaseSize,
         updateGoalPhaseSize,
