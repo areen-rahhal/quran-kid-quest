@@ -100,17 +100,20 @@ const GoalsModalMenuComponent = ({ profileId, isOpen, onClose }: GoalsModalMenuP
                   onClick={(e) => {
                     try {
                       e.stopPropagation();
-                      if (!isAdded) handleGoalSelect(goal.id, goal.nameEnglish);
+                      if (!isAdded && !isProcessing) {
+                        handleGoalSelect(goal.id, goal.nameEnglish);
+                      }
                     } catch (error) {
                       console.error('[goalButton onClick] error:', error);
+                      setIsProcessing(false);
                       // Still close the modal even if there's an error
                       onClose();
                     }
                   }}
-                  disabled={isAdded}
+                  disabled={isAdded || isProcessing}
                   className={`w-full p-4 rounded-lg border-2 transition-all text-left
                     ${
-                      isAdded
+                      isAdded || isProcessing
                         ? 'bg-muted border-border text-muted-foreground cursor-not-allowed opacity-60'
                         : 'bg-gradient-soft border-primary/20 hover:border-primary hover:shadow-md active:scale-95 cursor-pointer'
                     }
