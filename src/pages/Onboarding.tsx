@@ -17,9 +17,13 @@ const GOAL_OPTIONS = [
 
 const Onboarding = () => {
   const navigate = useNavigate();
-  const { parentProfile, currentProfile, addGoal } = useProfile();
+  const { parentProfile, currentProfile, addGoal, isLoading } = useProfile();
   const [selectedGoal, setSelectedGoal] = useState("");
   const [isAddingGoal, setIsAddingGoal] = useState(false);
+
+  // Check if profile is valid (not the default 'unknown' placeholder)
+  const isProfileValid = currentProfile && currentProfile.id !== 'unknown';
+  const canAddGoal = isProfileValid && !isLoading && !isAddingGoal;
 
   const handleLogout = () => {
     navigate("/");
