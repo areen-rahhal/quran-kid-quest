@@ -157,8 +157,21 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   const switchProfile = useCallback((profileId: string) => {
     const profile = profiles.find(p => p.id === profileId);
     if (profile) {
-      console.log('[switchProfile] Switching to profile:', profile.name);
+      console.log('[switchProfile] Switching to profile:', profile.name, 'Type:', profile.type);
       setCurrentProfile(profile);
+
+      // If switching to a parent profile, update currentParentId
+      if (profile.type === 'parent') {
+        console.log('[switchProfile] Updating currentParentId to:', profileId);
+        setCurrentParentId(profileId);
+        localStorage.setItem('currentParentId', profileId);
+      }
+      // If switching to a child profile, find and set its parent
+      else if (profile.parentId) {
+        console.log('[switchProfile] Child profile, parent is:', profile.parentId);
+        setCurrentParentId(profile.parentId);
+        localStorage.setItem('currentParentId', profile.parentId);
+      }
     }
   }, [profiles]);
 
