@@ -52,6 +52,40 @@ const LearnersProfiles = () => {
     }, 800);
   };
 
+  const handleCreateChildProfile = async (childData: Omit<Profile, 'id'>) => {
+    setIsCreatingChild(true);
+    try {
+      const newChild = await createChildProfile(childData);
+      if (newChild) {
+        toast({
+          title: t('learnersProfiles.childCreated'),
+          description: t('learnersProfiles.childCreatedDesc'),
+        });
+        setShowChildForm(false);
+      } else {
+        toast({
+          title: t('common.error'),
+          description: t('learnersProfiles.failedToCreateChild'),
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('Error creating child profile:', error);
+      toast({
+        title: t('common.error'),
+        description: t('learnersProfiles.failedToCreateChild'),
+        variant: 'destructive',
+      });
+    } finally {
+      setIsCreatingChild(false);
+    }
+  };
+
+  // Separate parent and child profiles
+  const parentProfile = profiles.find(p => p.type === 'parent');
+  const childProfiles = profiles.filter(p => p.type === 'child');
+  const canAddMoreChildren = childProfiles.length < 3;
+
   return (
     <div className="min-h-screen bg-gradient-soft islamic-pattern flex flex-col">
       {/* Header */}
