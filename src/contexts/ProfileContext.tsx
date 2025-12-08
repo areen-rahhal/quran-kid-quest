@@ -353,6 +353,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         updateGoalPhaseSize,
         updateProfile,
         deleteGoal,
+        logout,
         isRegistrationComplete,
         parentProfile,
         isLoading,
