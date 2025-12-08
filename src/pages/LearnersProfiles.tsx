@@ -40,33 +40,8 @@ const LearnersProfiles = () => {
     console.log('Add new learner');
   };
 
-  const handleCreateChildProfile = async (childData: Omit<Profile, 'id'>) => {
-    setIsCreatingChild(true);
-    try {
-      const newChild = await createChildProfile(childData);
-      if (newChild) {
-        toast({
-          title: t('learnersProfiles.childCreated'),
-          description: t('learnersProfiles.childCreatedDesc'),
-        });
-        setShowChildForm(false);
-      } else {
-        toast({
-          title: t('common.error'),
-          description: t('learnersProfiles.failedToCreateChild'),
-          variant: 'destructive',
-        });
-      }
-    } catch (error) {
-      console.error('Error creating child profile:', error);
-      toast({
-        title: t('common.error'),
-        description: t('learnersProfiles.failedToCreateChild'),
-        variant: 'destructive',
-      });
-    } finally {
-      setIsCreatingChild(false);
-    }
+  const handleAddChildProfile = () => {
+    navigate('/add-child-profile');
   };
 
   // Separate parent and child profiles
