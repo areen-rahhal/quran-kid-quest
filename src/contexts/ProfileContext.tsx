@@ -40,6 +40,7 @@ const defaultEmptyProfile: Profile = {
 export function ProfileProvider({ children }: { children: ReactNode }) {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [currentProfile, setCurrentProfile] = useState<Profile>(defaultEmptyProfile);
+  const [currentParentId, setCurrentParentId] = useState<string | null>(null);
   const [isRegistrationComplete, setIsRegistrationComplete] = useState<boolean>(false);
   const [parentProfile, setParentProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
