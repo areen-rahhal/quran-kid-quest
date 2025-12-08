@@ -246,6 +246,20 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 
   const addGoal = useCallback((profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
     console.log('[addGoal] called with:', { profileId, goalId, goalName });
+
+    // Validate that profile exists
+    const targetProfile = profiles.find(p => p.id === profileId);
+    if (!targetProfile) {
+      console.error('[addGoal] Profile not found:', profileId);
+      return;
+    }
+
+    // Validate that goal doesn't already exist (idempotency check)
+    if (targetProfile.goals?.some(g => g.id === goalId)) {
+      console.warn('[addGoal] Goal already exists for this profile:', goalId);
+      return;
+    }
+
     try {
       setProfiles((prevProfiles) => {
         console.log('[addGoal] setProfiles callback - prevProfiles count:', prevProfiles.length);
@@ -266,7 +280,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
       console.error('[addGoal] ERROR:', error);
       throw error;
     }
-  }, []);
+  }, [profiles]);
 
   const addGoalWithPhaseSize = (profileId: string, goalId: string, goalName: string, phaseSize: number) => {
     addGoal(profileId, goalId, goalName, phaseSize);
