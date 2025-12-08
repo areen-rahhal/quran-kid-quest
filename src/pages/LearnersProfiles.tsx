@@ -46,8 +46,16 @@ const LearnersProfiles = () => {
   };
 
   // Separate parent and child profiles
-  const parentProfile = profiles.find(p => p.type === 'parent');
-  const childProfiles = profiles.filter(p => p.type === 'child');
+  // Find the parent profile using currentParentId (not just the first parent)
+  const parentProfile = currentParentId
+    ? profiles.find(p => p.id === currentParentId)
+    : profiles.find(p => p.type === 'parent');
+
+  // Get child profiles for the current parent
+  const childProfiles = parentProfile
+    ? profiles.filter(p => p.type === 'child' && p.parentId === parentProfile.id)
+    : [];
+
   const canAddMoreChildren = childProfiles.length < 3;
 
   return (
