@@ -168,43 +168,43 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     }
   }, [profiles]);
 
-  // Debounced localStorage saves with change detection
+  // Consolidated debounced localStorage saves for all profile data
   useEffect(() => {
-    console.log('[STORAGE EFFECT] profiles changed, scheduling save in 300ms');
+    console.log('[STORAGE EFFECT] Profile data changed, scheduling save in 300ms');
     const timer = setTimeout(() => {
-      console.log('[STORAGE EFFECT] saving profiles to localStorage');
+      console.log('[STORAGE EFFECT] Saving all profile data to localStorage');
       try {
+        // Save profiles array
         const cleanedProfiles = profiles.map(cleanProfileForStorage);
-        const serialized = JSON.stringify(cleanedProfiles);
+        const profilesSerialized = JSON.stringify(cleanedProfiles);
+        const storedProfiles = localStorage.getItem('profiles');
 
-        // Only write if the data actually changed
-        const stored = localStorage.getItem('profiles');
-        if (stored !== serialized) {
-          console.log('[STORAGE EFFECT] cleaned profiles count:', cleanedProfiles.length);
-          localStorage.setItem('profiles', serialized);
-          console.log('[STORAGE EFFECT] save complete');
+        if (storedProfiles !== profilesSerialized) {
+          console.log('[STORAGE EFFECT] Saving profiles, count:', cleanedProfiles.length);
+          localStorage.setItem('profiles', profilesSerialized);
         } else {
-          console.log('[STORAGE EFFECT] no changes detected, skipping write');
+          console.log('[STORAGE EFFECT] Profiles unchanged, skipping write');
         }
-      } catch (error) {
-        console.error('[STORAGE EFFECT] Failed to save profiles:', error);
-      }
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [profiles]);
 
-  // Debounced currentProfile save
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      try {
-        const cleanedProfile = cleanProfileForStorage(currentProfile);
-        localStorage.setItem('currentProfile', JSON.stringify(cleanedProfile));
+        // Save currentProfile
+        const cleanedCurrentProfile = cleanProfileForStorage(currentProfile);
+        const currentProfileSerialized = JSON.stringify(cleanedCurrentProfile);
+        const storedCurrentProfile = localStorage.getItem('currentProfile');
+
+        if (storedCurrentProfile !== currentProfileSerialized) {
+          console.log('[STORAGE EFFECT] Saving currentProfile:', currentProfile.name);
+          localStorage.setItem('currentProfile', currentProfileSerialized);
+        } else {
+          console.log('[STORAGE EFFECT] CurrentProfile unchanged, skipping write');
+        }
+
+        console.log('[STORAGE EFFECT] Save complete');
       } catch (error) {
-        console.error('Failed to save currentProfile:', error);
+        console.error('[STORAGE EFFECT] Failed to save profile data:', error);
       }
     }, 300);
     return () => clearTimeout(timer);
-  }, [currentProfile]);
+  }, [profiles, currentProfile]);
 
   // Save registration status (small data, synchronous is okay)
   useEffect(() => {
