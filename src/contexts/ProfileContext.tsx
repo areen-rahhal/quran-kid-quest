@@ -7,7 +7,7 @@ interface ProfileContextType {
   currentProfile: Profile;
   profiles: Profile[];
   switchProfile: (profileId: string) => void;
-  registerParent: (data: RegistrationData) => Profile;
+  registerParent: (data: RegistrationData) => Promise<Profile>;
   addGoal: (profileId: string, goalId: string, goalName: string, phaseSize?: number) => void;
   addGoalWithPhaseSize: (profileId: string, goalId: string, goalName: string, phaseSize: number) => void;
   updateGoalPhaseSize: (profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => void;
