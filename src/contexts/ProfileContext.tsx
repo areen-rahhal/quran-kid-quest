@@ -139,16 +139,24 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     }
   }, [profiles, profilesMap, currentProfile]);
 
-  // Debounced localStorage saves
+  // Debounced localStorage saves with change detection
   useEffect(() => {
     console.log('[STORAGE EFFECT] profiles changed, scheduling save in 300ms');
     const timer = setTimeout(() => {
       console.log('[STORAGE EFFECT] saving profiles to localStorage');
       try {
         const cleanedProfiles = profiles.map(cleanProfileForStorage);
-        console.log('[STORAGE EFFECT] cleaned profiles count:', cleanedProfiles.length);
-        localStorage.setItem('profiles', JSON.stringify(cleanedProfiles));
-        console.log('[STORAGE EFFECT] save complete');
+        const serialized = JSON.stringify(cleanedProfiles);
+
+        // Only write if the data actually changed
+        const stored = localStorage.getItem('profiles');
+        if (stored !== serialized) {
+          console.log('[STORAGE EFFECT] cleaned profiles count:', cleanedProfiles.length);
+          localStorage.setItem('profiles', serialized);
+          console.log('[STORAGE EFFECT] save complete');
+        } else {
+          console.log('[STORAGE EFFECT] no changes detected, skipping write');
+        }
       } catch (error) {
         console.error('[STORAGE EFFECT] Failed to save profiles:', error);
       }
