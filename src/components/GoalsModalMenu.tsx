@@ -4,26 +4,31 @@ import { useGoals } from '@/hooks/useGoals';
 import { useProfile } from '@/contexts/ProfileContext';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Profile } from '@/types/profile';
 
 interface GoalsModalMenuProps {
-  profile: Profile;
+  profileId: string;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const GoalsModalMenuComponent = ({ profile, isOpen, onClose }: GoalsModalMenuProps) => {
+const GoalsModalMenuComponent = ({ profileId, isOpen, onClose }: GoalsModalMenuProps) => {
   const { t, i18n } = useTranslation();
   const { allGoals } = useGoals();
-  const { addGoal } = useProfile();
+  const { addGoal, profiles } = useProfile();
   const isArabic = i18n.language === 'ar';
+
+  // Get the current profile from the profiles list
+  const profile = profiles.find(p => p.id === profileId);
+  if (!profile) {
+    return null;
+  }
 
   // Get IDs of goals already added to this profile
   const addedGoalIds = new Set(profile.goals?.map(g => g.id) || []);
 
   const handleGoalSelect = (goalId: string, goalName: string) => {
     try {
-      addGoal(profile.id, goalId, goalName);
+      addGoal(profileId, goalId, goalName);
       // Delay close slightly to allow event to finish processing
       setTimeout(() => {
         onClose();
