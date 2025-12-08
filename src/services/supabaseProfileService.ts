@@ -428,6 +428,53 @@ export const supabaseProfileService = {
       return null;
     }
   },
+
+  /**
+   * Load goals for multiple profiles and merge with existing profile data
+   * Reuses profile data instead of re-fetching, significantly reducing database queries
+   * Tier 2 Optimization: Eliminates redundant profile row fetches
+   */
+  async loadProfilesWithGoals(profiles: Profile[]): Promise<Profile[]> {
+    try {
+      if (profiles.length === 0) {
+        return [];
+      }
+
+      console.log('[supabaseProfileService] Loading goals for profiles:', profiles.map(p => p.name).join(', '));
+
+      // Fetch goals for all profiles in parallel
+      const goalsPromises = profiles.map(profile =>
+        this.loadGoalsForProfile(profile.id)
+      );
+
+      const allGoalsResults = await Promise.all(goalsPromises);
+
+      // Merge goals into profiles
+      const profilesWithGoals = profiles.map((profile, index) => {
+        const goalsData = allGoalsResults[index] || [];
+        const profileCopy = { ...profile };
+        profileCopy.goals = goalsData.map(dbGoal => ({
+          id: dbGoal.goal_id,
+          name: dbGoal.name,
+          status: dbGoal.status,
+          completedSurahs: dbGoal.completed_surahs,
+          totalSurahs: dbGoal.total_surahs,
+          phaseSize: dbGoal.phase_size,
+          phases: null,
+          currentUnitId: dbGoal.current_unit_id,
+          completionDate: dbGoal.completion_date,
+        }));
+        return profileCopy;
+      });
+
+      console.log('[supabaseProfileService] Loaded goals for all profiles');
+      return profilesWithGoals;
+    } catch (error) {
+      console.error('[supabaseProfileService] Exception loading profiles with goals:', error);
+      // Fallback: return profiles without goals instead of failing
+      return profiles;
+    }
+  },
 };
 
 /**
