@@ -14,7 +14,7 @@ import { Profile } from "@/lib/validation";
 const LearnersProfiles = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { profiles, createChildProfile, currentParentId, profileService } = useProfile();
+  const { profiles, createChildProfile, currentParentId } = useProfile();
   const { toast } = useToast();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showChildForm, setShowChildForm] = useState(false);
