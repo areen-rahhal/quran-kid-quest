@@ -393,6 +393,7 @@ export { ProfileContext };
 
 /**
  * Create default profiles in Supabase
+ * TIER 2 OPTIMIZATION: Parallelize saves using Promise.all instead of sequential saves
  */
 async function createDefaultProfiles(): Promise<Profile[]> {
   const defaultProfiles: Omit<Profile, 'id'>[] = [
@@ -441,15 +442,21 @@ async function createDefaultProfiles(): Promise<Profile[]> {
     },
   ];
 
-  const savedProfiles: Profile[] = [];
-  for (const profile of defaultProfiles) {
-    // Add a temporary ID for the profile object (will be replaced by Supabase UUID)
-    const profileWithId = { ...profile, id: 'temp-' + Date.now() } as Profile;
-    const saved = await supabaseProfileService.saveProfile(profileWithId);
-    if (saved) {
-      savedProfiles.push(saved);
-    }
-  }
+  // Create profile objects with temporary IDs
+  const profilesWithTempIds = defaultProfiles.map((profile, index) => ({
+    ...profile,
+    id: 'temp-' + Date.now() + '-' + index, // Add index to ensure unique IDs in parallel saves
+  })) as Profile[];
+
+  // Parallelize saves using Promise.all
+  const savePromises = profilesWithTempIds.map(profile =>
+    supabaseProfileService.saveProfile(profile)
+  );
+
+  const savedResults = await Promise.all(savePromises);
+
+  // Filter out null results (failed saves)
+  const savedProfiles = savedResults.filter((p): p is Profile => p !== null);
 
   return savedProfiles;
 }
