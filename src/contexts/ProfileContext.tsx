@@ -137,7 +137,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
       setCurrentProfile(updatedProfile);
       console.log('[SYNC EFFECT] setCurrentProfile done');
     }
-  }, [profiles, profilesMap, currentProfile]);
+  }, [profilesMap]);
 
   // Debounced localStorage saves with change detection
   useEffect(() => {
