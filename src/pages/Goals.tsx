@@ -46,6 +46,7 @@ const Goals = () => {
     if (!selectedProfileId) {
       const parentProfile = profiles.find(p => p.type === 'parent');
       selectedProfileId = parentProfile?.id;
+      console.log('[Goals] No profileId in URL, defaulting to parent:', parentProfile?.id, parentProfile?.name);
     }
 
     // Only process if we have a profileId
@@ -69,9 +70,11 @@ const Goals = () => {
 
         // Clean up URL parameters so menu switches work properly
         navigate('/goals', { replace: true });
+      } else {
+        console.warn('[Goals] Could not find profile with ID:', selectedProfileId);
       }
     }
-  }, [isLoading, profiles]);
+  }, [isLoading, profiles, searchParams, switchProfile, navigate]);
 
   // Sync currentGoalIndex when profile changes (use active goal if not set from URL)
   useEffect(() => {
