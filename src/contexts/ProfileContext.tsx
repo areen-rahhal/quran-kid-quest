@@ -304,7 +304,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 
   const deleteGoal = useCallback(async (profileId: string, goalId: string) => {
     console.log('[deleteGoal] Deleting goal:', { profileId, goalId });
-    
+
     try {
       const success = await supabaseProfileService.deleteGoalFromProfile(profileId, goalId);
       if (success) {
@@ -323,6 +323,21 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
       console.error('[deleteGoal] Error:', error);
     }
   }, [currentProfile]);
+
+  const logout = useCallback(() => {
+    console.log('[logout] Logging out user');
+    // Clear profile state
+    setCurrentProfile(defaultEmptyProfile);
+    setProfiles([]);
+    setCurrentParentId(null);
+    setParentProfile(null);
+    setIsRegistrationComplete(false);
+
+    // Clear localStorage
+    localStorage.removeItem('parentProfile');
+    localStorage.removeItem('currentParentId');
+    localStorage.removeItem('isRegistrationComplete');
+  }, []);
 
   return (
     <ProfileContext.Provider
