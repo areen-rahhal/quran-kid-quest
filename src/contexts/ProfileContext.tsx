@@ -105,17 +105,34 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     }
   }, [profiles]);
 
-  const registerParent = useCallback((data: RegistrationData): Profile => {
+  const registerParent = useCallback(async (data: RegistrationData): Promise<Profile> => {
     console.log('[registerParent] Registering parent:', data.parentName);
     const { profile, updatedProfiles } = profileService.registerParent(data, profiles);
-    
-    // Save to localStorage for now (can migrate to Supabase later)
-    localStorage.setItem('parentProfile', JSON.stringify(profile));
-    localStorage.setItem('isRegistrationComplete', 'true');
-    
-    setParentProfile(profile);
-    setIsRegistrationComplete(true);
-    return profile;
+
+    // Save parent profile to Supabase
+    const savedProfile = await supabaseProfileService.saveProfile(profile);
+
+    if (savedProfile) {
+      // Use the profile from Supabase (has correct UUID)
+      localStorage.setItem('parentProfile', JSON.stringify(savedProfile));
+      localStorage.setItem('isRegistrationComplete', 'true');
+
+      setParentProfile(savedProfile);
+      setProfiles(prev => [...prev, savedProfile]);
+      setIsRegistrationComplete(true);
+      console.log('[registerParent] Parent profile saved successfully:', savedProfile.id);
+      return savedProfile;
+    } else {
+      // Fallback to local profile if Supabase save fails
+      console.error('[registerParent] Failed to save to Supabase, using local profile');
+      localStorage.setItem('parentProfile', JSON.stringify(profile));
+      localStorage.setItem('isRegistrationComplete', 'true');
+
+      setParentProfile(profile);
+      setProfiles(prev => [...prev, profile]);
+      setIsRegistrationComplete(true);
+      return profile;
+    }
   }, [profiles]);
 
   const addGoal = useCallback(async (profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
