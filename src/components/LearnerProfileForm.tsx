@@ -247,7 +247,7 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
 
       {/* Goals Modal */}
       <GoalsModalMenu
-        profile={profile}
+        profileId={profile.id}
         isOpen={isGoalsModalOpen}
         onClose={() => setIsGoalsModalOpen(false)}
       />

@@ -103,13 +103,7 @@ const mockProfiles: Profile[] = [
 export function ProfileProvider({ children }: { children: ReactNode }) {
   const [profiles, setProfiles] = useState<Profile[]>(() => {
     console.log('[INIT] Initializing profiles...');
-    // CLEAR ALL OLD DATA - Fresh start
-    localStorage.removeItem('profiles');
-    localStorage.removeItem('currentProfile');
-    localStorage.removeItem('parentProfile');
-    localStorage.removeItem('isRegistrationComplete');
-
-    // Always start with fresh clean mock data (no goals)
+    // Load profiles from storage or use mock data as fallback
     const initialized = profileService.initializeProfiles(mockProfiles);
     console.log('[INIT] Profiles initialized:', initialized.length, 'profiles');
     return initialized;
