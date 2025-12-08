@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Card } from "@/components/ui/card";
 import { useProfile } from "@/hooks/useProfile";
-import { ChevronLeft, UserPlus, Plus } from "lucide-react";
+import { ChevronLeft, UserPlus, Plus, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProfileCard } from "@/components/ProfileCard";
 import { Badge } from "@/components/ui/badge";
