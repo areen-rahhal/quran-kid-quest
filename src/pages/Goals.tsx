@@ -19,7 +19,7 @@ const Goals = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
-  const { currentProfile, profiles, switchProfile, addGoal } = useProfile();
+  const { currentProfile, profiles, switchProfile, addGoal, isLoading } = useProfile();
   const { allGoals, getGoal } = useGoals();
   const [selectedGoal, setSelectedGoal] = useState("");
   const [currentGoalIndex, setCurrentGoalIndex] = useState(0);
