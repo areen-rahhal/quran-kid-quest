@@ -19,50 +19,62 @@ export const goalService = {
     phaseSize?: number
   ): Profile {
     console.log('[goalService.addGoalToProfile] called with profile:', profile.name, 'goalId:', goalId);
-    // Check if goal already exists (idempotency)
-    if (this.hasGoal(profile, goalId)) {
-      console.log('[goalService.addGoalToProfile] goal already exists, returning unchanged');
-      return profile;
+
+    try {
+      // Check if goal already exists (idempotency)
+      if (this.hasGoal(profile, goalId)) {
+        console.log('[goalService.addGoalToProfile] goal already exists, returning unchanged');
+        return profile;
+      }
+
+      // Validate profile has required fields
+      if (!profile || !profile.id) {
+        console.error('[goalService.addGoalToProfile] Invalid profile:', profile);
+        throw new Error('Profile is invalid or missing id');
+      }
+
+      const goalConfig = getGoalById(goalId);
+      if (!goalConfig) {
+        console.error('[goalService.addGoalToProfile] Goal config not found for:', goalId);
+        throw new Error(`Goal with id ${goalId} not found`);
+      }
+
+      const totalSurahs = goalConfig.metadata?.surahCount || 0;
+
+      // Determine phase size with fallback
+      const effectivePhaseSize = phaseSize || goalConfig.metadata?.defaultPhaseSize || 5;
+
+      console.log('[goalService.addGoalToProfile] creating new goal:', goalName, 'phaseSize:', effectivePhaseSize);
+
+      // Don't store phases in localStorage - generate on-demand instead
+      // This prevents localStorage quota exceeded errors
+      const newGoal: GoalProgress = {
+        id: goalId,
+        name: goalName,
+        status: 'in-progress',
+        completedSurahs: 0,
+        totalSurahs: totalSurahs,
+        phaseSize: effectivePhaseSize,
+        phases: null,
+        currentUnitId: goalConfig.units?.[0]?.id?.toString(),
+      };
+
+      const updatedGoals = [...(profile.goals || []), newGoal];
+      console.log('[goalService.addGoalToProfile] updated goals count:', updatedGoals.length);
+
+      const result = {
+        ...profile,
+        goals: updatedGoals,
+        goalsCount: updatedGoals.length,
+        currentGoal: goalName,
+      };
+
+      console.log('[goalService.addGoalToProfile] returning updated profile:', result.name, 'goals:', result.goals?.length);
+      return result;
+    } catch (error) {
+      console.error('[goalService.addGoalToProfile] Error adding goal:', error);
+      throw error;
     }
-
-    const goalConfig = getGoalById(goalId);
-    if (!goalConfig) {
-      console.error('[goalService.addGoalToProfile] Goal config not found for:', goalId);
-      throw new Error(`Goal with id ${goalId} not found`);
-    }
-
-    const totalSurahs = goalConfig.metadata.surahCount || 0;
-
-    // Determine phase size
-    const effectivePhaseSize = phaseSize || goalConfig.metadata.defaultPhaseSize;
-
-    console.log('[goalService.addGoalToProfile] creating new goal:', goalName, 'phaseSize:', effectivePhaseSize);
-
-    // Don't store phases in localStorage - generate on-demand instead
-    // This prevents localStorage quota exceeded errors
-    const newGoal: GoalProgress = {
-      id: goalId,
-      name: goalName,
-      status: 'in-progress',
-      completedSurahs: 0,
-      totalSurahs: totalSurahs,
-      phaseSize: effectivePhaseSize,
-      phases: null,
-      currentUnitId: goalConfig.units?.[0]?.id.toString(),
-    };
-
-    const updatedGoals = [...(profile.goals || []), newGoal];
-    console.log('[goalService.addGoalToProfile] updated goals count:', updatedGoals.length);
-
-    const result = {
-      ...profile,
-      goals: updatedGoals,
-      goalsCount: updatedGoals.length,
-      currentGoal: goalName,
-    };
-
-    console.log('[goalService.addGoalToProfile] returning updated profile:', result.name, 'goals:', result.goals?.length);
-    return result;
   },
 
   /**
