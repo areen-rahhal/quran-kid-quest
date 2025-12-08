@@ -43,14 +43,6 @@ const LearnersProfiles = () => {
     console.log('Add new learner');
   };
 
-  const handleRefresh = () => {
-    setIsRefreshing(true);
-    // Simulate refresh delay
-    setTimeout(() => {
-      setIsRefreshing(false);
-    }, 800);
-  };
-
   const handleCreateChildProfile = async (childData: Omit<Profile, 'id'>) => {
     setIsCreatingChild(true);
     try {
