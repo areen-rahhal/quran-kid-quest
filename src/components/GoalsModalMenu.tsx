@@ -1,7 +1,7 @@
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGoals } from '@/hooks/useGoals';
-import { useProfile } from '@/contexts/ProfileContext';
+import { useProfile } from '@/hooks/useProfile';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 

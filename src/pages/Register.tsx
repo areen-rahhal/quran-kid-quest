@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useProfile } from '@/contexts/ProfileContext';
+import { useProfile } from '@/hooks/useProfile';
 import { AVATAR_OPTIONS } from '@/utils/avatars';
 import { useToast } from '@/hooks/use-toast';
 

@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/sheet';
 import { AvatarImage } from '@/components/AvatarImage';
 import { Badge } from '@/components/ui/badge';
-import { useProfile } from '@/contexts/ProfileContext';
+import { useProfile } from '@/hooks/useProfile';
 import { Profile } from '@/types/profile';
 import { getAvatarImageUrl } from '@/utils/avatars';
 
