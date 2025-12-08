@@ -115,7 +115,7 @@ const LearnersProfiles = () => {
         {/* Child Profiles Section */}
         {childProfiles.length > 0 && (
           <div className="space-y-3">
-            <h2 className="text-lg font-bold text-foreground">{t('learnersProfiles.childProfiles')} ({childProfiles.length}/3)</h2>
+            <h2 className="text-lg font-bold text-foreground">Childs</h2>
             <div className="space-y-2">
               {childProfiles.map((profile) => (
                 <ProfileCard
