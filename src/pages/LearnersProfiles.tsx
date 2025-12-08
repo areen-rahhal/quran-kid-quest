@@ -117,32 +117,90 @@ const LearnersProfiles = () => {
       </div>
 
       {/* Content */}
-      <div className="container max-w-2xl mx-auto p-4 pb-8 space-y-4 flex-1">
-        {sortedProfiles.map((profile) => (
-          <ProfileCard
-            key={profile.id}
-            profile={profile}
-            onNavigate={handleNavigateToProfile}
-            onAddGoal={handleAddGoal}
-            onGoalClick={handleGoalClick}
-          />
-        ))}
-
-        {/* Add New Learner Card */}
-        <Card
-          className="p-6 border-2 border-dashed border-border hover:border-primary/50 hover:bg-accent/30 transition-all cursor-pointer group"
-          onClick={handleAddLearner}
-        >
-          <div className="flex items-center justify-center gap-3 py-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center group-hover:scale-110 transition-transform">
-              <UserPlus className="h-6 w-6 text-primary-foreground" />
+      <div className="container max-w-2xl mx-auto p-4 pb-8 space-y-6 flex-1">
+        {/* Parent Profile Section */}
+        {parentProfile && (
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <h2 className="text-lg font-bold text-foreground">{t('learnersProfiles.parentProfile')}</h2>
+              <Badge variant="secondary">{t('profileSwitcher.parent')}</Badge>
             </div>
-            <div className="text-center">
-              <p className="text-lg font-bold text-foreground">{t('learnersProfiles.addNewLearner')}</p>
-              <p className="text-sm text-muted-foreground">{t('learnersProfiles.createProfile')}</p>
+            <ProfileCard
+              profile={parentProfile}
+              onNavigate={handleNavigateToProfile}
+              onAddGoal={handleAddGoal}
+              onGoalClick={handleGoalClick}
+            />
+          </div>
+        )}
+
+        {/* Child Profiles Section */}
+        {childProfiles.length > 0 && (
+          <div className="space-y-3">
+            <h2 className="text-lg font-bold text-foreground">{t('learnersProfiles.childProfiles')} ({childProfiles.length}/3)</h2>
+            <div className="space-y-2">
+              {childProfiles.map((profile) => (
+                <ProfileCard
+                  key={profile.id}
+                  profile={profile}
+                  onNavigate={handleNavigateToProfile}
+                  onAddGoal={handleAddGoal}
+                  onGoalClick={handleGoalClick}
+                />
+              ))}
             </div>
           </div>
-        </Card>
+        )}
+
+        {/* Add Child Profile Card - Show if less than 3 children */}
+        {canAddMoreChildren && !showChildForm && (
+          <Card
+            className="p-6 border-2 border-dashed border-border hover:border-primary/50 hover:bg-accent/30 transition-all cursor-pointer group"
+            onClick={() => setShowChildForm(true)}
+          >
+            <div className="flex items-center justify-center gap-3 py-4">
+              <div className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Plus className="h-6 w-6 text-primary-foreground" />
+              </div>
+              <div className="text-center">
+                <p className="text-lg font-bold text-foreground">{t('learnersProfiles.addChildProfile')}</p>
+                <p className="text-sm text-muted-foreground">{childProfiles.length}/3 {t('learnersProfiles.childrenAdded')}</p>
+              </div>
+            </div>
+          </Card>
+        )}
+
+        {/* Child Profile Form - Show when clicked */}
+        {showChildForm && (
+          <Card className="p-6 bg-card border-2 border-primary">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-foreground">{t('learnersProfiles.createNewChild')}</h3>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowChildForm(false)}
+                disabled={isCreatingChild}
+                className="h-8 w-8"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            <ChildProfileForm
+              onSubmit={handleCreateChildProfile}
+              onCancel={() => setShowChildForm(false)}
+              isLoading={isCreatingChild}
+            />
+          </Card>
+        )}
+
+        {/* Max Children Reached Message */}
+        {!canAddMoreChildren && (
+          <Card className="p-4 bg-accent/50 border border-primary/30">
+            <p className="text-sm text-foreground text-center">
+              {t('learnersProfiles.maxChildrenReached')}
+            </p>
+          </Card>
+        )}
       </div>
     </div>
   );
