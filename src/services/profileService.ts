@@ -97,12 +97,12 @@ export const profileService = {
 
   /**
    * Switch to a different profile
+   * Note: ProfileContext handles saving to localStorage via debounced effect
    */
   switchProfile(profiles: Profile[], profileId: string): Profile | null {
     const profile = profiles.find((p) => p.id === profileId);
     if (!profile) return null;
 
-    storageService.saveCurrentProfile(profile);
     return profile;
   },
 
