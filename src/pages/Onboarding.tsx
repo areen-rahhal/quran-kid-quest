@@ -131,7 +131,7 @@ const Onboarding = () => {
                 </div>
                 <Button
                   onClick={async () => {
-                    if (!selectedGoal || !currentProfile) return;
+                    if (!selectedGoal || !canAddGoal) return;
 
                     setIsAddingGoal(true);
                     try {
@@ -154,10 +154,10 @@ const Onboarding = () => {
                       setIsAddingGoal(false);
                     }
                   }}
-                  disabled={!selectedGoal || isAddingGoal}
+                  disabled={!selectedGoal || !canAddGoal}
                   className="w-full bg-secondary text-secondary-foreground font-semibold hover:bg-secondary/90"
                 >
-                  {isAddingGoal ? "Adding Goal..." : "Continue"}
+                  {isLoading ? "Loading..." : isAddingGoal ? "Adding Goal..." : "Continue"}
                 </Button>
               </CardContent>
             </Card>
