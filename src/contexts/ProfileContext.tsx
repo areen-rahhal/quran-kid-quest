@@ -110,7 +110,18 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   });
   const [currentProfile, setCurrentProfile] = useState<Profile>(() => {
     // Always start with first profile from fresh mock data
-    return mockProfiles[0] || ({} as Profile);
+    const initialProfile = mockProfiles[0];
+    if (!initialProfile) {
+      console.warn('[ProfileProvider] No mock profiles available for initialization');
+      return mockProfiles[0] || ({
+        id: 'unknown',
+        name: 'Unknown',
+        type: 'child',
+        goals: [],
+        goalsCount: 0,
+      } as Profile);
+    }
+    return initialProfile;
   });
   const [isRegistrationComplete, setIsRegistrationComplete] = useState<boolean>(() => {
     return profileService.initializeRegistrationStatus();
