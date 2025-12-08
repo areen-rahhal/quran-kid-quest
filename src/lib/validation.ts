@@ -134,6 +134,7 @@ export const RegistrationDataSchema = z.object({
 export const ProfileUpdateSchema = z.object({
   name: z.string().min(1).optional(),
   type: ProfileTypeSchema.optional(),
+  parentId: z.string().uuid().optional(),
   avatar: z.string().optional(),
   currentGoal: z.string().optional(),
   goals: z.array(GoalProgressSchema).optional(),
