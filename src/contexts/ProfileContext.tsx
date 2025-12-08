@@ -157,9 +157,12 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Only update if the profile object actually changed
-    if (updatedProfile !== currentProfile) {
-      console.log('[SYNC EFFECT] calling setCurrentProfile');
+    // Only update if the profile's content actually changed (use content-based comparison, not reference equality)
+    // Check if goals count or profile data changed
+    if (updatedProfile.goals?.length !== currentProfile.goals?.length ||
+        updatedProfile.name !== currentProfile.name ||
+        updatedProfile.goalsCount !== currentProfile.goalsCount) {
+      console.log('[SYNC EFFECT] calling setCurrentProfile due to content change');
       setCurrentProfile(updatedProfile);
       console.log('[SYNC EFFECT] setCurrentProfile done');
     }
