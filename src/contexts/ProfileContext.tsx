@@ -53,7 +53,43 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         console.log('[ProfileProvider] Initializing profiles from Supabase');
         setIsLoading(true);
 
-        // Load all profiles first to find parent profiles
+        // TIER 2 OPTIMIZATION: Check localStorage first to avoid redundant loadProfiles() call
+        const savedParentId = localStorage.getItem('currentParentId');
+
+        // Path 1: User has logged in before (savedParentId exists)
+        if (savedParentId) {
+          console.log('[ProfileProvider] Found saved parent ID in localStorage:', savedParentId);
+          const parentAndChildren = await supabaseProfileService.loadProfilesForParent(savedParentId);
+
+          if (parentAndChildren.length > 0) {
+            // Use loadProfilesWithGoals to avoid redundant profile fetches
+            const profilesWithGoals = await supabaseProfileService.loadProfilesWithGoals(parentAndChildren);
+
+            setCurrentParentId(savedParentId);
+            setProfiles(profilesWithGoals);
+            setCurrentProfile(profilesWithGoals[0]);
+
+            // Load registration status
+            const regStatus = localStorage.getItem('isRegistrationComplete') === 'true';
+            setIsRegistrationComplete(regStatus);
+
+            // Load parent profile from localStorage
+            const parentData = localStorage.getItem('parentProfile');
+            if (parentData) {
+              try {
+                setParentProfile(JSON.parse(parentData));
+              } catch (e) {
+                console.error('Failed to parse parent profile', e);
+              }
+            }
+
+            setIsLoading(false);
+            return;
+          }
+        }
+
+        // Path 2: No savedParentId, need to load all profiles
+        console.log('[ProfileProvider] No saved parent ID, loading all profiles');
         const allProfiles = await supabaseProfileService.loadProfiles();
         console.log('[ProfileProvider] Loaded all profiles:', allProfiles.length);
 
@@ -68,39 +104,28 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
             setCurrentProfile(parentProfile);
           }
         } else {
-          // Find the current parent (from localStorage or first parent profile)
-          const savedParentId = localStorage.getItem('currentParentId');
-          let parentIdToLoad = savedParentId;
-
-          // If no saved parent ID, use the first parent profile
-          if (!parentIdToLoad) {
-            const firstParent = allProfiles.find(p => p.type === 'parent');
-            parentIdToLoad = firstParent?.id;
-          }
+          // Find first parent from loaded profiles
+          const firstParent = allProfiles.find(p => p.type === 'parent');
+          const parentIdToLoad = firstParent?.id;
 
           if (parentIdToLoad) {
             console.log('[ProfileProvider] Loading profiles for parent:', parentIdToLoad);
-            // Load parent and their children with goals
+            // Load parent and their children
             const parentAndChildren = await supabaseProfileService.loadProfilesForParent(parentIdToLoad);
-            const profilesWithGoals = await Promise.all(
-              parentAndChildren.map(profile => supabaseProfileService.loadProfileWithGoals(profile.id))
-            );
-            const validProfiles = profilesWithGoals.filter(p => p !== null) as Profile[];
+            // Use loadProfilesWithGoals to avoid redundant profile fetches
+            const profilesWithGoals = await supabaseProfileService.loadProfilesWithGoals(parentAndChildren);
 
             setCurrentParentId(parentIdToLoad);
-            setProfiles(validProfiles);
-            if (validProfiles.length > 0) {
-              setCurrentProfile(validProfiles[0]);
+            setProfiles(profilesWithGoals);
+            if (profilesWithGoals.length > 0) {
+              setCurrentProfile(profilesWithGoals[0]);
             }
           } else {
-            // Fallback: just load all profiles with goals
-            const profilesWithGoals = await Promise.all(
-              allProfiles.map(profile => supabaseProfileService.loadProfileWithGoals(profile.id))
-            );
-            const validProfiles = profilesWithGoals.filter(p => p !== null) as Profile[];
-            setProfiles(validProfiles);
-            if (validProfiles.length > 0) {
-              setCurrentProfile(validProfiles[0]);
+            // Fallback: load all profiles with goals
+            const profilesWithGoals = await supabaseProfileService.loadProfilesWithGoals(allProfiles);
+            setProfiles(profilesWithGoals);
+            if (profilesWithGoals.length > 0) {
+              setCurrentProfile(profilesWithGoals[0]);
             }
           }
         }
