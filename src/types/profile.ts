@@ -11,6 +11,7 @@ export interface Profile {
   id: string;
   name: string;
   type: 'parent' | 'child';
+  parentId?: string;
   avatar?: string;
   currentGoal?: string;
   goals?: GoalProgress[];
