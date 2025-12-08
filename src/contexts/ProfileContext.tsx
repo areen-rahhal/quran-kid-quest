@@ -6,8 +6,10 @@ import { supabaseProfileService } from '@/services/supabaseProfileService';
 interface ProfileContextType {
   currentProfile: Profile;
   profiles: Profile[];
+  currentParentId: string | null;
   switchProfile: (profileId: string) => void;
   registerParent: (data: RegistrationData) => Promise<Profile>;
+  createChildProfile: (childData: Omit<Profile, 'id'>) => Promise<Profile | null>;
   addGoal: (profileId: string, goalId: string, goalName: string, phaseSize?: number) => void;
   addGoalWithPhaseSize: (profileId: string, goalId: string, goalName: string, phaseSize: number) => void;
   updateGoalPhaseSize: (profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => void;
