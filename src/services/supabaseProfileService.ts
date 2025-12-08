@@ -67,6 +67,7 @@ export const supabaseProfileService = {
         .insert({
           name: profile.name,
           type: profile.type,
+          parent_id: profile.parentId || null,
           avatar: profile.avatar,
           email: profile.email,
           age: profile.age,
