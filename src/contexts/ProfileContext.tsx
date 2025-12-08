@@ -130,28 +130,26 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     return profileService.initializeParentProfile();
   });
 
-  // Track current profile ID to avoid stale closures
-  const currentProfileIdRef = useRef(currentProfile.id);
-  useEffect(() => {
-    currentProfileIdRef.current = currentProfile.id;
-  }, [currentProfile.id]);
-
-  // Memoize profile lookup to avoid O(n) search on every profiles change
-  const profilesMap = useMemo(() => {
-    const map = new Map<string, Profile>();
-    profiles.forEach(p => map.set(p.id, p));
-    return map;
-  }, [profiles]);
-
   // Keep currentProfile in sync when profiles change
   useEffect(() => {
     console.log('[SYNC EFFECT] profiles changed, current profiles count:', profiles.length);
-    console.log('[SYNC EFFECT] looking for profile with id:', currentProfileIdRef.current);
+    console.log('[SYNC EFFECT] looking for profile with id:', currentProfile.id);
 
-    const profileId = currentProfileIdRef.current;
+    // Safety check: ensure currentProfile has an id
+    if (!currentProfile?.id) {
+      console.log('[SYNC EFFECT] currentProfile has no id, resetting to first profile');
+      if (profiles.length > 0) {
+        setCurrentProfile(profiles[0]);
+      }
+      return;
+    }
 
-    // If currentProfile is not found in the new profiles array, use first profile
-    if (!profileId || !profilesMap.has(profileId)) {
+    // Find the updated profile in the new profiles array
+    const updatedProfile = profiles.find(p => p.id === currentProfile.id);
+    console.log('[SYNC EFFECT] found updated profile:', updatedProfile?.name, 'goals:', updatedProfile?.goals?.length);
+
+    // If profile not found, switch to first profile
+    if (!updatedProfile) {
       console.log('[SYNC EFFECT] currentProfile not found in profiles, resetting to first');
       if (profiles.length > 0) {
         setCurrentProfile(profiles[0]);
@@ -159,14 +157,13 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const updatedProfile = profilesMap.get(profileId);
-    console.log('[SYNC EFFECT] found updated profile:', updatedProfile?.name, 'goals:', updatedProfile?.goals?.length);
-    if (updatedProfile && updatedProfile !== currentProfile) {
+    // Only update if the profile object actually changed
+    if (updatedProfile !== currentProfile) {
       console.log('[SYNC EFFECT] calling setCurrentProfile');
       setCurrentProfile(updatedProfile);
       console.log('[SYNC EFFECT] setCurrentProfile done');
     }
-  }, [profilesMap]);
+  }, [profiles]);
 
   // Debounced localStorage saves with change detection
   useEffect(() => {
