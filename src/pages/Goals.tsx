@@ -220,6 +220,14 @@ const Goals = () => {
                 </div>
                 <button
                   onClick={() => {
+                    if (!currentProfile?.id) {
+                      console.error('[addGoal] currentProfile is not properly initialized');
+                      toast({
+                        title: 'Error',
+                        description: 'Profile not loaded. Please refresh the page.',
+                      });
+                      return;
+                    }
                     if (selectedGoal) {
                       const goal = getGoal(selectedGoal);
                       if (goal) {
