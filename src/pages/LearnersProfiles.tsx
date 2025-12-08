@@ -103,10 +103,6 @@ const LearnersProfiles = () => {
         {/* Parent Profile Section */}
         {parentProfile && (
           <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <h2 className="text-lg font-bold text-foreground">{t('learnersProfiles.parentProfile')}</h2>
-              <Badge variant="secondary">{t('profileSwitcher.parent')}</Badge>
-            </div>
             <ProfileCard
               profile={parentProfile}
               onNavigate={handleNavigateToProfile}
