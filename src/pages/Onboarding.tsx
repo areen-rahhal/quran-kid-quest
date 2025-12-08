@@ -7,11 +7,19 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useProfile } from "@/hooks/useProfile";
 import { AVATAR_OPTIONS } from "@/utils/avatars";
+import { getGoalById } from "@/config/goals-data";
+
+const GOAL_OPTIONS = [
+  { value: "juz-30", label: "Juz' 30" },
+  { value: "juz-29", label: "Juz' 29" },
+  { value: "surah-bakarah", label: "Surah Al Bakarah" },
+];
 
 const Onboarding = () => {
   const navigate = useNavigate();
-  const { parentProfile } = useProfile();
+  const { parentProfile, currentProfile, addGoal } = useProfile();
   const [selectedGoal, setSelectedGoal] = useState("");
+  const [isAddingGoal, setIsAddingGoal] = useState(false);
 
   const handleLogout = () => {
     navigate("/");
