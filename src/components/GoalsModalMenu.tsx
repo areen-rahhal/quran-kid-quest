@@ -34,6 +34,12 @@ const GoalsModalMenuComponent = ({ profileId, isOpen, onClose }: GoalsModalMenuP
       return;
     }
 
+    // Validate inputs
+    if (!profileId || !goalId) {
+      console.error('[handleGoalSelect] Missing required inputs:', { profileId, goalId });
+      return;
+    }
+
     setIsProcessing(true);
     try {
       console.log('[handleGoalSelect] Starting goal selection:', { profileId, goalId, goalName });
@@ -46,9 +52,10 @@ const GoalsModalMenuComponent = ({ profileId, isOpen, onClose }: GoalsModalMenuP
         setIsProcessing(false);
       }, 200);
     } catch (error) {
-      console.error('[handleGoalSelect] ERROR:', error);
-      // Close modal even if there's an error
+      console.error('[handleGoalSelect] ERROR adding goal:', error);
+      // Close modal and reset state even if there's an error
       setTimeout(() => {
+        console.error('[handleGoalSelect] Closing modal due to error');
         onClose();
         setIsProcessing(false);
       }, 200);
