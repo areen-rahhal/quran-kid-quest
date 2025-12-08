@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGoals } from '@/hooks/useGoals';
 import { useProfile } from '@/contexts/ProfileContext';
@@ -16,6 +16,7 @@ const GoalsModalMenuComponent = ({ profileId, isOpen, onClose }: GoalsModalMenuP
   const { allGoals } = useGoals();
   const { addGoal, profiles } = useProfile();
   const isArabic = i18n.language === 'ar';
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Get the current profile from the profiles list
   const profile = profiles.find(p => p.id === profileId);
@@ -27,6 +28,13 @@ const GoalsModalMenuComponent = ({ profileId, isOpen, onClose }: GoalsModalMenuP
   const addedGoalIds = new Set(profile.goals?.map(g => g.id) || []);
 
   const handleGoalSelect = (goalId: string, goalName: string) => {
+    // Prevent multiple submissions
+    if (isProcessing) {
+      console.log('[handleGoalSelect] Already processing, ignoring click');
+      return;
+    }
+
+    setIsProcessing(true);
     try {
       console.log('[handleGoalSelect] Starting goal selection:', { profileId, goalId, goalName });
       addGoal(profileId, goalId, goalName);
@@ -35,12 +43,14 @@ const GoalsModalMenuComponent = ({ profileId, isOpen, onClose }: GoalsModalMenuP
       setTimeout(() => {
         console.log('[handleGoalSelect] Closing modal after goal addition');
         onClose();
+        setIsProcessing(false);
       }, 100);
     } catch (error) {
       console.error('[handleGoalSelect] ERROR:', error);
       // Close modal even if there's an error
       setTimeout(() => {
         onClose();
+        setIsProcessing(false);
       }, 100);
     }
   };
