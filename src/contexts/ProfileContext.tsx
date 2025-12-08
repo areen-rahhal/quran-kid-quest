@@ -15,6 +15,7 @@ interface ProfileContextType {
   updateGoalPhaseSize: (profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => void;
   updateProfile: (profileId: string, updates: ProfileUpdate) => void;
   deleteGoal: (profileId: string, goalId: string) => void;
+  logout: () => void;
   isRegistrationComplete: boolean;
   parentProfile: Profile | null;
   isLoading: boolean;
