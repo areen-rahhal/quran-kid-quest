@@ -76,6 +76,27 @@ const Goals = () => {
     }
   }, [isLoading, profiles, searchParams, switchProfile, navigate]);
 
+  // Ensure parent profile is selected if no explicit profile was set from URL
+  useEffect(() => {
+    // Don't interfere if we're still loading or just applied URL params
+    if (isLoading || !hasAppliedUrlParams) {
+      return;
+    }
+
+    // Don't change if user explicitly navigated with a profileId
+    const profileId = searchParams.get('profileId');
+    if (profileId) {
+      return;
+    }
+
+    // If current profile is a child, switch to parent
+    const parentProfile = profiles.find(p => p.type === 'parent');
+    if (parentProfile && currentProfile.type === 'child') {
+      console.log('[Goals] Current profile is a child, switching to parent:', parentProfile.id, parentProfile.name);
+      switchProfile(parentProfile.id);
+    }
+  }, [hasAppliedUrlParams, isLoading, profiles, currentProfile.id, currentProfile.type, searchParams, switchProfile]);
+
   // Sync currentGoalIndex when profile changes (use active goal if not set from URL)
   useEffect(() => {
     // Safety check: ensure currentProfile and goals exist
