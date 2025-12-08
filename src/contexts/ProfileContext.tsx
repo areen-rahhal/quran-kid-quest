@@ -130,6 +130,16 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     console.log('[SYNC EFFECT] profiles changed, current profiles count:', profiles.length);
     console.log('[SYNC EFFECT] looking for profile with id:', currentProfile.id);
+
+    // If currentProfile is not found in the new profiles array, use first profile
+    if (!currentProfile.id || !profilesMap.has(currentProfile.id)) {
+      console.log('[SYNC EFFECT] currentProfile not found in profiles, resetting to first');
+      if (profiles.length > 0) {
+        setCurrentProfile(profiles[0]);
+      }
+      return;
+    }
+
     const updatedProfile = profilesMap.get(currentProfile.id);
     console.log('[SYNC EFFECT] found updated profile:', updatedProfile?.name, 'goals:', updatedProfile?.goals?.length);
     if (updatedProfile && updatedProfile !== currentProfile) {
