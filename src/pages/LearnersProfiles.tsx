@@ -67,6 +67,15 @@ const LearnersProfiles = () => {
               </Button>
               <h1 className="text-2xl font-bold text-foreground">{t('learnersProfiles.title')}</h1>
             </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleLogout}
+              className="h-10 w-10"
+              title={t('common.logout') || 'Logout'}
+            >
+              <LogOut className="h-5 w-5" />
+            </Button>
           </div>
         </div>
       </div>
