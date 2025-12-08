@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 const LearnersProfiles = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { profiles, currentParentId } = useProfile();
+  const { profiles, currentParentId, logout } = useProfile();
 
   // Sort profiles by streak (descending) - most active first
   const sortedProfiles = [...profiles].sort((a, b) => {
