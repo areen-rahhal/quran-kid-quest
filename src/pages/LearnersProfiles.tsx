@@ -94,15 +94,6 @@ const LearnersProfiles = () => {
               </Button>
               <h1 className="text-2xl font-bold text-foreground">{t('learnersProfiles.title')}</h1>
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleRefresh}
-              className="h-10 w-10"
-              disabled={isRefreshing}
-            >
-              <RefreshCw className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
-            </Button>
           </div>
         </div>
       </div>
