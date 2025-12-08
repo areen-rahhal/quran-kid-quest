@@ -14,13 +14,10 @@ const Login = () => {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     // Navigate based on user type
-    // Aya (parent with existing goals) goes to goals page with parent ID
+    // Aya (parent with existing goals) goes to goals page
+    // The Goals page will automatically default to the parent profile
     if (email.toLowerCase() === "aya@testmail.com") {
-      if (currentParentId) {
-        navigate(`/goals?profileId=${currentParentId}`);
-      } else {
-        navigate("/goals");
-      }
+      navigate("/goals");
     } else {
       // Other users go to onboarding
       navigate("/onboarding");
