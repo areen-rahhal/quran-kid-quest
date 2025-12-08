@@ -264,6 +264,20 @@ export const supabaseProfileService = {
   },
 
   /**
+   * Load profiles for a specific parent (parent + their children)
+   */
+  async loadProfilesForParent(parentId: string): Promise<Profile[]> {
+    return loadProfilesForParent(parentId);
+  },
+
+  /**
+   * Create a child profile under a parent
+   */
+  async createChildProfile(parentId: string, childData: Omit<Profile, 'id'>): Promise<Profile | null> {
+    return createChildProfile(parentId, childData);
+  },
+
+  /**
    * Load a profile with its goals
    */
   async loadProfileWithGoals(profileId: string): Promise<Profile | null> {
