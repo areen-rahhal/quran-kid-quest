@@ -97,45 +97,35 @@ const Goals = () => {
     }
   }, [hasAppliedUrlParams, isLoading, profiles, currentProfile.id, currentProfile.type, searchParams, switchProfile]);
 
-  // Reset goal index when profile switches via ProfileSwitcher
+  // Handle goal index when profile changes (via ProfileSwitcher or URL params)
   useEffect(() => {
-    // Only reset if URL params have been applied (i.e., we're no longer in initial load)
+    // Only proceed after URL params have been processed
     if (!hasAppliedUrlParams) {
       return;
     }
 
     // Check if URL params indicate an explicit goal selection
-    const hasUrlGoalId = searchParams.get('goalId');
-    if (hasUrlGoalId) {
+    const urlGoalId = searchParams.get('goalId');
+    if (urlGoalId) {
+      // URL has a specific goal, find and set its index
+      const goalIndex = currentProfile.goals?.findIndex(goal => goal.id === urlGoalId) ?? -1;
+      if (goalIndex !== -1) {
+        setCurrentGoalIndex(goalIndex);
+      }
       return;
     }
 
-    // Reset to first goal when profile changes
-    setCurrentGoalIndex(0);
-  }, [currentProfile.id, hasAppliedUrlParams, searchParams]);
+    // If profile has goals, try to use the active goal or default to first
+    if (currentProfile?.goals && currentProfile.goals.length > 0) {
+      const activeGoalIndex = currentProfile.goals.findIndex(
+        goal => goal.name === currentProfile.currentGoal
+      );
 
-  // Sync currentGoalIndex when profile changes (use active goal if not set from URL)
-  useEffect(() => {
-    // Safety check: ensure currentProfile and goals exist
-    if (!currentProfile?.id || !currentProfile?.goals || currentProfile.goals.length === 0) {
-      return;
-    }
-
-    // Check if URL params exist (more reliable than the flag due to state batching)
-    const hasUrlGoalId = searchParams.get('goalId');
-    if (hasUrlGoalId || hasAppliedUrlParams) {
-      return;
-    }
-
-    // Find the active goal
-    const activeGoalIndex = currentProfile.goals.findIndex(
-      goal => goal.name === currentProfile.currentGoal
-    );
-
-    if (activeGoalIndex !== -1) {
-      setCurrentGoalIndex(activeGoalIndex);
-    } else {
-      setCurrentGoalIndex(0);
+      if (activeGoalIndex !== -1) {
+        setCurrentGoalIndex(activeGoalIndex);
+      } else {
+        setCurrentGoalIndex(0);
+      }
     }
   }, [currentProfile.id, hasAppliedUrlParams, searchParams]);
 
