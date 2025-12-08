@@ -267,14 +267,116 @@ export const supabaseProfileService = {
    * Load profiles for a specific parent (parent + their children)
    */
   async loadProfilesForParent(parentId: string): Promise<Profile[]> {
-    return loadProfilesForParent(parentId);
+    try {
+      console.log('[supabaseProfileService] Loading profiles for parent:', parentId);
+
+      // Load parent profile
+      const { data: parentData, error: parentError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', parentId)
+        .single();
+
+      if (parentError || !parentData) {
+        console.error('[supabaseProfileService] Error loading parent profile:', parentError);
+        return [];
+      }
+
+      // Load children profiles
+      const { data: childrenData, error: childrenError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('parent_id', parentId)
+        .order('created_at', { ascending: true });
+
+      if (childrenError) {
+        console.error('[supabaseProfileService] Error loading children profiles:', childrenError);
+      }
+
+      const profiles: Profile[] = [convertDbProfileToProfile(parentData)];
+      if (childrenData) {
+        profiles.push(...childrenData.map(dbProfile => convertDbProfileToProfile(dbProfile)));
+      }
+
+      console.log('[supabaseProfileService] Loaded parent + children:', profiles.length);
+      return profiles;
+    } catch (error) {
+      console.error('[supabaseProfileService] Exception loading profiles for parent:', error);
+      return [];
+    }
   },
 
   /**
    * Create a child profile under a parent
    */
   async createChildProfile(parentId: string, childData: Omit<Profile, 'id'>): Promise<Profile | null> {
-    return createChildProfile(parentId, childData);
+    try {
+      console.log('[supabaseProfileService] Creating child profile for parent:', parentId);
+
+      // Validate parent exists
+      const { data: parentProfile, error: parentError } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('id', parentId)
+        .single();
+
+      if (parentError || !parentProfile) {
+        console.error('[supabaseProfileService] Parent profile not found:', parentId);
+        return null;
+      }
+
+      // Check child count
+      const { data: childrenCount, error: countError } = await supabase
+        .from('profiles')
+        .select('id', { count: 'exact', head: true })
+        .eq('parent_id', parentId);
+
+      if (!countError && childrenCount && childrenCount.length >= 3) {
+        console.error('[supabaseProfileService] Parent already has 3 children');
+        return null;
+      }
+
+      // Create child profile
+      const { data, error } = await supabase
+        .from('profiles')
+        .insert({
+          name: childData.name,
+          type: 'child',
+          parent_id: parentId,
+          avatar: childData.avatar,
+          email: childData.email,
+          age: childData.age,
+          arabic_proficiency: childData.arabicProficiency,
+          arabic_accent: childData.arabicAccent,
+          tajweed_level: childData.tajweedLevel,
+          current_goal: childData.currentGoal,
+          goals_count: childData.goalsCount || 0,
+          streak: childData.streak || 0,
+          achievements: childData.achievements || {
+            stars: 0,
+            streak: 0,
+            recitations: 0,
+            goalsCompleted: 0,
+          },
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error('[supabaseProfileService] Error creating child profile:', {
+          message: error.message,
+          code: error.code,
+          details: error.details,
+        });
+        return null;
+      }
+
+      console.log('[supabaseProfileService] Child profile created successfully:', data?.id);
+      return convertDbProfileToProfile(data);
+    } catch (error) {
+      console.error('[supabaseProfileService] Exception creating child profile:', error);
+      return null;
+    }
   },
 
   /**
