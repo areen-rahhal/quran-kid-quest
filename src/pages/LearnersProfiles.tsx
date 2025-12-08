@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Card } from "@/components/ui/card";
-import { useProfile } from "@/contexts/ProfileContext";
+import { useProfile } from "@/hooks/useProfile";
 import { ChevronLeft, UserPlus, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProfileCard } from "@/components/ProfileCard";
