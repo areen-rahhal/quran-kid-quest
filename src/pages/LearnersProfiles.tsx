@@ -103,10 +103,10 @@ const LearnersProfiles = () => {
         )}
 
         {/* Add Child Profile Card - Show if less than 3 children */}
-        {canAddMoreChildren && !showChildForm && (
+        {canAddMoreChildren && (
           <Card
             className="p-6 border-2 border-dashed border-border hover:border-primary/50 hover:bg-accent/30 transition-all cursor-pointer group"
-            onClick={() => setShowChildForm(true)}
+            onClick={handleAddChildProfile}
           >
             <div className="flex items-center justify-center gap-3 py-4">
               <div className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center group-hover:scale-110 transition-transform">
