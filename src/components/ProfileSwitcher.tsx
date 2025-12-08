@@ -20,7 +20,7 @@ interface ProfileSwitcherProps {
 
 export const ProfileSwitcher = ({ open, onOpenChange }: ProfileSwitcherProps) => {
   const { t } = useTranslation();
-  const { currentProfile, profiles, switchProfile } = useProfile();
+  const { currentProfile, profiles, switchProfile, currentParentId } = useProfile();
 
   const getInitials = (name: string) => {
     return name
@@ -36,6 +36,10 @@ export const ProfileSwitcher = ({ open, onOpenChange }: ProfileSwitcherProps) =>
     onOpenChange(false);
   };
 
+  // Group profiles by parent
+  const parentProfile = profiles.find(p => p.type === 'parent');
+  const childProfiles = profiles.filter(p => p.type === 'child');
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="bottom" className="max-h-[85vh]">
@@ -46,52 +50,108 @@ export const ProfileSwitcher = ({ open, onOpenChange }: ProfileSwitcherProps) =>
           </SheetDescription>
         </SheetHeader>
 
-        <div className="mt-6 space-y-2">
-          {profiles.map((profile) => {
-            const isActive = currentProfile.id === profile.id;
-            
-            return (
+        <div className="mt-6 space-y-4">
+          {/* Parent Profile Section */}
+          {parentProfile && (
+            <div className="space-y-2">
+              <div className="px-2 py-1">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                  {t('profileSwitcher.parent')}
+                </p>
+              </div>
               <button
-                key={profile.id}
-                onClick={() => handleProfileClick(profile)}
+                key={parentProfile.id}
+                onClick={() => handleProfileClick(parentProfile)}
                 className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all hover:bg-accent ${
-                  isActive 
-                    ? 'border-primary bg-accent' 
+                  currentProfile.id === parentProfile.id
+                    ? 'border-primary bg-accent'
                     : 'border-border hover:border-primary/50'
                 }`}
               >
                 <AvatarImage
-                src={getAvatarImageUrl(profile.avatar)}
-                initials={getInitials(profile.name)}
-                name={profile.name}
-                size="sm"
-              />
+                  src={getAvatarImageUrl(parentProfile.avatar)}
+                  initials={getInitials(parentProfile.name)}
+                  name={parentProfile.name}
+                  size="sm"
+                />
 
                 <div className="flex-1 text-left">
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-foreground">
-                      {profile.name}
+                      {parentProfile.name}
                     </span>
-                    <Badge
-                      variant="secondary"
-                      className="text-xs"
-                    >
-                      {t(`profileSwitcher.${profile.type}`)}
+                    <Badge variant="secondary" className="text-xs">
+                      {t(`profileSwitcher.${parentProfile.type}`)}
                     </Badge>
                   </div>
                   <p className="text-sm text-muted-foreground mt-1">
-                    {profile.currentGoal
-                      ? `${profile.currentGoal} • ${profile.goalsCount} ${profile.goalsCount !== 1 ? 'goals' : 'goal'}`
+                    {parentProfile.currentGoal
+                      ? `${parentProfile.currentGoal} • ${parentProfile.goalsCount} ${
+                          parentProfile.goalsCount !== 1 ? 'goals' : 'goal'
+                        }`
                       : t('profileSwitcher.noActiveGoals')}
                   </p>
                 </div>
 
-                {isActive && (
+                {currentProfile.id === parentProfile.id && (
                   <Check className="h-5 w-5 text-primary flex-shrink-0" />
                 )}
               </button>
-            );
-          })}
+            </div>
+          )}
+
+          {/* Child Profiles Section */}
+          {childProfiles.length > 0 && (
+            <div className="space-y-2">
+              <div className="px-2 py-1">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                  {t('profileSwitcher.children')}
+                </p>
+              </div>
+              <div className="space-y-2 pl-2">
+                {childProfiles.map((profile) => (
+                  <button
+                    key={profile.id}
+                    onClick={() => handleProfileClick(profile)}
+                    className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all hover:bg-accent ${
+                      currentProfile.id === profile.id
+                        ? 'border-primary bg-accent'
+                        : 'border-border hover:border-primary/50'
+                    }`}
+                  >
+                    <AvatarImage
+                      src={getAvatarImageUrl(profile.avatar)}
+                      initials={getInitials(profile.name)}
+                      name={profile.name}
+                      size="sm"
+                    />
+
+                    <div className="flex-1 text-left">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-foreground">
+                          {profile.name}
+                        </span>
+                        <Badge variant="secondary" className="text-xs">
+                          {t(`profileSwitcher.${profile.type}`)}
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {profile.currentGoal
+                          ? `${profile.currentGoal} • ${profile.goalsCount} ${
+                              profile.goalsCount !== 1 ? 'goals' : 'goal'
+                            }`
+                          : t('profileSwitcher.noActiveGoals')}
+                      </p>
+                    </div>
+
+                    {currentProfile.id === profile.id && (
+                      <Check className="h-5 w-5 text-primary flex-shrink-0" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Manage Profiles Button */}
