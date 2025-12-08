@@ -16,7 +16,6 @@ const LearnersProfiles = () => {
   const { t } = useTranslation();
   const { profiles, createChildProfile, currentParentId } = useProfile();
   const { toast } = useToast();
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [showChildForm, setShowChildForm] = useState(false);
   const [isCreatingChild, setIsCreatingChild] = useState(false);
 
