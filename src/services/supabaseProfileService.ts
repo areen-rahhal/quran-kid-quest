@@ -37,18 +37,35 @@ export const supabaseProfileService = {
   async loadGoalsForProfile(profileId: string): Promise<any[]> {
     try {
       console.log('[supabaseProfileService] Loading goals for profile:', profileId);
-      const { data, error } = await supabase
-        .from('goals')
-        .select('*')
-        .eq('profile_id', profileId);
 
-      if (error) {
-        console.error('[supabaseProfileService] Error loading goals:', error);
+      // Add timeout to prevent hanging requests
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+      try {
+        const { data, error } = await supabase
+          .from('goals')
+          .select('*')
+          .eq('profile_id', profileId);
+
+        clearTimeout(timeoutId);
+
+        if (error) {
+          console.error('[supabaseProfileService] Error loading goals:', error);
+          return [];
+        }
+
+        console.log('[supabaseProfileService] Loaded goals:', data?.length);
+        return data || [];
+      } catch (fetchError) {
+        clearTimeout(timeoutId);
+        if (fetchError instanceof Error && fetchError.name === 'AbortError') {
+          console.error('[supabaseProfileService] Request timeout loading goals for profile:', profileId);
+        } else {
+          console.error('[supabaseProfileService] Network error loading goals:', fetchError);
+        }
         return [];
       }
-
-      console.log('[supabaseProfileService] Loaded goals:', data?.length);
-      return data || [];
     } catch (error) {
       console.error('[supabaseProfileService] Exception loading goals:', error);
       return [];
