@@ -44,7 +44,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
   return (
     <Card
       className="p-6 space-y-4 transition-all hover:shadow-medium cursor-pointer"
-      onClick={() => !isGoalsModalOpen && onNavigate?.(profile.id)}
+      onClick={() => onNavigate?.(profile.id)}
     >
       {/* Profile Header */}
       <div className="flex items-center gap-4">
