@@ -120,6 +120,9 @@ export const authService = {
             };
           } else {
             console.error('[authService] Development fallback: Invalid password for:', email);
+            console.error('[authService] Expected password:', expectedPassword);
+            console.error('[authService] Received password:', `"${trimmedPassword}"`, `(length: ${trimmedPassword.length})`);
+            console.error('[authService] Password match:', trimmedPassword === expectedPassword);
             return { success: false, error: 'Invalid login credentials' };
           }
         }
