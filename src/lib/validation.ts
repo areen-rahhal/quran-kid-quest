@@ -171,3 +171,20 @@ export type RegistrationData = z.infer<typeof RegistrationDataSchema>;
 export type ProfileUpdate = z.infer<typeof ProfileUpdateSchema>;
 export type AddGoal = z.infer<typeof AddGoalSchema>;
 export type DeleteGoal = z.infer<typeof DeleteGoalSchema>;
+
+// Re-export database validators for type safety at DB boundaries
+// These are defined in src/types/database.ts
+export {
+  DbProfileRowSchema,
+  DbGoalRowSchema,
+  DbAchievementsSchema,
+  validateDbProfileRow,
+  tryValidateDbProfileRow,
+  validateDbGoalRow,
+  tryValidateDbGoalRow,
+  type DbProfileRow,
+  type DbGoalRow,
+  type DbAchievements,
+  type ValidatedDbProfileRow,
+  type ValidatedDbGoalRow,
+} from '@/types/database';
