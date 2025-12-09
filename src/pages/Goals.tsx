@@ -6,7 +6,7 @@ import { GoalHeader } from "@/components/GoalHeader";
 import { VerticalProgressBar } from "@/components/VerticalProgressBar";
 import { UnitsGrid, Unit } from "@/components/UnitsGrid";
 import { useToast } from "@/hooks/use-toast";
-import { useProfile } from "@/contexts/ProfileContext";
+import { useProfile } from "@/hooks/useProfile";
 import { useGoals } from "@/hooks/useGoals";
 import { BaseUnit } from "@/types/goals";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -19,7 +19,7 @@ const Goals = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
-  const { currentProfile, profiles, switchProfile, addGoal } = useProfile();
+  const { currentProfile, profiles, switchProfile, addGoal, isLoading } = useProfile();
   const { allGoals, getGoal } = useGoals();
   const [selectedGoal, setSelectedGoal] = useState("");
   const [currentGoalIndex, setCurrentGoalIndex] = useState(0);
@@ -27,6 +27,11 @@ const Goals = () => {
 
   // Handle URL parameters - set profile and goal from URL if provided (only once on initial load)
   useEffect(() => {
+    // Wait until profiles are loaded
+    if (isLoading || profiles.length === 0) {
+      return;
+    }
+
     if (hasAppliedUrlParams) {
       return;
     }
@@ -34,9 +39,19 @@ const Goals = () => {
     const profileId = searchParams.get('profileId');
     const goalId = searchParams.get('goalId');
 
+    // Determine which profile to use
+    let selectedProfileId = profileId;
+
+    // If no profileId provided, default to parent profile
+    if (!selectedProfileId) {
+      const parentProfile = profiles.find(p => p.type === 'parent');
+      selectedProfileId = parentProfile?.id;
+      console.log('[Goals] No profileId in URL, defaulting to parent:', parentProfile?.id, parentProfile?.name);
+    }
+
     // Only process if we have a profileId
-    if (profileId) {
-      const selectedProfile = profiles.find(p => p.id === profileId);
+    if (selectedProfileId) {
+      const selectedProfile = profiles.find(p => p.id === selectedProfileId);
 
       if (selectedProfile) {
         // Find and set the goal index if goalId is provided, BEFORE switching
@@ -49,31 +64,44 @@ const Goals = () => {
           }
         }
 
-        switchProfile(profileId);
+        console.log('[Goals] Switching to profile:', selectedProfileId, selectedProfile.name, selectedProfile.type);
+        switchProfile(selectedProfileId);
         setHasAppliedUrlParams(true);
 
         // Clean up URL parameters so menu switches work properly
         navigate('/goals', { replace: true });
+      } else {
+        console.warn('[Goals] Could not find profile with ID:', selectedProfileId);
       }
     }
-  }, []);
+  }, [isLoading, profiles, searchParams, switchProfile, navigate]);
 
-  // Sync currentGoalIndex when profile changes (use active goal if not set from URL)
+  // Handle goal index when profile changes (via ProfileSwitcher or URL params)
   useEffect(() => {
-    if (!currentProfile.goals || currentProfile.goals.length === 0) {
+    // Only proceed after URL params have been processed
+    if (!hasAppliedUrlParams) {
       return;
     }
 
-    // Check if URL params exist (more reliable than the flag due to state batching)
-    const hasUrlGoalId = searchParams.get('goalId');
-    if (hasUrlGoalId || hasAppliedUrlParams) {
+    console.log('[Goals] Profile changed to:', currentProfile.name, 'Type:', currentProfile.type, 'Goals:', currentProfile.goals?.length);
+
+    // Check if URL params indicate an explicit goal selection
+    const urlGoalId = searchParams.get('goalId');
+    if (urlGoalId) {
+      // URL has a specific goal, find and set its index
+      const goalIndex = currentProfile.goals?.findIndex(goal => goal.id === urlGoalId) ?? -1;
+      if (goalIndex !== -1) {
+        setCurrentGoalIndex(goalIndex);
+        console.log('[Goals] Set goal index from URL:', goalIndex);
+      }
       return;
     }
 
-    // Find the active goal
-    const activeGoalIndex = currentProfile.goals.findIndex(
-      goal => goal.name === currentProfile.currentGoal
-    );
+    // If profile has goals, try to use the active goal or default to first
+    if (currentProfile?.goals && currentProfile.goals.length > 0) {
+      const activeGoalIndex = currentProfile.goals.findIndex(
+        goal => goal.name === currentProfile.currentGoal
+      );
 
     const newIndex = activeGoalIndex !== -1 ? activeGoalIndex : 0;
     
@@ -89,6 +117,10 @@ const Goals = () => {
   const goalsCompleted = currentProfile.achievements?.goalsCompleted || 0;
 
   const handleUnitClick = (unit: Unit) => {
+    if (!currentProfile?.id) {
+      console.warn('[handleUnitClick] currentProfile not properly initialized');
+      return;
+    }
     const currentGoal = currentProfile.goals?.[currentGoalIndex];
     if (currentGoal) {
       navigate(`/unit-path/${currentProfile.id}/${currentGoal.id}/${unit.id}`);
@@ -149,14 +181,16 @@ const Goals = () => {
 
 
   const handlePrevGoal = () => {
-    if (currentProfile.goals && currentProfile.goals.length > 0) {
-      setCurrentGoalIndex((prev) => (prev - 1 + currentProfile.goals!.length) % currentProfile.goals!.length);
+    const goals = currentProfile?.goals;
+    if (goals && goals.length > 0) {
+      setCurrentGoalIndex((prev) => (prev - 1 + goals.length) % goals.length);
     }
   };
 
   const handleNextGoal = () => {
-    if (currentProfile.goals && currentProfile.goals.length > 0) {
-      setCurrentGoalIndex((prev) => (prev + 1) % currentProfile.goals!.length);
+    const goals = currentProfile?.goals;
+    if (goals && goals.length > 0) {
+      setCurrentGoalIndex((prev) => (prev + 1) % goals.length);
     }
   };
 
@@ -212,6 +246,14 @@ const Goals = () => {
                 </div>
                 <button
                   onClick={() => {
+                    if (!currentProfile?.id) {
+                      console.error('[addGoal] currentProfile is not properly initialized');
+                      toast({
+                        title: 'Error',
+                        description: 'Profile not loaded. Please refresh the page.',
+                      });
+                      return;
+                    }
                     if (selectedGoal) {
                       const goal = getGoal(selectedGoal);
                       if (goal) {

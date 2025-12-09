@@ -71,6 +71,7 @@ export const profileService = {
 
   /**
    * Register a new parent profile
+   * Note: Storage persistence is handled by the ProfileContext provider
    */
   registerParent(
     data: RegistrationData,
@@ -88,13 +89,6 @@ export const profileService = {
 
     const updatedProfiles = [...allProfiles, newParentProfile];
 
-    // Persist to storage with cleaned data
-    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
-    storageService.saveProfiles(cleanedProfiles);
-    storageService.saveCurrentProfile(cleanProfileForStorage(newParentProfile));
-    storageService.saveRegistrationStatus(true);
-    storageService.saveParentProfile(cleanProfileForStorage(newParentProfile));
-
     return {
       profile: newParentProfile,
       updatedProfiles,
@@ -103,12 +97,12 @@ export const profileService = {
 
   /**
    * Switch to a different profile
+   * Note: ProfileContext handles saving to localStorage via debounced effect
    */
   switchProfile(profiles: Profile[], profileId: string): Profile | null {
     const profile = profiles.find((p) => p.id === profileId);
     if (!profile) return null;
 
-    storageService.saveCurrentProfile(profile);
     return profile;
   },
 
@@ -133,13 +127,6 @@ export const profileService = {
     const updatedCurrentProfile =
       updatedProfiles.find((p) => p.id === currentProfileId) || updatedProfiles[0];
 
-    // Persist to storage with cleaned data
-    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
-    storageService.saveProfiles(cleanedProfiles);
-    if (updatedCurrentProfile) {
-      storageService.saveCurrentProfile(cleanProfileForStorage(updatedCurrentProfile));
-    }
-
     return {
       updatedProfiles,
       updatedCurrentProfile: updatedCurrentProfile || ({} as Profile),
@@ -163,13 +150,6 @@ export const profileService = {
 
     const updatedCurrentProfile =
       updatedProfiles.find((p) => p.id === profileId) || updatedProfiles[0];
-
-    // Persist to storage with cleaned data
-    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
-    storageService.saveProfiles(cleanedProfiles);
-    if (updatedCurrentProfile) {
-      storageService.saveCurrentProfile(cleanProfileForStorage(updatedCurrentProfile));
-    }
 
     return {
       updatedProfiles,
@@ -200,13 +180,6 @@ export const profileService = {
 
     const updatedCurrentProfile =
       updatedProfiles.find((p) => p.id === profileId) || updatedProfiles[0];
-
-    // Persist to storage with cleaned data
-    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
-    storageService.saveProfiles(cleanedProfiles);
-    if (updatedCurrentProfile) {
-      storageService.saveCurrentProfile(cleanProfileForStorage(updatedCurrentProfile));
-    }
 
     return {
       updatedProfiles: updatedProfiles as Profile[],
@@ -248,17 +221,18 @@ export const profileService = {
     const updatedCurrentProfile =
       updatedProfiles.find((p) => p.id === profileId) || updatedProfiles[0];
 
-    // Persist to storage with cleaned data
-    const cleanedProfiles = updatedProfiles.map(cleanProfileForStorage);
-    storageService.saveProfiles(cleanedProfiles);
-    if (updatedCurrentProfile) {
-      storageService.saveCurrentProfile(cleanProfileForStorage(updatedCurrentProfile));
-    }
-
     return {
       updatedProfiles,
       updatedCurrentProfile: updatedCurrentProfile || ({} as Profile),
     };
+  },
+
+  /**
+   * Validate child count (max 3 per parent)
+   */
+  validateChildCountLimit(profiles: Profile[], parentId: string): boolean {
+    const childCount = profiles.filter(p => p.parentId === parentId && p.type === 'child').length;
+    return childCount < 3;
   },
 
   /**

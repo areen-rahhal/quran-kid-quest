@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -7,7 +6,6 @@ import { Progress } from "@/components/ui/progress";
 import { Plus, Trophy } from "lucide-react";
 import { AchievementsRow } from "./AchievementsRow";
 import { AvatarImage } from "./AvatarImage";
-import { GoalsModalMenu } from "./GoalsModalMenu";
 import { Profile } from "@/types/profile";
 import { getAvatarImageUrl } from "@/utils/avatars";
 
@@ -30,7 +28,6 @@ const getInitials = (name: string) => {
 
 export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: ProfileCardProps) => {
   const { t } = useTranslation();
-  const [isGoalsModalOpen, setIsGoalsModalOpen] = useState(false);
 
   // Helper function to get translated goal name
   const getTranslatedGoalName = (goalName: string): string => {
@@ -47,7 +44,7 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
   return (
     <Card
       className="p-6 space-y-4 transition-all hover:shadow-medium cursor-pointer"
-      onClick={() => !isGoalsModalOpen && onNavigate?.(profile.id)}
+      onClick={() => onNavigate?.(profile.id)}
     >
       {/* Profile Header */}
       <div className="flex items-center gap-4">
@@ -125,14 +122,12 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
                 </Card>
               ))}
 
-              {/* Add Goal Button */}
+              {/* Add Goal Button - Coming Soon */}
               <Button
+                disabled={true}
                 size="icon"
-                className="h-auto aspect-square bg-primary/10 text-primary hover:bg-primary/20"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsGoalsModalOpen(true);
-                }}
+                className="h-auto aspect-square bg-primary/10 text-primary hover:bg-primary/20 opacity-50 cursor-not-allowed"
+                title="Add Goal functionality is coming soon"
               >
                 <Plus className="h-5 w-5" />
               </Button>
@@ -145,26 +140,18 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
               <p className="text-xs text-muted-foreground mb-2">{t('learnersProfiles.setupFirstGoal')}</p>
             )}
             <Button
+              disabled={true}
               variant="outline"
-              className="gap-2 border-2 hover:border-primary/50 hover:bg-accent"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsGoalsModalOpen(true);
-              }}
+              className="gap-2 border-2 hover:border-primary/50 hover:bg-accent opacity-50 cursor-not-allowed"
+              title="Add Goal functionality is coming soon"
             >
               <Plus className="h-4 w-4" />
-              {t('learnersProfiles.addFirstGoal')}
+              {t('learnersProfiles.addFirstGoal')} (Coming Soon)
             </Button>
           </div>
         )}
       </div>
 
-      {/* Goals Modal Menu */}
-      <GoalsModalMenu
-        profile={profile}
-        isOpen={isGoalsModalOpen}
-        onClose={() => setIsGoalsModalOpen(false)}
-      />
     </Card>
   );
 };

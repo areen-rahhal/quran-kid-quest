@@ -1,8 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useProfile } from "@/contexts/ProfileContext";
+import { useProfile } from "@/hooks/useProfile";
+import { useAuth } from "@/contexts/AuthContext";
 import { LearnerProfileForm } from "@/components/LearnerProfileForm";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Learner = () => {
@@ -10,6 +11,12 @@ const Learner = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { profiles } = useProfile();
+  const { signOut } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/");
+  };
 
   const profile = profiles.find((p) => p.id === id);
 
@@ -33,15 +40,24 @@ const Learner = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => navigate(-1)}
+              onClick={() => navigate('/learners-profiles')}
               className="h-10 w-10"
+              title="Go back"
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
             <h1 className="text-xl font-bold text-foreground">
               {t('learnersProfiles.editProfile') || 'Edit Profile'}
             </h1>
-            <div className="w-10" />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleLogout}
+              className="h-10 w-10"
+              title="Logout"
+            >
+              <LogOut className="h-5 w-5" />
+            </Button>
           </div>
         </div>
       </div>

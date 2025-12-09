@@ -69,12 +69,22 @@ export function generatePhasesForUnit(unit: BaseUnit, phaseSize: number): Phase[
 /**
  * Generate phases for all units in a goal
  * Returns a flattened array of all phases across all units
+ * Optimized to pre-allocate array and avoid repeated push operations
  */
 export function generatePhasesForGoal(goal: Goal, phaseSize: number): Phase[] {
-  const allPhases: Phase[] = [];
+  // Pre-calculate total phases to allocate array once
+  let totalPhases = 0;
+  const unitPhasesMap: Phase[][] = [];
 
   for (const unit of goal.units) {
     const unitPhases = generatePhasesForUnit(unit, phaseSize);
+    unitPhasesMap.push(unitPhases);
+    totalPhases += unitPhases.length;
+  }
+
+  // Allocate array with exact capacity needed
+  const allPhases: Phase[] = [];
+  for (const unitPhases of unitPhasesMap) {
     allPhases.push(...unitPhases);
   }
 

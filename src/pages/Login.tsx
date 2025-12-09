@@ -4,22 +4,66 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BookOpen } from "lucide-react";
-
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 const Login = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { signIn, isSigningIn, error, clearError } = useAuth();
+  const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [localError, setLocalError] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Navigate based on user type
-    // Aya (parent with existing goals) goes to goals page
-    if (email.toLowerCase() === "aya@testmail.com") {
-      navigate("/goals");
-    } else {
-      // Other users go to onboarding
-      navigate("/onboarding");
+    const newEmail = email.toLowerCase();
+
+    if (!newEmail || !password) {
+      setLocalError(t('login.validation.required') || 'Email and password are required');
+      return;
+    }
+
+    console.log('[Login] User attempting login:', newEmail);
+    setLocalError("");
+    clearError();
+
+    try {
+      const success = await signIn(newEmail, password);
+
+      if (success) {
+        console.log('[Login] Sign in successful, redirecting...');
+        toast({
+          title: t('login.success') || 'Welcome back!',
+          description: `Logged in as ${newEmail}`,
+        });
+
+        // Navigate based on user type
+        // Aya (parent with existing goals) goes to goals page
+        // The Goals page will automatically default to the parent profile
+        if (newEmail === "aya@testmail.com") {
+          navigate("/goals");
+        } else {
+          // Other users go to onboarding
+          navigate("/onboarding");
+        }
+      } else {
+        const errorMsg = error || t('login.failed') || 'Failed to sign in';
+        setLocalError(errorMsg);
+        toast({
+          title: t('login.error') || 'Sign in failed',
+          description: errorMsg,
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'An error occurred';
+      setLocalError(message);
+      toast({
+        title: t('login.error') || 'Error',
+        description: message,
+        variant: 'destructive',
+      });
     }
   };
 
@@ -45,6 +89,14 @@ const Login = () => {
 
         {/* Form */}
         <form onSubmit={handleLogin} className="space-y-4">
+          {(localError || error) && (
+            <div className="p-4 bg-red-100/80 border border-red-300 rounded-lg">
+              <p className="text-sm text-red-800">
+                {localError || error}
+              </p>
+            </div>
+          )}
+
           <div className="space-y-3">
             <Input
               id="email"
@@ -52,7 +104,8 @@ const Login = () => {
               placeholder={t('common.email')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground"
+              disabled={isSigningIn}
+              className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground disabled:opacity-50"
             />
             <Input
               id="password"
@@ -60,19 +113,40 @@ const Login = () => {
               placeholder={t('common.password')}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground"
+              disabled={isSigningIn}
+              className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground disabled:opacity-50"
             />
           </div>
 
           <Button
             type="submit"
-            className="w-full h-14 text-base font-semibold bg-white text-primary hover:bg-white/90 shadow-strong mt-6"
+            disabled={isSigningIn || !email || !password}
+            className="w-full h-14 text-base font-semibold bg-white text-primary hover:bg-white/90 shadow-strong mt-6 disabled:opacity-50"
             size="lg"
           >
-            {t('login.signIn')}
+            {isSigningIn ? t('login.signingIn') || 'Signing In...' : t('login.signIn')}
           </Button>
         </form>
       </div>
+
+      {/* Test Account Info (Development Only) */}
+      {import.meta.env.DEV && (
+        <div className="relative z-10 text-center mt-4 p-4 bg-blue-100/20 rounded-lg border border-blue-300/30 space-y-2">
+          <p className="text-xs text-blue-700/80 font-semibold">🔧 Development Mode - Test with Mock Auth</p>
+
+          <div className="space-y-2 text-left text-xs text-blue-700">
+            <p className="font-mono bg-black/20 p-2 rounded">
+              <span className="text-green-300">areenrahhal@gmail.com</span> / <span className="text-yellow-300">password</span>
+            </p>
+            <p className="font-mono bg-black/20 p-2 rounded">
+              <span className="text-green-300">aya@testmail.com</span> / <span className="text-yellow-300">123456</span>
+            </p>
+          </div>
+          <p className="text-xs text-blue-700/60">
+            These use development fallback auth (mock users for testing)
+          </p>
+        </div>
+      )}
 
       {/* Test Account CTA */}
       <div className="relative z-10 text-center mt-8 space-y-3">
@@ -80,33 +154,37 @@ const Login = () => {
         <div className="flex flex-col gap-2">
           <button
             type="button"
-            onClick={() => {
-              setEmail("Aya@testmail.com");
-              setPassword("123456");
+            onClick={async () => {
+              setEmail("areenrahhal@gmail.com");
+              setPassword("password");
+              setLocalError("");
+              clearError();
+              const success = await signIn("areenrahhal@gmail.com", "password");
+              if (success) {
+                navigate("/onboarding");
+              }
             }}
-            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors"
+            disabled={isSigningIn}
+            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors disabled:opacity-50"
+          >
+            Use Areen
+          </button>
+          <button
+            type="button"
+            onClick={async () => {
+              setEmail("aya@testmail.com");
+              setPassword("123456");
+              setLocalError("");
+              clearError();
+              const success = await signIn("aya@testmail.com", "123456");
+              if (success) {
+                navigate("/goals");
+              }
+            }}
+            disabled={isSigningIn}
+            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors disabled:opacity-50"
           >
             {t('login.testAccounts.parent')}
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setEmail("Ahmad@testmail.com");
-              setPassword("TestPass");
-            }}
-            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors"
-          >
-            {t('login.testAccounts.newUser')}
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setEmail("Myadmin@google.com");
-              setPassword("123");
-            }}
-            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors"
-          >
-            {t('login.testAccounts.admin')}
           </button>
         </div>
       </div>

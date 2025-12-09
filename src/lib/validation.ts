@@ -112,6 +112,7 @@ export const ProfileSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   type: ProfileTypeSchema,
+  parentId: z.string().uuid().optional(),
   avatar: z.string().optional(),
   currentGoal: z.string().optional(),
   goals: z.array(GoalProgressSchema).optional(),
@@ -137,6 +138,7 @@ export const RegistrationDataSchema = z.object({
 export const ProfileUpdateSchema = z.object({
   name: z.string().min(1).optional(),
   type: ProfileTypeSchema.optional(),
+  parentId: z.string().uuid().optional(),
   avatar: z.string().optional(),
   currentGoal: z.string().optional(),
   goals: z.array(GoalProgressSchema).optional(),
@@ -173,3 +175,20 @@ export type RegistrationData = z.infer<typeof RegistrationDataSchema>;
 export type ProfileUpdate = z.infer<typeof ProfileUpdateSchema>;
 export type AddGoal = z.infer<typeof AddGoalSchema>;
 export type DeleteGoal = z.infer<typeof DeleteGoalSchema>;
+
+// Re-export database validators for type safety at DB boundaries
+// These are defined in src/types/database.ts
+export {
+  DbProfileRowSchema,
+  DbGoalRowSchema,
+  DbAchievementsSchema,
+  validateDbProfileRow,
+  tryValidateDbProfileRow,
+  validateDbGoalRow,
+  tryValidateDbGoalRow,
+  type DbProfileRow,
+  type DbGoalRow,
+  type DbAchievements,
+  type ValidatedDbProfileRow,
+  type ValidatedDbGoalRow,
+} from '@/types/database';

@@ -6,6 +6,15 @@ import { ReactNode } from 'react';
 const TestComponent = () => {
   const { currentProfile, profiles, switchProfile, registerParent, isRegistrationComplete } = useProfile();
 
+  const handleRegister = async () => {
+    await registerParent({
+      email: 'newparent@example.com',
+      password: 'password123',
+      parentName: 'Ahmed',
+      avatar: 'avatar-new',
+    });
+  };
+
   return (
     <div>
       <div data-testid="current-profile">{currentProfile.name}</div>
@@ -15,14 +24,7 @@ const TestComponent = () => {
         Switch to Waleed
       </button>
       <button
-        onClick={() =>
-          registerParent({
-            email: 'newparent@example.com',
-            password: 'password123',
-            parentName: 'Ahmed',
-            avatar: 'avatar-new',
-          })
-        }
+        onClick={handleRegister}
         data-testid="register-btn"
       >
         Register Parent

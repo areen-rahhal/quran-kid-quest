@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Star, Flame, Gem, Trophy, ChevronLeft } from 'lucide-react';
 import { AvatarImage } from '@/components/AvatarImage';
 import { ProfileSwitcher } from '@/components/ProfileSwitcher';
-import { useProfile } from '@/contexts/ProfileContext';
+import { useProfile } from '@/hooks/useProfile';
 import { getAvatarImageUrl } from '@/utils/avatars';
 
 interface AchievementProps {
