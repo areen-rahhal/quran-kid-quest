@@ -45,9 +45,6 @@ const Onboarding = () => {
               <p className="text-xs font-medium text-muted-foreground">
                 Welcome {isLoading ? "..." : (parentProfile?.name || currentProfile?.name || "User")}
               </p>
-              <h2 className="text-lg font-bold text-foreground">
-                {isLoading ? "Loading..." : (parentProfile?.name || currentProfile?.name || "User")}
-              </h2>
             </div>
           </div>
           <button
