@@ -94,35 +94,6 @@ export const ChildProfileForm = ({ onSubmit, onCancel, isLoading = false }: Chil
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Avatar Selection */}
-      <div className="space-y-3">
-        <Label className="text-sm font-medium">{t('common.avatar')}</Label>
-        <div className="flex items-center gap-4 mb-4">
-          <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-primary">
-            <AvatarImage
-              src={getAvatarImageUrl(formData.avatar)}
-              initials={formData.name ? formData.name[0].toUpperCase() : '?'}
-              name={formData.name}
-            />
-          </div>
-          <div>
-            <p className="text-sm font-medium text-foreground">{selectedAvatar?.label || 'Select Avatar'}</p>
-            <p className="text-xs text-muted-foreground">{t('common.selectAvatar')}</p>
-          </div>
-        </div>
-        <Select value={formData.avatar} onValueChange={(value) => setFormData(prev => ({ ...prev, avatar: value }))}>
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {AVATAR_OPTIONS.map(avatar => (
-              <SelectItem key={avatar.id} value={avatar.id}>
-                {avatar.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
 
       {/* Name Input */}
       <div className="space-y-2">
