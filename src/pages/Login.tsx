@@ -6,8 +6,6 @@ import { Input } from "@/components/ui/input";
 import { BookOpen } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { authDevHelper } from "@/services/authDevHelper";
-
 const Login = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -16,27 +14,6 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [localError, setLocalError] = useState("");
-  const [isSettingUpTestUsers, setIsSettingUpTestUsers] = useState(false);
-
-  const handleSetupTestUsers = async () => {
-    setIsSettingUpTestUsers(true);
-    try {
-      await authDevHelper.setupAllTestUsers();
-      toast({
-        title: 'Test Users Created',
-        description: 'All test users have been set up. You can now log in.',
-      });
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to setup test users';
-      toast({
-        title: 'Setup Failed',
-        description: message,
-        variant: 'destructive',
-      });
-    } finally {
-      setIsSettingUpTestUsers(false);
-    }
-  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
