@@ -164,13 +164,10 @@ const Login = () => {
             <p className="font-mono bg-black/20 p-2 rounded">
               <span className="text-blue-300">aya@testmail.com</span> / <span className="text-green-300">123456</span>
             </p>
-            <p className="font-mono bg-black/20 p-2 rounded">
-              <span className="text-blue-300">ahmad@testmail.com</span> / <span className="text-green-300">TestPass</span>
-            </p>
-            <p className="font-mono bg-black/20 p-2 rounded">
-              <span className="text-blue-300">myadmin@google.com</span> / <span className="text-green-300">123</span>
-            </p>
           </div>
+          <p className="text-xs text-yellow-700/60 mt-2">
+            (Only profiles that exist in the database can login)
+          </p>
 
           <button
             type="button"
