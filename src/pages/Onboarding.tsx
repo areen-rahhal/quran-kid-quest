@@ -6,7 +6,7 @@ import { UserPlus, Target, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useProfile } from "@/hooks/useProfile";
-import { AVATAR_OPTIONS } from "@/utils/avatars";
+import { AVATAR_OPTIONS, getAvatarImageUrl } from "@/utils/avatars";
 import { getGoalById, getAllGoals } from "@/config/goals-data";
 
 const Onboarding = () => {
