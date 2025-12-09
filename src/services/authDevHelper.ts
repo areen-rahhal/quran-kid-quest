@@ -3,11 +3,18 @@ import { User } from '@supabase/supabase-js';
 
 /**
  * Development helper for creating test users in Supabase Auth
- * 
- * This is for development only. In production, users should sign up through the app.
- * 
- * Usage:
- * await createTestUser('areenrahhal@gmail.com', 'password', 'Areen')
+ *
+ * ⚠️ DEPRECATED: This is not currently used
+ *
+ * The development fallback in authService.ts is used instead.
+ * Development mode uses mock authentication for testing without real Supabase Auth users.
+ *
+ * This file is kept for reference when setting up real Supabase Auth users for production.
+ *
+ * Production Usage:
+ * 1. Create real Supabase Auth users via Dashboard or API
+ * 2. Ensure each auth user has a matching profile in the profiles table
+ * 3. Remove DEV_TEST_PASSWORDS from authService.ts
  */
 
 export const authDevHelper = {
