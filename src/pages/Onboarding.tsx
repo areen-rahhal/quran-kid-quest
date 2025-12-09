@@ -66,29 +66,6 @@ const Onboarding = () => {
 
           {/* Action Cards */}
           <div className="grid md:grid-cols-2 gap-6">
-            {/* Add Child Profile Card */}
-            <Card
-              className="cursor-pointer transition-all hover:shadow-strong hover:scale-105 border-2 hover:border-primary"
-              onClick={() => navigate("/goals")}
-            >
-              <CardHeader className="text-center space-y-4">
-                <div className="mx-auto w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center">
-                  <UserPlus className="w-10 h-10 text-primary-foreground" />
-                </div>
-                <div>
-                  <CardTitle className="text-2xl">Add Child Profile</CardTitle>
-                  <CardDescription className="text-base mt-2">
-                    Create a learning profile for your child
-                  </CardDescription>
-                </div>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-sm text-muted-foreground">
-                  Track their progress and customize their learning experience
-                </p>
-              </CardContent>
-            </Card>
-
             {/* Start Learning Card */}
             <Card className="transition-all border-2 hover:border-secondary hover:shadow-strong">
               <CardHeader className="text-center space-y-4">
@@ -115,9 +92,9 @@ const Onboarding = () => {
                       <SelectValue placeholder="Choose a goal" />
                     </SelectTrigger>
                     <SelectContent>
-                      {GOAL_OPTIONS.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
+                      {getAllGoals().map((goal) => (
+                        <SelectItem key={goal.id} value={goal.id}>
+                          {goal.nameEnglish}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -161,6 +138,29 @@ const Onboarding = () => {
                 >
                   {isLoading ? "Loading..." : isAddingGoal ? "Adding Goal..." : "Continue"}
                 </Button>
+              </CardContent>
+            </Card>
+
+            {/* Add Child Profile Card */}
+            <Card
+              className="cursor-pointer transition-all hover:shadow-strong hover:scale-105 border-2 hover:border-primary"
+              onClick={() => navigate("/goals")}
+            >
+              <CardHeader className="text-center space-y-4">
+                <div className="mx-auto w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center">
+                  <UserPlus className="w-10 h-10 text-primary-foreground" />
+                </div>
+                <div>
+                  <CardTitle className="text-2xl">Add Child Profile</CardTitle>
+                  <CardDescription className="text-base mt-2">
+                    Create a learning profile for your child
+                  </CardDescription>
+                </div>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-sm text-muted-foreground">
+                  Track their progress and customize their learning experience
+                </p>
               </CardContent>
             </Card>
           </div>
