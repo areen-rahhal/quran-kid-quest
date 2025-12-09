@@ -15,17 +15,6 @@ const Onboarding = () => {
   const [selectedGoal, setSelectedGoal] = useState("");
   const [isAddingGoal, setIsAddingGoal] = useState(false);
 
-  // Ensure loginEmail is set so profile loads correctly
-  React.useEffect(() => {
-    const loginEmail = localStorage.getItem('loginEmail');
-    if (!loginEmail) {
-      // Set default login email for demonstration (user should set this via Login page)
-      localStorage.setItem('loginEmail', 'areenrahhal@gmail.com');
-      // Reload to trigger profile initialization
-      window.location.reload();
-    }
-  }, []);
-
   // Check if profile is valid (not the default 'unknown' placeholder)
   const isProfileValid = currentProfile && currentProfile.id !== 'unknown';
   const canAddGoal = isProfileValid && !isLoading && !isAddingGoal;
