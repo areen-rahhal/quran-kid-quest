@@ -6,7 +6,7 @@
     "email": "Email",
     "password": "Password",
     "confirmPassword": "Confirm Password",
-    "name": "Your Name",
+    "name": "Name",
     "required": "Required",
     "backToLogin": "Back to Login",
     "cancel": "Cancel",
