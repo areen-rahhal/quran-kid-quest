@@ -90,6 +90,14 @@ const Login = () => {
 
         {/* Form */}
         <form onSubmit={handleLogin} className="space-y-4">
+          {(localError || error) && (
+            <div className="p-4 bg-red-100/80 border border-red-300 rounded-lg">
+              <p className="text-sm text-red-800">
+                {localError || error}
+              </p>
+            </div>
+          )}
+
           <div className="space-y-3">
             <Input
               id="email"
@@ -97,7 +105,8 @@ const Login = () => {
               placeholder={t('common.email')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground"
+              disabled={isSigningIn}
+              className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground disabled:opacity-50"
             />
             <Input
               id="password"
@@ -105,16 +114,18 @@ const Login = () => {
               placeholder={t('common.password')}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground"
+              disabled={isSigningIn}
+              className="h-14 text-base bg-white/95 backdrop-blur-sm border-0 shadow-medium placeholder:text-muted-foreground disabled:opacity-50"
             />
           </div>
 
           <Button
             type="submit"
-            className="w-full h-14 text-base font-semibold bg-white text-primary hover:bg-white/90 shadow-strong mt-6"
+            disabled={isSigningIn || !email || !password}
+            className="w-full h-14 text-base font-semibold bg-white text-primary hover:bg-white/90 shadow-strong mt-6 disabled:opacity-50"
             size="lg"
           >
-            {t('login.signIn')}
+            {isSigningIn ? t('login.signingIn') || 'Signing In...' : t('login.signIn')}
           </Button>
         </form>
       </div>
