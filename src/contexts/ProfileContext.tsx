@@ -340,7 +340,7 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
 
   const updateProfile = useCallback(async (profileId: string, updates: ProfileUpdate) => {
     console.log('[updateProfile] Updating profile:', profileId);
-    
+
     try {
       const success = await supabaseProfileService.updateProfile(profileId, updates);
       if (success) {
@@ -352,6 +352,12 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
           );
           if (currentProfile.id === profileId) {
             setCurrentProfile(updatedProfile);
+          }
+
+          // Update cache if this is the parent profile
+          if (updatedProfile.type === 'parent') {
+            console.log('[updateProfile] Updating cached parent profile');
+            localStorage.setItem('parentProfile', JSON.stringify(updatedProfile));
           }
         }
       }
