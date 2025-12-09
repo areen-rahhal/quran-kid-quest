@@ -79,8 +79,9 @@ export const authService = {
         console.error('[authService] Sign in error:', error.message);
 
         // Development fallback: Allow testing with dev credentials when Supabase Auth users don't exist
-        if (isDevelopment && email.toLowerCase() in DEV_TEST_CREDENTIALS) {
-          const expectedPassword = DEV_TEST_CREDENTIALS[email.toLowerCase() as keyof typeof DEV_TEST_CREDENTIALS];
+        // Only allows emails that have matching profiles in the Supabase profiles table
+        if (isDevelopment && email.toLowerCase() in DEV_TEST_PASSWORDS) {
+          const expectedPassword = DEV_TEST_PASSWORDS[email.toLowerCase()];
           const trimmedPassword = password.trim();
 
           if (trimmedPassword === expectedPassword) {
