@@ -245,6 +245,15 @@ export const authService = {
   async getSession(): Promise<Session | null> {
     try {
       console.log('[authService] Getting current session');
+
+      // Check for stored development session first
+      if (isDevelopment) {
+        const storedSession = getStoredDevSession();
+        if (storedSession) {
+          return storedSession.session;
+        }
+      }
+
       const { data, error } = await supabase.auth.getSession();
 
       if (error) {
