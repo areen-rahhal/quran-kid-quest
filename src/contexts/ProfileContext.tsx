@@ -138,6 +138,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
           if (parentProfile) {
             setCurrentParentId(parentProfile.id);
             setCurrentProfile(parentProfile);
+            setParentProfile(parentProfile);
           }
         } else {
           // Find first parent from loaded profiles
