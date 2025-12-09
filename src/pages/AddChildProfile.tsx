@@ -59,7 +59,7 @@ const AddChildProfile = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate('/learners-profiles')}
                 className="h-10 w-10"
               >
                 <ChevronLeft className="h-5 w-5" />
