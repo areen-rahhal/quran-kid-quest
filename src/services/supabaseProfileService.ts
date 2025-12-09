@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase';
 import { Profile, RegistrationData, ProfileUpdate } from '@/lib/validation';
+import { withSupabaseTimeout } from '@/lib/supabaseTimeout';
 import { goalService } from './goalService';
 
 /**
@@ -14,40 +15,31 @@ export const supabaseProfileService = {
     try {
       console.log('[supabaseProfileService] Loading profiles from Supabase');
 
-      // Add timeout to prevent hanging requests
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-
-      try {
-        const { data, error } = await supabase
+      const { data, error } = await withSupabaseTimeout(
+        supabase
           .from('profiles')
           .select('*')
-          .order('created_at', { ascending: true });
+          .order('created_at', { ascending: true }),
+        'loadProfiles'
+      );
 
-        clearTimeout(timeoutId);
-
-        if (error) {
-          console.error('[supabaseProfileService] Error loading profiles:', {
-            message: error.message,
-            code: error.code,
-            status: error.status,
-          });
-          return [];
-        }
-
-        console.log('[supabaseProfileService] Loaded profiles:', data?.length);
-        return (data || []).map(dbProfile => convertDbProfileToProfile(dbProfile));
-      } catch (fetchError) {
-        clearTimeout(timeoutId);
-        if (fetchError instanceof Error && fetchError.name === 'AbortError') {
-          console.error('[supabaseProfileService] Request timeout loading profiles');
-        } else {
-          console.error('[supabaseProfileService] Network error loading profiles:', fetchError);
-        }
+      if (error) {
+        console.error('[supabaseProfileService] Error loading profiles:', {
+          message: error.message,
+          code: error.code,
+          status: error.status,
+        });
         return [];
       }
+
+      console.log('[supabaseProfileService] Loaded profiles:', data?.length);
+      return (data || []).map(dbProfile => convertDbProfileToProfile(dbProfile));
     } catch (error) {
-      console.error('[supabaseProfileService] Exception loading profiles:', error);
+      if (error instanceof Error && error.message.includes('timed out')) {
+        console.error('[supabaseProfileService] Request timeout loading profiles:', error.message);
+      } else {
+        console.error('[supabaseProfileService] Exception loading profiles:', error);
+      }
       return [];
     }
   },
@@ -59,36 +51,27 @@ export const supabaseProfileService = {
     try {
       console.log('[supabaseProfileService] Loading goals for profile:', profileId);
 
-      // Add timeout to prevent hanging requests
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-
-      try {
-        const { data, error } = await supabase
+      const { data, error } = await withSupabaseTimeout(
+        supabase
           .from('goals')
           .select('*')
-          .eq('profile_id', profileId);
+          .eq('profile_id', profileId),
+        `loadGoalsForProfile(${profileId})`
+      );
 
-        clearTimeout(timeoutId);
-
-        if (error) {
-          console.error('[supabaseProfileService] Error loading goals:', error);
-          return [];
-        }
-
-        console.log('[supabaseProfileService] Loaded goals:', data?.length);
-        return data || [];
-      } catch (fetchError) {
-        clearTimeout(timeoutId);
-        if (fetchError instanceof Error && fetchError.name === 'AbortError') {
-          console.error('[supabaseProfileService] Request timeout loading goals for profile:', profileId);
-        } else {
-          console.error('[supabaseProfileService] Network error loading goals:', fetchError);
-        }
+      if (error) {
+        console.error('[supabaseProfileService] Error loading goals:', error);
         return [];
       }
+
+      console.log('[supabaseProfileService] Loaded goals:', data?.length);
+      return data || [];
     } catch (error) {
-      console.error('[supabaseProfileService] Exception loading goals:', error);
+      if (error instanceof Error && error.message.includes('timed out')) {
+        console.error('[supabaseProfileService] Request timeout loading goals for profile:', profileId);
+      } else {
+        console.error('[supabaseProfileService] Exception loading goals:', error);
+      }
       return [];
     }
   },
@@ -100,30 +83,33 @@ export const supabaseProfileService = {
     try {
       console.log('[supabaseProfileService] Saving profile:', profile.name);
       // Don't include id - let Supabase generate UUID automatically
-      const { data, error } = await supabase
-        .from('profiles')
-        .insert({
-          name: profile.name,
-          type: profile.type,
-          parent_id: profile.parentId || null,
-          avatar: profile.avatar,
-          email: profile.email,
-          age: profile.age,
-          arabic_proficiency: profile.arabicProficiency,
-          arabic_accent: profile.arabicAccent,
-          tajweed_level: profile.tajweedLevel,
-          current_goal: profile.currentGoal,
-          goals_count: profile.goalsCount || 0,
-          streak: profile.streak || 0,
-          achievements: profile.achievements || {
-            stars: 0,
-            streak: 0,
-            recitations: 0,
-            goalsCompleted: 0,
-          },
-        })
-        .select()
-        .single();
+      const { data, error } = await withSupabaseTimeout(
+        supabase
+          .from('profiles')
+          .insert({
+            name: profile.name,
+            type: profile.type,
+            parent_id: profile.parentId || null,
+            avatar: profile.avatar,
+            email: profile.email,
+            age: profile.age,
+            arabic_proficiency: profile.arabicProficiency,
+            arabic_accent: profile.arabicAccent,
+            tajweed_level: profile.tajweedLevel,
+            current_goal: profile.currentGoal,
+            goals_count: profile.goalsCount || 0,
+            streak: profile.streak || 0,
+            achievements: profile.achievements || {
+              stars: 0,
+              streak: 0,
+              recitations: 0,
+              goalsCompleted: 0,
+            },
+          })
+          .select()
+          .single(),
+        'saveProfile'
+      );
 
       if (error) {
         console.error('[supabaseProfileService] Error saving profile:', {
@@ -150,21 +136,24 @@ export const supabaseProfileService = {
   async updateProfile(profileId: string, updates: Partial<Profile>): Promise<Profile | null> {
     try {
       console.log('[supabaseProfileService] Updating profile:', profileId);
-      const { data, error } = await supabase
-        .from('profiles')
-        .update({
-          name: updates.name,
-          avatar: updates.avatar,
-          age: updates.age,
-          current_goal: updates.currentGoal,
-          goals_count: updates.goalsCount,
-          streak: updates.streak,
-          achievements: updates.achievements,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', profileId)
-        .select()
-        .single();
+      const { data, error } = await withSupabaseTimeout(
+        supabase
+          .from('profiles')
+          .update({
+            name: updates.name,
+            avatar: updates.avatar,
+            age: updates.age,
+            current_goal: updates.currentGoal,
+            goals_count: updates.goalsCount,
+            streak: updates.streak,
+            achievements: updates.achievements,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', profileId)
+          .select()
+          .single(),
+        `updateProfile(${profileId})`
+      );
 
       if (error) {
         console.error('[supabaseProfileService] Error updating profile:', error);
@@ -196,12 +185,15 @@ export const supabaseProfileService = {
       });
 
       // Check if goal already exists
-      const { data: existingGoal } = await supabase
-        .from('goals')
-        .select('id')
-        .eq('profile_id', profileId)
-        .eq('goal_id', goalId)
-        .single();
+      const { data: existingGoal } = await withSupabaseTimeout(
+        supabase
+          .from('goals')
+          .select('id')
+          .eq('profile_id', profileId)
+          .eq('goal_id', goalId)
+          .single(),
+        `addGoalToProfile check existing(${profileId}, ${goalId})`
+      );
 
       if (existingGoal) {
         console.log('[supabaseProfileService] Goal already exists, skipping');
@@ -215,16 +207,19 @@ export const supabaseProfileService = {
       const effectivePhaseSize = phaseSize || goalConfig?.metadata?.defaultPhaseSize || 5;
 
       // Insert goal
-      const { error } = await supabase.from('goals').insert({
-        profile_id: profileId,
-        goal_id: goalId,
-        name: goalName,
-        status: 'in-progress',
-        completed_surahs: 0,
-        total_surahs: totalSurahs,
-        phase_size: effectivePhaseSize,
-        current_unit_id: goalConfig?.units?.[0]?.id?.toString(),
-      });
+      const { error } = await withSupabaseTimeout(
+        supabase.from('goals').insert({
+          profile_id: profileId,
+          goal_id: goalId,
+          name: goalName,
+          status: 'in-progress',
+          completed_surahs: 0,
+          total_surahs: totalSurahs,
+          phase_size: effectivePhaseSize,
+          current_unit_id: goalConfig?.units?.[0]?.id?.toString(),
+        }),
+        `addGoalToProfile insert(${profileId}, ${goalId})`
+      );
 
       if (error) {
         console.error('[supabaseProfileService] Error adding goal:', error);
@@ -232,20 +227,26 @@ export const supabaseProfileService = {
       }
 
       // Update profile's goals_count
-      const { data: currentProfile } = await supabase
-        .from('profiles')
-        .select('goals_count')
-        .eq('id', profileId)
-        .single();
+      const { data: currentProfile } = await withSupabaseTimeout(
+        supabase
+          .from('profiles')
+          .select('goals_count')
+          .eq('id', profileId)
+          .single(),
+        `addGoalToProfile getProfile(${profileId})`
+      );
 
       if (currentProfile) {
-        await supabase
-          .from('profiles')
-          .update({
-            goals_count: (currentProfile.goals_count || 0) + 1,
-            current_goal: goalName,
-          })
-          .eq('id', profileId);
+        await withSupabaseTimeout(
+          supabase
+            .from('profiles')
+            .update({
+              goals_count: (currentProfile.goals_count || 0) + 1,
+              current_goal: goalName,
+            })
+            .eq('id', profileId),
+          `addGoalToProfile updateProfile(${profileId})`
+        );
       }
 
       console.log('[supabaseProfileService] Goal added successfully');
@@ -264,11 +265,14 @@ export const supabaseProfileService = {
       console.log('[supabaseProfileService] Deleting goal:', goalId);
 
       // Delete goal
-      const { error } = await supabase
-        .from('goals')
-        .delete()
-        .eq('profile_id', profileId)
-        .eq('goal_id', goalId);
+      const { error } = await withSupabaseTimeout(
+        supabase
+          .from('goals')
+          .delete()
+          .eq('profile_id', profileId)
+          .eq('goal_id', goalId),
+        `deleteGoalFromProfile(${profileId}, ${goalId})`
+      );
 
       if (error) {
         console.error('[supabaseProfileService] Error deleting goal:', error);
@@ -276,21 +280,27 @@ export const supabaseProfileService = {
       }
 
       // Update profile's goals_count
-      const { data: currentProfile } = await supabase
-        .from('profiles')
-        .select('goals_count')
-        .eq('id', profileId)
-        .single();
+      const { data: currentProfile } = await withSupabaseTimeout(
+        supabase
+          .from('profiles')
+          .select('goals_count')
+          .eq('id', profileId)
+          .single(),
+        `deleteGoalFromProfile getProfile(${profileId})`
+      );
 
       if (currentProfile) {
         const newCount = Math.max(0, (currentProfile.goals_count || 0) - 1);
-        await supabase
-          .from('profiles')
-          .update({
-            goals_count: newCount,
-            current_goal: newCount === 0 ? null : currentProfile.current_goal,
-          })
-          .eq('id', profileId);
+        await withSupabaseTimeout(
+          supabase
+            .from('profiles')
+            .update({
+              goals_count: newCount,
+              current_goal: newCount === 0 ? null : currentProfile.current_goal,
+            })
+            .eq('id', profileId),
+          `deleteGoalFromProfile updateProfile(${profileId})`
+        );
       }
 
       console.log('[supabaseProfileService] Goal deleted successfully');
@@ -309,11 +319,14 @@ export const supabaseProfileService = {
       console.log('[supabaseProfileService] Loading profiles for parent:', parentId);
 
       // Load parent profile
-      const { data: parentData, error: parentError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', parentId)
-        .single();
+      const { data: parentData, error: parentError } = await withSupabaseTimeout(
+        supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', parentId)
+          .single(),
+        `loadProfilesForParent getParent(${parentId})`
+      );
 
       if (parentError || !parentData) {
         console.error('[supabaseProfileService] Error loading parent profile:', parentError);
@@ -321,11 +334,14 @@ export const supabaseProfileService = {
       }
 
       // Load children profiles
-      const { data: childrenData, error: childrenError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('parent_id', parentId)
-        .order('created_at', { ascending: true });
+      const { data: childrenData, error: childrenError } = await withSupabaseTimeout(
+        supabase
+          .from('profiles')
+          .select('*')
+          .eq('parent_id', parentId)
+          .order('created_at', { ascending: true }),
+        `loadProfilesForParent getChildren(${parentId})`
+      );
 
       if (childrenError) {
         console.error('[supabaseProfileService] Error loading children profiles:', childrenError);
@@ -352,11 +368,14 @@ export const supabaseProfileService = {
       console.log('[supabaseProfileService] Creating child profile for parent:', parentId);
 
       // Validate parent exists
-      const { data: parentProfile, error: parentError } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('id', parentId)
-        .single();
+      const { data: parentProfile, error: parentError } = await withSupabaseTimeout(
+        supabase
+          .from('profiles')
+          .select('id')
+          .eq('id', parentId)
+          .single(),
+        `createChildProfile checkParent(${parentId})`
+      );
 
       if (parentError || !parentProfile) {
         console.error('[supabaseProfileService] Parent profile not found:', parentId);
@@ -364,10 +383,13 @@ export const supabaseProfileService = {
       }
 
       // Check child count
-      const { data: childrenCount, error: countError } = await supabase
-        .from('profiles')
-        .select('id', { count: 'exact', head: true })
-        .eq('parent_id', parentId);
+      const { data: childrenCount, error: countError } = await withSupabaseTimeout(
+        supabase
+          .from('profiles')
+          .select('id', { count: 'exact', head: true })
+          .eq('parent_id', parentId),
+        `createChildProfile countChildren(${parentId})`
+      );
 
       if (!countError && childrenCount && childrenCount.length >= 3) {
         console.error('[supabaseProfileService] Parent already has 3 children');
@@ -375,30 +397,33 @@ export const supabaseProfileService = {
       }
 
       // Create child profile
-      const { data, error } = await supabase
-        .from('profiles')
-        .insert({
-          name: childData.name,
-          type: 'child',
-          parent_id: parentId,
-          avatar: childData.avatar,
-          email: childData.email,
-          age: childData.age,
-          arabic_proficiency: childData.arabicProficiency,
-          arabic_accent: childData.arabicAccent,
-          tajweed_level: childData.tajweedLevel,
-          current_goal: childData.currentGoal,
-          goals_count: childData.goalsCount || 0,
-          streak: childData.streak || 0,
-          achievements: childData.achievements || {
-            stars: 0,
-            streak: 0,
-            recitations: 0,
-            goalsCompleted: 0,
-          },
-        })
-        .select()
-        .single();
+      const { data, error } = await withSupabaseTimeout(
+        supabase
+          .from('profiles')
+          .insert({
+            name: childData.name,
+            type: 'child',
+            parent_id: parentId,
+            avatar: childData.avatar,
+            email: childData.email,
+            age: childData.age,
+            arabic_proficiency: childData.arabicProficiency,
+            arabic_accent: childData.arabicAccent,
+            tajweed_level: childData.tajweedLevel,
+            current_goal: childData.currentGoal,
+            goals_count: childData.goalsCount || 0,
+            streak: childData.streak || 0,
+            achievements: childData.achievements || {
+              stars: 0,
+              streak: 0,
+              recitations: 0,
+              goalsCompleted: 0,
+            },
+          })
+          .select()
+          .single(),
+        `createChildProfile insert(${parentId})`
+      );
 
       if (error) {
         console.error('[supabaseProfileService] Error creating child profile:', {
@@ -425,11 +450,14 @@ export const supabaseProfileService = {
       console.log('[supabaseProfileService] Loading profile with goals:', profileId);
 
       // Load profile
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', profileId)
-        .single();
+      const { data: profileData, error: profileError } = await withSupabaseTimeout(
+        supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', profileId)
+          .single(),
+        `loadProfileWithGoals getProfile(${profileId})`
+      );
 
       if (profileError || !profileData) {
         console.error('[supabaseProfileService] Error loading profile:', profileError);
@@ -437,10 +465,13 @@ export const supabaseProfileService = {
       }
 
       // Load goals
-      const { data: goalsData, error: goalsError } = await supabase
-        .from('goals')
-        .select('*')
-        .eq('profile_id', profileId);
+      const { data: goalsData, error: goalsError } = await withSupabaseTimeout(
+        supabase
+          .from('goals')
+          .select('*')
+          .eq('profile_id', profileId),
+        `loadProfileWithGoals getGoals(${profileId})`
+      );
 
       if (goalsError) {
         console.error('[supabaseProfileService] Error loading goals:', goalsError);
