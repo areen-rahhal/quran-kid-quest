@@ -107,7 +107,7 @@ const Onboarding = () => {
                 <Button
                   onClick={async () => {
                     if (!selectedGoal || !canAddGoal) {
-                      console.warn('Cannot add goal:', { selectedGoal, canAddGoal, isLoading, isProfileValid });
+                      console.warn('Cannot add goal:', { selectedGoal, canAddGoal, isProfileValid });
                       return;
                     }
 
@@ -140,7 +140,7 @@ const Onboarding = () => {
                   disabled={!selectedGoal || !canAddGoal}
                   className="w-full bg-secondary text-secondary-foreground font-semibold hover:bg-secondary/90"
                 >
-                  {isLoading ? "Loading..." : isAddingGoal ? "Adding Goal..." : "Continue"}
+                  {isAddingGoal ? "Adding Goal..." : "Continue"}
                 </Button>
               </CardContent>
             </Card>
