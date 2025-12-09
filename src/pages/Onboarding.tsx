@@ -46,7 +46,7 @@ const Onboarding = () => {
             </Avatar>
             <div>
               <p className="text-xs font-medium text-muted-foreground">
-                Welcome {isLoading ? "..." : (parentProfile?.name || currentProfile?.name || "User")}
+                Welcome {parentProfile?.name || currentProfile?.name || "User"}
               </p>
             </div>
           </div>
