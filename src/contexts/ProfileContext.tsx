@@ -120,37 +120,58 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
         console.log('[ProfileProvider] No cached data, fetching from Supabase...');
         setIsLoading(true);
 
-        // Load all profiles to find one matching this email
-        const allProfiles = await supabaseProfileService.loadProfiles();
-        console.log('[ProfileProvider] Loaded all profiles:', allProfiles.length);
+        try {
+          // Load all profiles to find one matching this email
+          const allProfiles = await supabaseProfileService.loadProfiles();
+          console.log('[ProfileProvider] Loaded all profiles:', allProfiles.length);
 
-        // Find a parent profile matching the authenticated user's email
-        const matchingParent = allProfiles.find(
-          p => p.type === 'parent' && p.email?.toLowerCase() === userEmail
-        );
+          // Find a parent profile matching the authenticated user's email
+          const matchingParent = allProfiles.find(
+            p => p.type === 'parent' && p.email?.toLowerCase() === userEmail
+          );
 
-        if (matchingParent) {
-          console.log('[ProfileProvider] Found matching parent for authenticated user:', userEmail);
-          // Load that parent and their children in parallel with goals
-          const parentAndChildren = await supabaseProfileService.loadProfilesForParent(matchingParent.id);
-          const profilesWithGoals = await supabaseProfileService.loadProfilesWithGoals(parentAndChildren);
+          if (matchingParent) {
+            console.log('[ProfileProvider] Found matching parent for authenticated user:', userEmail);
+            // Load that parent and their children in parallel with goals
+            const parentAndChildren = await supabaseProfileService.loadProfilesForParent(matchingParent.id);
 
-          setCurrentParentId(matchingParent.id);
-          setProfiles(profilesWithGoals);
-          setCurrentProfile(profilesWithGoals[0]);
-          setParentProfile(matchingParent);
+            // Load goals but don't fail if this times out - still show profiles
+            let profilesWithGoals = parentAndChildren;
+            try {
+              profilesWithGoals = await supabaseProfileService.loadProfilesWithGoals(parentAndChildren);
+              console.log('[ProfileProvider] ✅ Loaded goals for all profiles');
+            } catch (goalsError) {
+              console.warn('[ProfileProvider] Failed to load goals (will show profiles without goals):', goalsError);
+              // Use profiles without goals - they still have the basic data
+              profilesWithGoals = parentAndChildren;
+            }
 
-          // Cache the parent ID for quick access
-          localStorage.setItem('currentParentId', matchingParent.id);
-          localStorage.setItem('parentProfile', JSON.stringify(matchingParent));
-          localStorage.setItem('isRegistrationComplete', 'true');
+            setCurrentParentId(matchingParent.id);
+            setProfiles(profilesWithGoals);
+            setCurrentProfile(profilesWithGoals[0]);
+            setParentProfile(matchingParent);
 
-          console.log('[ProfileProvider] ✅ Profiles loaded successfully for:', userEmail);
-          setIsLoading(false);
-          return;
-        } else {
-          // No profile found for this authenticated user - they need to register
-          console.log('[ProfileProvider] No profile found for authenticated user:', userEmail, '- user needs to register');
+            // Cache the parent ID for quick access
+            localStorage.setItem('currentParentId', matchingParent.id);
+            localStorage.setItem('parentProfile', JSON.stringify(matchingParent));
+            localStorage.setItem('isRegistrationComplete', 'true');
+
+            console.log('[ProfileProvider] ✅ Profiles loaded successfully for:', userEmail);
+            setIsLoading(false);
+            return;
+          } else {
+            // No profile found for this authenticated user - they need to register
+            console.log('[ProfileProvider] No profile found for authenticated user:', userEmail, '- user needs to register');
+            setCurrentProfile(defaultEmptyProfile);
+            setProfiles([]);
+            setCurrentParentId(null);
+            setParentProfile(null);
+            setIsLoading(false);
+            return;
+          }
+        } catch (fetchError) {
+          console.error('[ProfileProvider] Failed to fetch profiles from Supabase:', fetchError);
+          // Don't block the UI - user can still navigate
           setCurrentProfile(defaultEmptyProfile);
           setProfiles([]);
           setCurrentParentId(null);
