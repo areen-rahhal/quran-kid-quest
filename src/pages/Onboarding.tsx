@@ -42,8 +42,8 @@ const Onboarding = () => {
               </AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-xs font-medium text-muted-foreground">Welcome back</p>
-              <h2 className="text-lg font-bold text-foreground">{parentProfile?.name}</h2>
+              <p className="text-xs font-medium text-muted-foreground">Welcome {parentProfile?.name}</p>
+              <h2 className="text-lg font-bold text-foreground">{parentProfile?.name || "User"}</h2>
             </div>
           </div>
           <button
