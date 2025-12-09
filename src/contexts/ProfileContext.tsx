@@ -115,6 +115,12 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 
             setIsLoading(false);
             return;
+          } else {
+            // No profile found for this email - user must register first
+            console.log('[ProfileProvider] No profile found for email:', loginEmail, '- user needs to register');
+            // Set up minimal state so registration can proceed
+            setIsLoading(false);
+            return;
           }
         }
 
