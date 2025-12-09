@@ -56,55 +56,36 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
   useEffect(() => {
     const initializeProfiles = async () => {
       try {
-        console.log('[ProfileProvider] Initializing profiles from Supabase');
+        console.log('[ProfileProvider] Initializing profiles from Supabase', 'User:', authenticatedUser?.email);
         setIsLoading(true);
 
-        // TIER 2 OPTIMIZATION: Check localStorage first to avoid redundant loadProfiles() call
-        const savedParentId = localStorage.getItem('currentParentId');
-        const loginEmail = localStorage.getItem('loginEmail');
-        console.log('[ProfileProvider] Stored state:', { savedParentId, loginEmail });
-
-        // Path 1: User has logged in before (savedParentId exists)
-        if (savedParentId) {
-          console.log('[ProfileProvider] Found saved parent ID in localStorage:', savedParentId);
-          const parentAndChildren = await supabaseProfileService.loadProfilesForParent(savedParentId);
-
-          if (parentAndChildren.length > 0) {
-            // Use loadProfilesWithGoals to avoid redundant profile fetches
-            const profilesWithGoals = await supabaseProfileService.loadProfilesWithGoals(parentAndChildren);
-
-            setCurrentParentId(savedParentId);
-            setProfiles(profilesWithGoals);
-            setCurrentProfile(profilesWithGoals[0]);
-
-            // Set parent profile
-            const loadedParent = profilesWithGoals.find(p => p.type === 'parent');
-            if (loadedParent) {
-              console.log('[ProfileProvider] Setting parent profile from loaded data:', loadedParent.name);
-              setParentProfile(loadedParent);
-            }
-
-            // Load registration status
-            const regStatus = localStorage.getItem('isRegistrationComplete') === 'true';
-            setIsRegistrationComplete(regStatus);
-
-            setIsLoading(false);
-            return;
-          }
+        // If no authenticated user, don't try to load profiles
+        if (!authenticatedUser) {
+          console.log('[ProfileProvider] No authenticated user, skipping profile load');
+          setCurrentProfile(defaultEmptyProfile);
+          setProfiles([]);
+          setCurrentParentId(null);
+          setParentProfile(null);
+          setIsLoading(false);
+          return;
         }
 
-        // Path 1.5: User just logged in but hasn't registered yet (has loginEmail but no savedParentId)
-        if (loginEmail && !savedParentId) {
-          console.log('[ProfileProvider] User logged in with email:', loginEmail);
-          // Load all profiles to see if one matches this email
+        // Path 1: User is authenticated - load their profiles by email
+        const userEmail = authenticatedUser.email?.toLowerCase();
+        if (userEmail) {
+          console.log('[ProfileProvider] User authenticated with email:', userEmail);
+
+          // Load all profiles to find one matching this email
           const allProfiles = await supabaseProfileService.loadProfiles();
           console.log('[ProfileProvider] Loaded all profiles:', allProfiles.length);
 
-          // Find a parent profile matching the login email (case-insensitive)
-          const matchingParent = allProfiles.find(p => p.type === 'parent' && p.email?.toLowerCase() === loginEmail.toLowerCase());
+          // Find a parent profile matching the authenticated user's email
+          const matchingParent = allProfiles.find(
+            p => p.type === 'parent' && p.email?.toLowerCase() === userEmail
+          );
 
           if (matchingParent) {
-            console.log('[ProfileProvider] Found matching parent for email:', loginEmail);
+            console.log('[ProfileProvider] Found matching parent for authenticated user:', userEmail);
             // Load that parent and their children
             const parentAndChildren = await supabaseProfileService.loadProfilesForParent(matchingParent.id);
             const profilesWithGoals = await supabaseProfileService.loadProfilesWithGoals(parentAndChildren);
@@ -113,16 +94,22 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
             setProfiles(profilesWithGoals);
             setCurrentProfile(profilesWithGoals[0]);
             setParentProfile(matchingParent);
+
+            // Cache the parent ID for quick access
             localStorage.setItem('currentParentId', matchingParent.id);
             localStorage.setItem('parentProfile', JSON.stringify(matchingParent));
             localStorage.setItem('isRegistrationComplete', 'true');
 
+            console.log('[ProfileProvider] Profiles loaded successfully for:', userEmail);
             setIsLoading(false);
             return;
           } else {
-            // No profile found for this email - user must register first
-            console.log('[ProfileProvider] No profile found for email:', loginEmail, '- user needs to register');
-            // Set up minimal state so registration can proceed
+            // No profile found for this authenticated user - they need to register
+            console.log('[ProfileProvider] No profile found for authenticated user:', userEmail, '- user needs to register');
+            setCurrentProfile(defaultEmptyProfile);
+            setProfiles([]);
+            setCurrentParentId(null);
+            setParentProfile(null);
             setIsLoading(false);
             return;
           }
