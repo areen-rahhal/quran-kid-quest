@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,8 +23,8 @@ export const ChildProfileForm = ({ onSubmit, onCancel, isLoading = false }: Chil
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
-    age: '',
-    selectedGoals: [] as string[],
+    dob: '',
+    selectedGoal: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -39,13 +39,31 @@ export const ChildProfileForm = ({ onSubmit, onCancel, isLoading = false }: Chil
       newErrors.name = t('common.validation.nameMax');
     }
 
-    if (formData.age && (isNaN(Number(formData.age)) || Number(formData.age) < 1 || Number(formData.age) > 120)) {
-      newErrors.age = t('common.validation.ageInvalid');
+    if (formData.dob) {
+      const dob = new Date(formData.dob);
+      const today = new Date();
+      if (dob > today) {
+        newErrors.dob = t('common.validation.dobInvalid') || 'Date of birth cannot be in the future';
+      }
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
+  const calculateAge = useCallback((dobString: string): number | null => {
+    if (!dobString) return null;
+    const dob = new Date(dobString);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+    return age;
+  }, []);
+
+  const displayAge = useMemo(() => calculateAge(formData.dob), [formData.dob, calculateAge]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,12 +71,12 @@ export const ChildProfileForm = ({ onSubmit, onCancel, isLoading = false }: Chil
       return;
     }
 
-    // Create goal objects from selected goal IDs
-    const goals = formData.selectedGoals
-      .map(goalId => {
-        const goalConfig = getGoalById(goalId);
-        return goalConfig ? {
-          id: goalId,
+    const goals = [];
+    if (formData.selectedGoal) {
+      const goalConfig = getGoalById(formData.selectedGoal);
+      if (goalConfig) {
+        goals.push({
+          id: formData.selectedGoal,
           name: goalConfig.nameEnglish,
           status: 'in-progress',
           completedSurahs: 0,
@@ -66,17 +84,19 @@ export const ChildProfileForm = ({ onSubmit, onCancel, isLoading = false }: Chil
           phaseSize: goalConfig.metadata?.defaultPhaseSize || 5,
           phases: null,
           currentUnitId: goalConfig.units?.[0]?.id?.toString(),
-        } : null;
-      })
-      .filter(Boolean) as any[];
+        });
+      }
+    }
+
+    const age = formData.dob ? calculateAge(formData.dob) : undefined;
 
     const childData: Omit<Profile, 'id'> = {
       name: formData.name.trim(),
       type: 'child',
       avatar: undefined,
-      age: formData.age ? Number(formData.age) : undefined,
+      age: age,
       goalsCount: goals.length,
-      goals: goals,
+      goals: goals.length > 0 ? goals : undefined,
       achievements: {
         stars: 0,
         streak: 0,
@@ -111,53 +131,43 @@ export const ChildProfileForm = ({ onSubmit, onCancel, isLoading = false }: Chil
         {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
       </div>
 
-      {/* Age Input */}
+      {/* Date of Birth Input */}
       <div className="space-y-2">
-        <Label htmlFor="age" className="text-sm font-medium">
-          {t('common.age')}
+        <Label htmlFor="dob" className="text-sm font-medium">
+          {t('learnersProfiles.dateOfBirth') || 'Date of Birth'} <span className="text-muted-foreground text-xs">(Optional)</span>
         </Label>
-        <Input
-          id="age"
-          type="number"
-          placeholder={t('common.optional')}
-          value={formData.age}
-          onChange={(e) => setFormData(prev => ({ ...prev, age: e.target.value }))}
-          className="h-10"
-          min="1"
-          max="120"
+        <input
+          id="dob"
+          type="date"
+          value={formData.dob}
+          onChange={(e) => setFormData(prev => ({ ...prev, dob: e.target.value }))}
+          className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground h-10"
         />
-        {errors.age && <p className="text-xs text-destructive">{errors.age}</p>}
+        {displayAge !== null && (
+          <p className="text-xs text-muted-foreground">
+            {displayAge} {displayAge === 1 ? 'year' : 'years'} old
+          </p>
+        )}
+        {errors.dob && <p className="text-xs text-destructive">{errors.dob}</p>}
       </div>
 
-      {/* Goals Selection */}
-      <div className="space-y-3">
-        <Label className="text-sm font-medium">
-          {t('common.selectGoals') || 'Select Goals'} <span className="text-muted-foreground text-xs">(Optional)</span>
+      {/* Goals Selection Dropdown */}
+      <div className="space-y-2">
+        <Label htmlFor="goal-select" className="text-sm font-medium">
+          {t('common.selectGoals') || 'Select Goal'} <span className="text-muted-foreground text-xs">(Optional)</span>
         </Label>
-        <div className="space-y-2">
-          {getAllGoals().map((goal) => (
-            <div key={goal.id} className="flex items-center gap-3 p-3 rounded-lg border border-border hover:border-primary/50 cursor-pointer transition-colors"
-              onClick={() => {
-                setFormData(prev => ({
-                  ...prev,
-                  selectedGoals: prev.selectedGoals.includes(goal.id)
-                    ? prev.selectedGoals.filter(id => id !== goal.id)
-                    : [...prev.selectedGoals, goal.id]
-                }));
-              }}>
-              <input
-                type="checkbox"
-                id={`goal-${goal.id}`}
-                checked={formData.selectedGoals.includes(goal.id)}
-                onChange={() => {}}
-                className="w-4 h-4 rounded border-border cursor-pointer"
-              />
-              <Label htmlFor={`goal-${goal.id}`} className="text-sm font-medium cursor-pointer flex-1">
+        <Select value={formData.selectedGoal} onValueChange={(value) => setFormData(prev => ({ ...prev, selectedGoal: value }))}>
+          <SelectTrigger id="goal-select" className="h-10">
+            <SelectValue placeholder={t('common.selectGoal') || 'Select a goal'} />
+          </SelectTrigger>
+          <SelectContent>
+            {getAllGoals().map((goal) => (
+              <SelectItem key={goal.id} value={goal.id}>
                 {goal.nameEnglish}
-              </Label>
-            </div>
-          ))}
-        </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Action Buttons */}

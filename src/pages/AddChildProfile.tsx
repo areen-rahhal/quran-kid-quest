@@ -64,7 +64,7 @@ const AddChildProfile = () => {
               >
                 <ChevronLeft className="h-5 w-5" />
               </Button>
-              <h1 className="text-2xl font-bold text-foreground">{t('learnersProfiles.createNewChild') || 'Add New Child'}</h1>
+              <h1 className="text-2xl font-bold text-foreground">{t('learnersProfiles.addChildProfile') || 'Add Child Profile'}</h1>
             </div>
           </div>
         </div>
