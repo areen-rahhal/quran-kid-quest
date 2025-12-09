@@ -129,35 +129,35 @@ export const ChildProfileForm = ({ onSubmit, onCancel, isLoading = false }: Chil
         {errors.age && <p className="text-xs text-destructive">{errors.age}</p>}
       </div>
 
-      {/* Tajweed Level */}
-      <div className="space-y-2">
-        <Label htmlFor="tajweedLevel" className="text-sm font-medium">
-          {t('common.tajweedLevel')}
+      {/* Goals Selection */}
+      <div className="space-y-3">
+        <Label className="text-sm font-medium">
+          {t('common.selectGoals') || 'Select Goals'} <span className="text-muted-foreground text-xs">(Optional)</span>
         </Label>
-        <Select value={formData.tajweedLevel} onValueChange={(value) => setFormData(prev => ({ ...prev, tajweedLevel: value as any }))}>
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="beginner">{t('common.tajweed.beginner')}</SelectItem>
-            <SelectItem value="intermediate">{t('common.tajweed.intermediate')}</SelectItem>
-            <SelectItem value="advanced">{t('common.tajweed.advanced')}</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Arabic Proficiency Toggle */}
-      <div className="flex items-center gap-3 p-3 rounded-lg bg-accent/50">
-        <input
-          type="checkbox"
-          id="arabicProficiency"
-          checked={formData.arabicProficiency}
-          onChange={(e) => setFormData(prev => ({ ...prev, arabicProficiency: e.target.checked }))}
-          className="w-4 h-4 rounded border-border cursor-pointer"
-        />
-        <Label htmlFor="arabicProficiency" className="text-sm font-medium cursor-pointer flex-1">
-          {t('common.arabicProficiency')}
-        </Label>
+        <div className="space-y-2">
+          {getAllGoals().map((goal) => (
+            <div key={goal.id} className="flex items-center gap-3 p-3 rounded-lg border border-border hover:border-primary/50 cursor-pointer transition-colors"
+              onClick={() => {
+                setFormData(prev => ({
+                  ...prev,
+                  selectedGoals: prev.selectedGoals.includes(goal.id)
+                    ? prev.selectedGoals.filter(id => id !== goal.id)
+                    : [...prev.selectedGoals, goal.id]
+                }));
+              }}>
+              <input
+                type="checkbox"
+                id={`goal-${goal.id}`}
+                checked={formData.selectedGoals.includes(goal.id)}
+                onChange={() => {}}
+                className="w-4 h-4 rounded border-border cursor-pointer"
+              />
+              <Label htmlFor={`goal-${goal.id}`} className="text-sm font-medium cursor-pointer flex-1">
+                {goal.nameEnglish}
+              </Label>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Action Buttons */}
