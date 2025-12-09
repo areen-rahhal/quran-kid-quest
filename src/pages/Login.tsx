@@ -101,6 +101,16 @@ const Login = () => {
           <button
             type="button"
             onClick={() => {
+              setEmail("areenrahhal@gmail.com");
+              setPassword("password");
+            }}
+            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors"
+          >
+            Use Areen
+          </button>
+          <button
+            type="button"
+            onClick={() => {
               setEmail("Aya@testmail.com");
               setPassword("123456");
             }}
