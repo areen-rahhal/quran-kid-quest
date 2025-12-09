@@ -82,8 +82,9 @@ export const authService = {
         // Development fallback: Allow testing with dev credentials when Supabase Auth users don't exist
         if (isDevelopment && email.toLowerCase() in DEV_TEST_CREDENTIALS) {
           const expectedPassword = DEV_TEST_CREDENTIALS[email.toLowerCase() as keyof typeof DEV_TEST_CREDENTIALS];
+          const trimmedPassword = password.trim();
 
-          if (password === expectedPassword) {
+          if (trimmedPassword === expectedPassword) {
             console.log('[authService] Using development fallback for:', email);
 
             // Create a mock user object for development
