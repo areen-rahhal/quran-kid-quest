@@ -13,13 +13,24 @@ const Login = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    const newEmail = email.toLowerCase();
+
+    // Clear previous login state to force fresh profile loading
+    const previousEmail = localStorage.getItem('loginEmail');
+    if (previousEmail && previousEmail !== newEmail) {
+      // User is logging in with a different email - clear old profile state
+      localStorage.removeItem('currentParentId');
+      localStorage.removeItem('parentProfile');
+      localStorage.removeItem('isRegistrationComplete');
+    }
+
     // Save the logged-in email to localStorage so ProfileContext knows who is logging in
-    localStorage.setItem('loginEmail', email.toLowerCase());
+    localStorage.setItem('loginEmail', newEmail);
 
     // Navigate based on user type
     // Aya (parent with existing goals) goes to goals page
     // The Goals page will automatically default to the parent profile
-    if (email.toLowerCase() === "aya@testmail.com") {
+    if (newEmail === "aya@testmail.com") {
       navigate("/goals");
     } else {
       // Other users go to onboarding
