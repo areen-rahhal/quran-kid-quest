@@ -156,6 +156,11 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
             setProfiles(profilesWithGoals);
             if (profilesWithGoals.length > 0) {
               setCurrentProfile(profilesWithGoals[0]);
+              // Set parent profile if it's in the loaded profiles
+              const loadedParentProfile = profilesWithGoals.find(p => p.id === parentIdToLoad);
+              if (loadedParentProfile) {
+                setParentProfile(loadedParentProfile);
+              }
             }
           } else {
             // Fallback: load all profiles with goals
@@ -163,6 +168,11 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
             setProfiles(profilesWithGoals);
             if (profilesWithGoals.length > 0) {
               setCurrentProfile(profilesWithGoals[0]);
+              // Set parent profile to the first parent found
+              const parentProfile = profilesWithGoals.find(p => p.type === 'parent');
+              if (parentProfile) {
+                setParentProfile(parentProfile);
+              }
             }
           }
         }
