@@ -73,7 +73,7 @@ const GoalsModalMenuComponent = ({ profileId, isOpen, onClose }: GoalsModalMenuP
     >
       {/* Modal Container */}
       <div
-        className="fixed inset-0 z-50 flex flex-col bg-white"
+        className="absolute inset-0 flex flex-col bg-white overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
