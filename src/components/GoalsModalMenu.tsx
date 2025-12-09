@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGoals } from '@/hooks/useGoals';
 import { useProfile } from '@/hooks/useProfile';
@@ -17,6 +17,18 @@ const GoalsModalMenuComponent = ({ profileId, isOpen, onClose }: GoalsModalMenuP
   const { addGoal, profiles } = useProfile();
   const isArabic = i18n.language === 'ar';
   const [isProcessing, setIsProcessing] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isMountedRef = useRef(true);
+
+  // Cleanup timeouts on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   // Get the current profile from the profiles list
   const profile = profiles.find(p => p.id === profileId);
@@ -46,18 +58,22 @@ const GoalsModalMenuComponent = ({ profileId, isOpen, onClose }: GoalsModalMenuP
       addGoal(profileId, goalId, goalName);
       console.log('[handleGoalSelect] Goal added successfully, closing modal');
       // Delay close to ensure state updates complete before modal closes
-      setTimeout(() => {
-        console.log('[handleGoalSelect] Closing modal after goal addition');
-        onClose();
-        setIsProcessing(false);
+      timeoutRef.current = setTimeout(() => {
+        if (isMountedRef.current) {
+          console.log('[handleGoalSelect] Closing modal after goal addition');
+          onClose();
+          setIsProcessing(false);
+        }
       }, 200);
     } catch (error) {
       console.error('[handleGoalSelect] ERROR adding goal:', error);
       // Close modal and reset state even if there's an error
-      setTimeout(() => {
-        console.error('[handleGoalSelect] Closing modal due to error');
-        onClose();
-        setIsProcessing(false);
+      timeoutRef.current = setTimeout(() => {
+        if (isMountedRef.current) {
+          console.error('[handleGoalSelect] Closing modal due to error');
+          onClose();
+          setIsProcessing(false);
+        }
       }, 200);
     }
   };
