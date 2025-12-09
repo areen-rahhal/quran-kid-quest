@@ -146,7 +146,8 @@ export const authService = {
           const trimmedPassword = password.trim();
 
           if (trimmedPassword === expectedPassword) {
-            console.log('[authService] Using development fallback for:', email);
+            console.log('[authService] ✅ Using development fallback for:', email, '(Supabase rejected with: ' + error.message + ')');
+            console.log('[authService] This is expected in development mode - test users are mocked locally');
 
             // Create a mock user object for development
             const mockUser = {
