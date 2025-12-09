@@ -3,6 +3,7 @@ import { User } from '@supabase/supabase-js';
 import { Profile, RegistrationData, ProfileUpdate } from '@/lib/validation';
 import { profileService } from '@/services/profileService';
 import { supabaseProfileService } from '@/services/supabaseProfileService';
+import { getSupabaseHealth } from '@/lib/supabaseHealth';
 
 interface ProfileContextType {
   currentProfile: Profile;
@@ -68,6 +69,12 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
           setParentProfile(null);
           setIsLoading(false);
           return;
+        }
+
+        // Check if Supabase is reachable
+        const isSupabaseHealthy = await getSupabaseHealth();
+        if (!isSupabaseHealthy) {
+          console.warn('[ProfileProvider] Supabase is not reachable - will continue with cached data only');
         }
 
         // STEP 1: Restore cached profile data immediately (cache-first strategy)
