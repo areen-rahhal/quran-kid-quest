@@ -214,36 +214,6 @@ const Login = () => {
           >
             {t('login.testAccounts.parent')}
           </button>
-          <button
-            type="button"
-            onClick={async () => {
-              setEmail("ahmad@testmail.com");
-              setPassword("TestPass");
-              setLocalError("");
-              clearError();
-              await signIn("ahmad@testmail.com", "TestPass");
-              navigate("/onboarding");
-            }}
-            disabled={isSigningIn}
-            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors disabled:opacity-50"
-          >
-            {t('login.testAccounts.newUser')}
-          </button>
-          <button
-            type="button"
-            onClick={async () => {
-              setEmail("myadmin@google.com");
-              setPassword("123");
-              setLocalError("");
-              clearError();
-              await signIn("myadmin@google.com", "123");
-              navigate("/goals");
-            }}
-            disabled={isSigningIn}
-            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors disabled:opacity-50"
-          >
-            {t('login.testAccounts.admin')}
-          </button>
         </div>
       </div>
     </div>
