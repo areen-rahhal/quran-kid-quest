@@ -9,6 +9,22 @@ export interface AuthResult {
 }
 
 /**
+ * Development-only test credentials
+ * These are only used in development mode when Supabase Auth users don't exist yet
+ */
+const DEV_TEST_CREDENTIALS = {
+  'areenrahhal@gmail.com': 'password',
+  'aya@testmail.com': '123456',
+  'ahmad@testmail.com': 'TestPass',
+  'myadmin@google.com': '123',
+};
+
+/**
+ * Development mode check
+ */
+const isDevelopment = import.meta.env.DEV;
+
+/**
  * Authentication Service
  * Handles all Supabase Auth operations following proper security patterns
  */
