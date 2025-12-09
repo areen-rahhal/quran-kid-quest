@@ -159,8 +159,10 @@ const Login = () => {
               setPassword("password");
               setLocalError("");
               clearError();
-              await signIn("areenrahhal@gmail.com", "password");
-              navigate("/onboarding");
+              const success = await signIn("areenrahhal@gmail.com", "password");
+              if (success) {
+                navigate("/onboarding");
+              }
             }}
             disabled={isSigningIn}
             className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors disabled:opacity-50"
@@ -174,8 +176,10 @@ const Login = () => {
               setPassword("123456");
               setLocalError("");
               clearError();
-              await signIn("aya@testmail.com", "123456");
-              navigate("/goals");
+              const success = await signIn("aya@testmail.com", "123456");
+              if (success) {
+                navigate("/goals");
+              }
             }}
             disabled={isSigningIn}
             className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors disabled:opacity-50"
