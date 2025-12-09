@@ -107,6 +107,7 @@ const Goals = () => {
     
     // Only update if the index actually changed to prevent re-render loops
     setCurrentGoalIndex(prev => prev === newIndex ? prev : newIndex);
+    }
   }, [currentProfile.goals?.length, currentProfile.currentGoal, hasAppliedUrlParams, searchParams]);
 
 
