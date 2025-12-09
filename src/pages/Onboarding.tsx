@@ -38,12 +38,16 @@ const Onboarding = () => {
           <div className="flex items-center gap-4">
             <Avatar className="h-12 w-12 border-2 border-primary">
               <AvatarFallback className="bg-gradient-primary text-primary-foreground text-lg">
-                {getInitials(parentProfile?.name)}
+                {getInitials(parentProfile?.name || currentProfile?.name)}
               </AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-xs font-medium text-muted-foreground">Welcome {parentProfile?.name}</p>
-              <h2 className="text-lg font-bold text-foreground">{parentProfile?.name || "User"}</h2>
+              <p className="text-xs font-medium text-muted-foreground">
+                Welcome {isLoading ? "..." : (parentProfile?.name || currentProfile?.name || "User")}
+              </p>
+              <h2 className="text-lg font-bold text-foreground">
+                {isLoading ? "Loading..." : (parentProfile?.name || currentProfile?.name || "User")}
+              </h2>
             </div>
           </div>
           <button
