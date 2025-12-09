@@ -43,11 +43,19 @@ const Onboarding = () => {
             onClick={() => navigate(`/learner/${currentProfile.id}`)}
             title="View profile"
           >
-            <Avatar className="h-12 w-12 border-2 border-primary">
-              <AvatarFallback className="bg-gradient-primary text-primary-foreground text-lg">
-                {getInitials(parentProfile?.name || currentProfile?.name)}
-              </AvatarFallback>
-            </Avatar>
+            {currentProfile.avatar ? (
+              <img
+                src={getAvatarImageUrl(currentProfile.avatar)}
+                alt={currentProfile.name}
+                className="h-12 w-12 rounded-full border-2 border-primary object-cover"
+              />
+            ) : (
+              <Avatar className="h-12 w-12 border-2 border-primary">
+                <AvatarFallback className="bg-gradient-primary text-primary-foreground text-lg">
+                  {getInitials(parentProfile?.name || currentProfile?.name)}
+                </AvatarFallback>
+              </Avatar>
+            )}
             <div>
               <p className="text-xs font-medium text-muted-foreground">
                 Welcome {parentProfile?.name || currentProfile?.name || "User"}
