@@ -42,13 +42,22 @@ const Learner = () => {
               size="icon"
               onClick={() => navigate(-1)}
               className="h-10 w-10"
+              title="Go back"
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
             <h1 className="text-xl font-bold text-foreground">
               {t('learnersProfiles.editProfile') || 'Edit Profile'}
             </h1>
-            <div className="w-10" />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleLogout}
+              className="h-10 w-10"
+              title="Logout"
+            >
+              <LogOut className="h-5 w-5" />
+            </Button>
           </div>
         </div>
       </div>
