@@ -27,7 +27,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         console.log('[AuthProvider] Initializing auth state');
         if (import.meta.env.DEV) {
-          console.warn('[AuthProvider] 🔧 DEVELOPMENT MODE: Using fallback authentication. Create real Supabase Auth users for production.');
+          console.info('[AuthProvider] 🔧 DEVELOPMENT MODE: Using mock authentication fallback for testing');
+          console.info('[AuthProvider] Valid test credentials: areenrahhal@gmail.com / password, aya@testmail.com / 123456');
+          console.info('[AuthProvider] See AUTH.DEVELOPMENT.MODE.md for details on moving to production.');
         }
         setIsLoading(true);
 
