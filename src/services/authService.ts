@@ -139,8 +139,6 @@ export const authService = {
       });
 
       if (error) {
-        console.error('[authService] Sign in error:', error.message);
-
         // Development fallback: Allow testing with dev credentials when Supabase Auth users don't exist
         // Only allows emails that have matching profiles in the Supabase profiles table
         if (isDevelopment && email.toLowerCase() in DEV_TEST_PASSWORDS) {
