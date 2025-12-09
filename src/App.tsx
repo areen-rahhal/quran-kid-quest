@@ -21,6 +21,38 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+/**
+ * Wrapper component to pass authenticated user from AuthContext to ProfileProvider
+ */
+const AppContent = () => {
+  const { user } = useAuth();
+  return (
+    <ProfileProvider authenticatedUser={user}>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/goals" element={<Goals />} />
+          <Route path="/unit-path/:profileId/:goalId/:unitId" element={<UnitPath />} />
+          <Route path="/learners-profiles" element={<LearnersProfiles />} />
+          <Route path="/add-child-profile" element={<AddChildProfile />} />
+          <Route path="/learner/:id" element={<Learner />} />
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </ProfileProvider>
+  );
+};
+
+// Need to import useAuth here
+import { useAuth } from "@/contexts/AuthContext";
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
