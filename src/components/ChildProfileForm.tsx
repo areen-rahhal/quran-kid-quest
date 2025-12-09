@@ -53,15 +53,30 @@ export const ChildProfileForm = ({ onSubmit, onCancel, isLoading = false }: Chil
       return;
     }
 
+    // Create goal objects from selected goal IDs
+    const goals = formData.selectedGoals
+      .map(goalId => {
+        const goalConfig = getGoalById(goalId);
+        return goalConfig ? {
+          id: goalId,
+          name: goalConfig.nameEnglish,
+          status: 'in-progress',
+          completedSurahs: 0,
+          totalSurahs: goalConfig.metadata?.surahCount || 0,
+          phaseSize: goalConfig.metadata?.defaultPhaseSize || 5,
+          phases: null,
+          currentUnitId: goalConfig.units?.[0]?.id?.toString(),
+        } : null;
+      })
+      .filter(Boolean) as any[];
+
     const childData: Omit<Profile, 'id'> = {
       name: formData.name.trim(),
       type: 'child',
-      avatar: formData.avatar,
+      avatar: undefined,
       age: formData.age ? Number(formData.age) : undefined,
-      arabicProficiency: formData.arabicProficiency,
-      tajweedLevel: formData.tajweedLevel,
-      goalsCount: 0,
-      goals: [],
+      goalsCount: goals.length,
+      goals: goals,
       achievements: {
         stars: 0,
         streak: 0,
@@ -76,8 +91,6 @@ export const ChildProfileForm = ({ onSubmit, onCancel, isLoading = false }: Chil
       console.error('Error submitting child profile form:', error);
     }
   };
-
-  const selectedAvatar = AVATAR_OPTIONS.find(a => a.id === formData.avatar);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
