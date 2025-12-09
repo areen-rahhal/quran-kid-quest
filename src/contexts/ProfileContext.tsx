@@ -180,17 +180,9 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         const regStatus = localStorage.getItem('isRegistrationComplete') === 'true';
         setIsRegistrationComplete(regStatus);
 
-        // Load parent profile from localStorage if available, otherwise use loaded parent
-        const parentData = localStorage.getItem('parentProfile');
-        if (parentData) {
-          try {
-            setParentProfile(JSON.parse(parentData));
-          } catch (e) {
-            console.error('Failed to parse parent profile', e);
-          }
-        }
-        // If no localStorage parent data but we have a parent profile loaded, keep the loaded one
-        // (don't override with undefined from localStorage)
+        // Note: Don't load parentProfile from localStorage here because:
+        // - If we got here via proper profile loading, parentProfile is already correctly set
+        // - Loading from localStorage would override the correct profile with potentially stale data
 
         setIsLoading(false);
       } catch (error) {
