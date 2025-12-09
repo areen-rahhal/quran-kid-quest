@@ -194,6 +194,7 @@ export const authService = {
           }
         }
 
+        console.error('[authService] Sign in error:', error.message);
         return { success: false, error: error.message };
       }
 
