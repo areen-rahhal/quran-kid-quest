@@ -47,8 +47,8 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
       age: age,
     });
 
-    // Navigate back to learners profiles screen
-    navigate('/learners-profiles');
+    // Navigate back to onboarding screen to see updated profile
+    navigate('/onboarding');
   };
 
   const handleDeleteGoal = (goalId: string) => {
