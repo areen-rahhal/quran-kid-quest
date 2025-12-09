@@ -23,10 +23,8 @@ export const ChildProfileForm = ({ onSubmit, onCancel, isLoading = false }: Chil
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
-    avatar: AVATAR_OPTIONS[0]?.id || 'avatar-default',
     age: '',
-    arabicProficiency: false,
-    tajweedLevel: 'beginner' as const,
+    selectedGoals: [] as string[],
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
