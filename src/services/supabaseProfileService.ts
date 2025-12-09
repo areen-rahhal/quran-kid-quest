@@ -13,18 +13,39 @@ export const supabaseProfileService = {
   async loadProfiles(): Promise<Profile[]> {
     try {
       console.log('[supabaseProfileService] Loading profiles from Supabase');
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('created_at', { ascending: true });
 
-      if (error) {
-        console.error('[supabaseProfileService] Error loading profiles:', error);
+      // Add timeout to prevent hanging requests
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .order('created_at', { ascending: true });
+
+        clearTimeout(timeoutId);
+
+        if (error) {
+          console.error('[supabaseProfileService] Error loading profiles:', {
+            message: error.message,
+            code: error.code,
+            status: error.status,
+          });
+          return [];
+        }
+
+        console.log('[supabaseProfileService] Loaded profiles:', data?.length);
+        return (data || []).map(dbProfile => convertDbProfileToProfile(dbProfile));
+      } catch (fetchError) {
+        clearTimeout(timeoutId);
+        if (fetchError instanceof Error && fetchError.name === 'AbortError') {
+          console.error('[supabaseProfileService] Request timeout loading profiles');
+        } else {
+          console.error('[supabaseProfileService] Network error loading profiles:', fetchError);
+        }
         return [];
       }
-
-      console.log('[supabaseProfileService] Loaded profiles:', data?.length);
-      return (data || []).map(dbProfile => convertDbProfileToProfile(dbProfile));
     } catch (error) {
       console.error('[supabaseProfileService] Exception loading profiles:', error);
       return [];
