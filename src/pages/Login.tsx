@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { BookOpen } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { authDevHelper } from "@/services/authDevHelper";
 
 const Login = () => {
   const navigate = useNavigate();
