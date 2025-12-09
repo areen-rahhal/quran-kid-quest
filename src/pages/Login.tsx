@@ -13,6 +13,9 @@ const Login = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    // Save the logged-in email to localStorage so ProfileContext knows who is logging in
+    localStorage.setItem('loginEmail', email.toLowerCase());
+
     // Navigate based on user type
     // Aya (parent with existing goals) goes to goals page
     // The Goals page will automatically default to the parent profile
