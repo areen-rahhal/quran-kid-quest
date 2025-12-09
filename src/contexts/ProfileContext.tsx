@@ -411,6 +411,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem('parentProfile');
     localStorage.removeItem('currentParentId');
     localStorage.removeItem('isRegistrationComplete');
+    localStorage.removeItem('loginEmail');
   }, []);
 
   return (
