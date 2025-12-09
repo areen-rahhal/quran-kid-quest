@@ -1,6 +1,8 @@
 import { supabase } from '@/lib/supabase';
 import { Profile, RegistrationData, ProfileUpdate } from '@/lib/validation';
 import { withSupabaseTimeout } from '@/lib/supabaseTimeout';
+import type { DbProfileRow, DbGoalRow } from '@/types/database';
+import { validateDbProfileRow, tryValidateDbProfileRow } from '@/types/database';
 import { goalService } from './goalService';
 
 /**
@@ -548,28 +550,54 @@ export const supabaseProfileService = {
 
 /**
  * Convert database profile row to Profile interface
+ * Validates DB row shape at runtime for type safety
  */
 function convertDbProfileToProfile(dbProfile: any): Profile {
+  // Validate at runtime to catch schema mismatches
+  const validated = tryValidateDbProfileRow(dbProfile);
+  if (!validated) {
+    console.warn('[supabaseProfileService] Invalid profile row from database, using fallback conversion:', dbProfile);
+    // Fallback conversion for backwards compatibility
+    return {
+      id: dbProfile.id,
+      name: dbProfile.name,
+      type: dbProfile.type as 'parent' | 'child',
+      parentId: dbProfile.parent_id,
+      avatar: dbProfile.avatar,
+      email: dbProfile.email,
+      age: dbProfile.age,
+      arabicProficiency: dbProfile.arabic_proficiency,
+      arabicAccent: dbProfile.arabic_accent,
+      tajweedLevel: dbProfile.tajweed_level as 'beginner' | 'intermediate' | 'advanced' | undefined,
+      currentGoal: dbProfile.current_goal,
+      goalsCount: dbProfile.goals_count || 0,
+      streak: dbProfile.streak || 0,
+      achievements: dbProfile.achievements || {
+        stars: 0,
+        streak: 0,
+        recitations: 0,
+        goalsCompleted: 0,
+      },
+      goals: [],
+    };
+  }
+
+  // Use validated row (type-safe)
   return {
-    id: dbProfile.id,
-    name: dbProfile.name,
-    type: dbProfile.type as 'parent' | 'child',
-    parentId: dbProfile.parent_id,
-    avatar: dbProfile.avatar,
-    email: dbProfile.email,
-    age: dbProfile.age,
-    arabicProficiency: dbProfile.arabic_proficiency,
-    arabicAccent: dbProfile.arabic_accent,
-    tajweedLevel: dbProfile.tajweed_level as 'beginner' | 'intermediate' | 'advanced' | undefined,
-    currentGoal: dbProfile.current_goal,
-    goalsCount: dbProfile.goals_count || 0,
-    streak: dbProfile.streak || 0,
-    achievements: dbProfile.achievements || {
-      stars: 0,
-      streak: 0,
-      recitations: 0,
-      goalsCompleted: 0,
-    },
+    id: validated.id,
+    name: validated.name,
+    type: validated.type,
+    parentId: validated.parent_id,
+    avatar: validated.avatar,
+    email: validated.email,
+    age: validated.age,
+    arabicProficiency: validated.arabic_proficiency,
+    arabicAccent: validated.arabic_accent,
+    tajweedLevel: validated.tajweed_level,
+    currentGoal: validated.current_goal,
+    goalsCount: validated.goals_count,
+    streak: validated.streak,
+    achievements: validated.achievements,
     goals: [],
   };
 }
