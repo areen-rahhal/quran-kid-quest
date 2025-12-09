@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { withHealthCheckTimeout } from './supabaseTimeout';
 
 /**
  * Test Supabase connectivity
@@ -7,14 +8,12 @@ import { supabase } from './supabase';
 export async function testSupabaseConnection(): Promise<boolean> {
   try {
     console.log('[supabaseHealth] Testing Supabase connection...');
-    
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
     // Simple test: Try to get the auth session (doesn't require auth)
-    const { data, error } = await supabase.auth.getSession();
-    
-    clearTimeout(timeoutId);
+    const { data, error } = await withHealthCheckTimeout(
+      supabase.auth.getSession(),
+      'testSupabaseConnection'
+    );
 
     if (error) {
       console.warn('[supabaseHealth] Connection test returned error:', error.message);
@@ -24,7 +23,11 @@ export async function testSupabaseConnection(): Promise<boolean> {
     console.log('[supabaseHealth] ✓ Supabase connection is healthy');
     return true;
   } catch (error) {
-    console.error('[supabaseHealth] Failed to connect to Supabase:', error instanceof Error ? error.message : String(error));
+    if (error instanceof Error && error.message.includes('timed out')) {
+      console.warn('[supabaseHealth] Connection test timed out (Supabase may be slow or unreachable)');
+    } else {
+      console.error('[supabaseHealth] Failed to connect to Supabase:', error instanceof Error ? error.message : String(error));
+    }
     return false;
   }
 }
