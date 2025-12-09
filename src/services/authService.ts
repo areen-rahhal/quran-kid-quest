@@ -9,14 +9,13 @@ export interface AuthResult {
 }
 
 /**
- * Development-only test credentials
- * These are only used in development mode when Supabase Auth users don't exist yet
+ * Development-only test passwords for existing profiles
+ * ONLY emails with matching profiles in the database are allowed to login
+ * This ensures: "Only profiles that exist in the Supabase profile table should be able to login"
  */
-const DEV_TEST_CREDENTIALS = {
-  'areenrahhal@gmail.com': 'password',
-  'aya@testmail.com': '123456',
-  'ahmad@testmail.com': 'TestPass',
-  'myadmin@google.com': '123',
+const DEV_TEST_PASSWORDS: Record<string, string> = {
+  'areenrahhal@gmail.com': 'password',   // ✅ Areen exists in profiles table
+  'aya@testmail.com': '123456',          // ✅ Aya exists in profiles table
 };
 
 /**
