@@ -1,1 +1,90 @@
-import React, { ReactNode } from 'react';\nimport { logger } from '@/lib/logger';\n\ninterface ErrorBoundaryProps {\n  children: ReactNode;\n  fallback?: ReactNode;\n}\n\ninterface ErrorBoundaryState {\n  hasError: boolean;\n  error: Error | null;\n}\n\n/**\n * Global Error Boundary Component\n *\n * Catches React rendering errors and prevents the entire app from crashing.\n * Logs errors for debugging and displays a fallback UI.\n *\n * Usage:\n * <ErrorBoundary>\n *   <YourComponent />\n * </ErrorBoundary>\n */\nexport class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {\n  constructor(props: ErrorBoundaryProps) {\n    super(props);\n    this.state = { hasError: false, error: null };\n  }\n\n  static getDerivedStateFromError(error: Error): ErrorBoundaryState {\n    return { hasError: true, error };\n  }\n\n  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {\n    // Log error details for debugging\n    logger.error('ErrorBoundary', 'Uncaught React error in component tree', error);\n    console.error('ErrorInfo:', errorInfo.componentStack);\n  }\n\n  handleReset = (): void => {\n    this.setState({ hasError: false, error: null });\n  };\n\n  render(): ReactNode {\n    if (this.state.hasError) {\n      // Use provided fallback or default error UI\n      if (this.props.fallback) {\n        return this.props.fallback;\n      }\n\n      return (\n        <div\n          style={{\n            display: 'flex',\n            flexDirection: 'column',\n            alignItems: 'center',\n            justifyContent: 'center',\n            height: '100vh',\n            backgroundColor: '#f8f9fa',\n            fontFamily: 'system-ui, -apple-system, sans-serif',\n          }}\n        >\n          <div\n            style={{\n              maxWidth: '600px',\n              padding: '40px',\n              backgroundColor: 'white',\n              borderRadius: '8px',\n              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',\n              textAlign: 'center',\n            }}\n          >\n            <h1 style={{ color: '#d32f2f', marginBottom: '16px' }}>Something went wrong</h1>\n            <p style={{ color: '#666', marginBottom: '24px', fontSize: '16px' }}>\n              An unexpected error occurred. We've logged the details for debugging.\n            </p>\n\n            {process.env.NODE_ENV === 'development' && this.state.error && (\n              <details\n                style={{\n                  marginBottom: '24px',\n                  padding: '16px',\n                  backgroundColor: '#f5f5f5',\n                  borderRadius: '4px',\n                  textAlign: 'left',\n                  cursor: 'pointer',\n                }}\n              >\n                <summary style={{ fontWeight: 'bold', marginBottom: '8px' }}>Error details</summary>\n                <pre\n                  style={{\n                    margin: '8px 0 0 0',\n                    padding: '12px',\n                    backgroundColor: '#e0e0e0',\n                    borderRadius: '4px',\n                    overflow: 'auto',\n                    fontSize: '12px',\n                  }}\n                >\n                  {this.state.error.toString()}\n                  {this.state.error.stack && `\\n\\n${this.state.error.stack}`}\n                </pre>\n              </details>\n            )}\n\n            <button\n              onClick={this.handleReset}\n              style={{\n                padding: '12px 24px',\n                backgroundColor: '#1976d2',\n                color: 'white',\n                border: 'none',\n                borderRadius: '4px',\n                fontSize: '16px',\n                cursor: 'pointer',\n                marginRight: '12px',\n              }}\n            >\n              Try Again\n            </button>\n\n            <button\n              onClick={() => {\n                window.location.href = '/';\n              }}\n              style={{\n                padding: '12px 24px',\n                backgroundColor: '#757575',\n                color: 'white',\n                border: 'none',\n                borderRadius: '4px',\n                fontSize: '16px',\n                cursor: 'pointer',\n              }}\n            >\n              Go Home\n            </button>\n          </div>\n        </div>\n      );\n    }\n\n    return this.props.children;\n  }\n}\n
+import React, { ReactNode } from 'react';
+import { logger } from '@/lib/logger';
+
+interface ErrorBoundaryProps {
+  children: ReactNode;
+  fallback?: ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
+
+/**
+ * Global Error Boundary Component
+ *
+ * Catches React rendering errors and prevents the entire app from crashing.
+ * Logs errors for debugging and displays a fallback UI.
+ *
+ * Usage:
+ * <ErrorBoundary>
+ *   <YourComponent />
+ * </ErrorBoundary>
+ */
+export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
+    logger.error('ErrorBoundary', 'Uncaught React error in component tree', error);
+    console.error('ErrorInfo:', errorInfo.componentStack);
+  }
+
+  handleReset = (): void => {
+    this.setState({ hasError: false, error: null });
+  };
+
+  render(): ReactNode {
+    if (this.state.hasError) {
+      if (this.props.fallback) {
+        return this.props.fallback;
+      }
+
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', backgroundColor: '#f8f9fa', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+          <div style={{ maxWidth: '600px', padding: '40px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', textAlign: 'center' }}>
+            <h1 style={{ color: '#d32f2f', marginBottom: '16px' }}>Something went wrong</h1>
+            <p style={{ color: '#666', marginBottom: '24px', fontSize: '16px' }}>
+              An unexpected error occurred. We have logged the details for debugging.
+            </p>
+
+            {import.meta.env.DEV && this.state.error && (
+              <details style={{ marginBottom: '24px', padding: '16px', backgroundColor: '#f5f5f5', borderRadius: '4px', textAlign: 'left', cursor: 'pointer' }}>
+                <summary style={{ fontWeight: 'bold', marginBottom: '8px' }}>Error details (dev only)</summary>
+                <pre style={{ margin: '8px 0 0 0', padding: '12px', backgroundColor: '#e0e0e0', borderRadius: '4px', overflow: 'auto', fontSize: '12px' }}>
+                  {this.state.error.toString()}
+                  {this.state.error.stack && `\n\n${this.state.error.stack}`}
+                </pre>
+              </details>
+            )}
+
+            <button
+              onClick={this.handleReset}
+              style={{ padding: '12px 24px', backgroundColor: '#1976d2', color: 'white', border: 'none', borderRadius: '4px', fontSize: '16px', cursor: 'pointer', marginRight: '12px' }}
+            >
+              Try Again
+            </button>
+
+            <button
+              onClick={() => {
+                window.location.href = '/';
+              }}
+              style={{ padding: '12px 24px', backgroundColor: '#757575', color: 'white', border: 'none', borderRadius: '4px', fontSize: '16px', cursor: 'pointer' }}
+            >
+              Go Home
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
