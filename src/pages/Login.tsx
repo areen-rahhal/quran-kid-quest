@@ -14,18 +14,23 @@ const Login = () => {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     const newEmail = email.toLowerCase();
+    console.log('[Login] User attempting login:', newEmail);
 
     // Clear previous login state to force fresh profile loading
     const previousEmail = localStorage.getItem('loginEmail');
     if (previousEmail && previousEmail !== newEmail) {
+      console.log('[Login] Different user detected. Clearing old profile state:', previousEmail, '→', newEmail);
       // User is logging in with a different email - clear old profile state
       localStorage.removeItem('currentParentId');
       localStorage.removeItem('parentProfile');
       localStorage.removeItem('isRegistrationComplete');
+    } else if (!previousEmail) {
+      console.log('[Login] New login session');
     }
 
     // Save the logged-in email to localStorage so ProfileContext knows who is logging in
     localStorage.setItem('loginEmail', newEmail);
+    console.log('[Login] Saved loginEmail to localStorage:', newEmail);
 
     // Navigate based on user type
     // Aya (parent with existing goals) goes to goals page
