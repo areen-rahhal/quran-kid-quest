@@ -7,13 +7,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useProfile } from "@/hooks/useProfile";
 import { AVATAR_OPTIONS } from "@/utils/avatars";
-import { getGoalById } from "@/config/goals-data";
-
-const GOAL_OPTIONS = [
-  { value: "juz-30", label: "Juz' 30" },
-  { value: "juz-29", label: "Juz' 29" },
-  { value: "surah-bakarah", label: "Surah Al Bakarah" },
-];
+import { getGoalById, getAllGoals } from "@/config/goals-data";
 
 const Onboarding = () => {
   const navigate = useNavigate();
