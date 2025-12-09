@@ -4,42 +4,67 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BookOpen } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { signIn, isSigningIn, error, clearError } = useAuth();
+  const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [localError, setLocalError] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const newEmail = email.toLowerCase();
-    console.log('[Login] User attempting login:', newEmail);
 
-    // Clear previous login state to force fresh profile loading
-    const previousEmail = localStorage.getItem('loginEmail');
-    if (previousEmail && previousEmail !== newEmail) {
-      console.log('[Login] Different user detected. Clearing old profile state:', previousEmail, '→', newEmail);
-      // User is logging in with a different email - clear old profile state
-      localStorage.removeItem('currentParentId');
-      localStorage.removeItem('parentProfile');
-      localStorage.removeItem('isRegistrationComplete');
-    } else if (!previousEmail) {
-      console.log('[Login] New login session');
+    if (!newEmail || !password) {
+      setLocalError(t('login.validation.required') || 'Email and password are required');
+      return;
     }
 
-    // Save the logged-in email to localStorage so ProfileContext knows who is logging in
-    localStorage.setItem('loginEmail', newEmail);
-    console.log('[Login] Saved loginEmail to localStorage:', newEmail);
+    console.log('[Login] User attempting login:', newEmail);
+    setLocalError("");
+    clearError();
 
-    // Navigate based on user type
-    // Aya (parent with existing goals) goes to goals page
-    // The Goals page will automatically default to the parent profile
-    if (newEmail === "aya@testmail.com") {
-      navigate("/goals");
-    } else {
-      // Other users go to onboarding
-      navigate("/onboarding");
+    try {
+      const success = await signIn(newEmail, password);
+
+      if (success) {
+        console.log('[Login] Sign in successful, redirecting...');
+        toast({
+          title: t('login.success') || 'Welcome back!',
+          description: `Logged in as ${newEmail}`,
+        });
+
+        // Navigate based on user type
+        // Aya (parent with existing goals) goes to goals page
+        // The Goals page will automatically default to the parent profile
+        if (newEmail === "aya@testmail.com") {
+          navigate("/goals");
+        } else {
+          // Other users go to onboarding
+          navigate("/onboarding");
+        }
+      } else {
+        const errorMsg = error || t('login.failed') || 'Failed to sign in';
+        setLocalError(errorMsg);
+        toast({
+          title: t('login.error') || 'Sign in failed',
+          description: errorMsg,
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'An error occurred';
+      setLocalError(message);
+      toast({
+        title: t('login.error') || 'Error',
+        description: message,
+        variant: 'destructive',
+      });
     }
   };
 
