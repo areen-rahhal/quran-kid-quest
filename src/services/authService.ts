@@ -167,19 +167,24 @@ export const authService = {
 
             console.log('[authService] Development mode: Signed in user:', email);
 
+            const mockSession = {
+              user: mockUser,
+              access_token: `dev-token-${Date.now()}`,
+              token_type: 'bearer',
+              expires_in: 3600,
+              expires_at: Math.floor(Date.now() / 1000) + 3600,
+              refresh_token: `dev-refresh-${Date.now()}`,
+            } as any;
+
+            // Store the development session so it persists across page refreshes
+            storeDevSession(mockUser, mockSession);
+
             // Trigger auth state change to notify listeners
             // In development mode, we're simulating the auth response
             return {
               success: true,
               user: mockUser,
-              session: {
-                user: mockUser,
-                access_token: `dev-token-${Date.now()}`,
-                token_type: 'bearer',
-                expires_in: 3600,
-                expires_at: Math.floor(Date.now() / 1000) + 3600,
-                refresh_token: `dev-refresh-${Date.now()}`,
-              } as any,
+              session: mockSession,
             };
           } else {
             console.error('[authService] Development fallback: Invalid password for:', email);
