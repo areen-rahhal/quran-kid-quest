@@ -17,7 +17,10 @@ const Onboarding = () => {
 
   // Check if profile is valid (not the default 'unknown' placeholder)
   const isProfileValid = currentProfile && currentProfile.id !== 'unknown';
-  const canAddGoal = isProfileValid && !isLoading && !isAddingGoal;
+
+  // Allow goal addition if profile is valid, even if background refresh is happening
+  // isLoading only blocks goal addition if we truly don't have cached data yet
+  const canAddGoal = isProfileValid && !isAddingGoal;
 
   const handleLogout = () => {
     navigate("/");
