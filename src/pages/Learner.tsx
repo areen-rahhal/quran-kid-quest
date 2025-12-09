@@ -11,6 +11,12 @@ const Learner = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { profiles } = useProfile();
+  const { signOut } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/");
+  };
 
   const profile = profiles.find((p) => p.id === id);
 
