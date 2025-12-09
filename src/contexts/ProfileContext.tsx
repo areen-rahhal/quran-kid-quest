@@ -96,8 +96,8 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
           const allProfiles = await supabaseProfileService.loadProfiles();
           console.log('[ProfileProvider] Loaded all profiles:', allProfiles.length);
 
-          // Find a parent profile matching the login email
-          const matchingParent = allProfiles.find(p => p.type === 'parent' && p.email === loginEmail);
+          // Find a parent profile matching the login email (case-insensitive)
+          const matchingParent = allProfiles.find(p => p.type === 'parent' && p.email?.toLowerCase() === loginEmail.toLowerCase());
 
           if (matchingParent) {
             console.log('[ProfileProvider] Found matching parent for email:', loginEmail);
