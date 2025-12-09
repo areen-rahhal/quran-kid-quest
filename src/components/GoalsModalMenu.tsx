@@ -121,21 +121,14 @@ const GoalsModalMenuComponent = ({ profileId, isOpen, onClose }: GoalsModalMenuP
                 <button
                   key={goal.id}
                   onClick={(e) => {
-                    try {
-                      e.stopPropagation();
-                      if (!isAdded && !isProcessing) {
-                        console.log('[goalButton onClick] Attempting to add goal:', goal.id);
-                        handleGoalSelect(goal.id, goal.nameEnglish);
-                      } else if (isAdded) {
-                        console.log('[goalButton onClick] Goal already added, ignoring click');
-                      } else if (isProcessing) {
-                        console.log('[goalButton onClick] Already processing, ignoring click');
-                      }
-                    } catch (error) {
-                      console.error('[goalButton onClick] Unexpected error:', error);
-                      setIsProcessing(false);
-                      // Still close the modal even if there's an error
-                      onClose();
+                    e.stopPropagation();
+                    if (!isAdded && !isProcessing) {
+                      console.log('[goalButton onClick] Attempting to add goal:', goal.id);
+                      handleGoalSelect(goal.id, goal.nameEnglish);
+                    } else if (isAdded) {
+                      console.log('[goalButton onClick] Goal already added, ignoring click');
+                    } else if (isProcessing) {
+                      console.log('[goalButton onClick] Already processing, ignoring click');
                     }
                   }}
                   disabled={isAdded || isProcessing}
