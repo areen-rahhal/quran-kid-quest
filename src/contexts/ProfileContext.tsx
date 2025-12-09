@@ -115,69 +115,6 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
           }
         }
 
-        // Path 2: No savedParentId or loginEmail, need to load all profiles
-        console.log('[ProfileProvider] No saved parent ID, loading all profiles');
-        const allProfiles = await supabaseProfileService.loadProfiles();
-        console.log('[ProfileProvider] Loaded all profiles:', allProfiles.length);
-
-        if (allProfiles.length === 0) {
-          console.log('[ProfileProvider] No profiles in Supabase, creating defaults');
-          // Create default profiles if none exist
-          const defaultProfiles = await createDefaultProfiles();
-          setProfiles(defaultProfiles);
-          const parentProfile = defaultProfiles.find(p => p.type === 'parent');
-          if (parentProfile) {
-            setCurrentParentId(parentProfile.id);
-            setCurrentProfile(parentProfile);
-            setParentProfile(parentProfile);
-          }
-        } else {
-          // Find first parent from loaded profiles
-          const firstParent = allProfiles.find(p => p.type === 'parent');
-          const parentIdToLoad = firstParent?.id;
-          console.log('[ProfileProvider] First parent found:', firstParent?.name, 'ID:', parentIdToLoad);
-
-          if (parentIdToLoad) {
-            console.log('[ProfileProvider] Loading profiles for parent:', parentIdToLoad);
-            // Load parent and their children
-            const parentAndChildren = await supabaseProfileService.loadProfilesForParent(parentIdToLoad);
-            // Use loadProfilesWithGoals to avoid redundant profile fetches
-            const profilesWithGoals = await supabaseProfileService.loadProfilesWithGoals(parentAndChildren);
-
-            setCurrentParentId(parentIdToLoad);
-            setProfiles(profilesWithGoals);
-            if (profilesWithGoals.length > 0) {
-              setCurrentProfile(profilesWithGoals[0]);
-              // Set parent profile if it's in the loaded profiles
-              const loadedParentProfile = profilesWithGoals.find(p => p.id === parentIdToLoad);
-              if (loadedParentProfile) {
-                setParentProfile(loadedParentProfile);
-              }
-            }
-          } else {
-            // Fallback: load all profiles with goals
-            const profilesWithGoals = await supabaseProfileService.loadProfilesWithGoals(allProfiles);
-            setProfiles(profilesWithGoals);
-            if (profilesWithGoals.length > 0) {
-              setCurrentProfile(profilesWithGoals[0]);
-              // Set parent profile to the first parent found
-              const parentProfile = profilesWithGoals.find(p => p.type === 'parent');
-              if (parentProfile) {
-                setParentProfile(parentProfile);
-              }
-            }
-          }
-        }
-
-        // Load registration status
-        const regStatus = localStorage.getItem('isRegistrationComplete') === 'true';
-        setIsRegistrationComplete(regStatus);
-
-        // Note: Don't load parentProfile from localStorage here because:
-        // - If we got here via proper profile loading, parentProfile is already correctly set
-        // - Loading from localStorage would override the correct profile with potentially stale data
-
-        setIsLoading(false);
       } catch (error) {
         console.error('[ProfileProvider] Error initializing profiles:', error);
         setIsLoading(false);
@@ -185,7 +122,7 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
     };
 
     initializeProfiles();
-  }, []);
+  }, [authenticatedUser]);
 
   const switchProfile = useCallback((profileId: string) => {
     const profile = profiles.find(p => p.id === profileId);
