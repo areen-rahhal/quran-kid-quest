@@ -40,7 +40,7 @@ const Learner = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => navigate(-1)}
+              onClick={() => navigate('/learners-profiles')}
               className="h-10 w-10"
               title="Go back"
             >
