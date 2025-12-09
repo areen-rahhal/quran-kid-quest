@@ -10,10 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { AvatarImage } from '@/components/AvatarImage';
-import { AVATAR_OPTIONS } from '@/utils/avatars';
 import { Profile } from '@/lib/validation';
-import { getAvatarImageUrl } from '@/utils/avatars';
+import { getAllGoals, getGoalById } from '@/config/goals-data';
 
 interface ChildProfileFormProps {
   onSubmit: (childData: Omit<Profile, 'id'>) => Promise<void>;
