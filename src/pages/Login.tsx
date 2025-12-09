@@ -152,6 +152,24 @@ const Login = () => {
         </form>
       </div>
 
+      {/* Test Account Setup (Development Only) */}
+      {import.meta.env.DEV && (
+        <div className="relative z-10 text-center mt-4 p-3 bg-yellow-100/20 rounded-lg border border-yellow-300/30">
+          <p className="text-xs text-yellow-700/80 mb-2">Development Mode</p>
+          <button
+            type="button"
+            onClick={handleSetupTestUsers}
+            disabled={isSettingUpTestUsers}
+            className="text-xs font-semibold px-3 py-2 bg-yellow-400/30 hover:bg-yellow-400/40 text-yellow-900 rounded border border-yellow-400 disabled:opacity-50 transition-colors"
+          >
+            {isSettingUpTestUsers ? 'Setting up test users...' : '📝 Setup Test Users'}
+          </button>
+          <p className="text-xs text-yellow-700/70 mt-2">
+            Click above to create Supabase Auth test accounts
+          </p>
+        </div>
+      )}
+
       {/* Test Account CTA */}
       <div className="relative z-10 text-center mt-8 space-y-3">
         <p className="text-sm text-primary-foreground/80 mb-3">{t('login.quickLogin')}</p>
