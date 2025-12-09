@@ -39,7 +39,12 @@ const defaultEmptyProfile: Profile = {
   },
 };
 
-export function ProfileProvider({ children }: { children: ReactNode }) {
+interface ProfileProviderProps {
+  children: ReactNode;
+  authenticatedUser?: User | null;
+}
+
+export function ProfileProvider({ children, authenticatedUser }: ProfileProviderProps) {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [currentProfile, setCurrentProfile] = useState<Profile>(defaultEmptyProfile);
   const [currentParentId, setCurrentParentId] = useState<string | null>(null);
