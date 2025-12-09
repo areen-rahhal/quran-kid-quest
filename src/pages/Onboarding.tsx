@@ -38,7 +38,11 @@ const Onboarding = () => {
       {/* Parent Profile Header */}
       <div className="relative z-10 mb-8">
         <div className="flex items-center justify-between bg-white/50 backdrop-blur-sm rounded-xl p-4 border border-border">
-          <div className="flex items-center gap-4">
+          <div
+            className="flex items-center gap-4 cursor-pointer hover:opacity-80 transition-opacity"
+            onClick={() => navigate(`/learner/${currentProfile.id}`)}
+            title="View profile"
+          >
             <Avatar className="h-12 w-12 border-2 border-primary">
               <AvatarFallback className="bg-gradient-primary text-primary-foreground text-lg">
                 {getInitials(parentProfile?.name || currentProfile?.name)}
