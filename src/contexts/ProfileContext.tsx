@@ -282,6 +282,7 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
 
   const addGoal = useCallback(async (profileId: string, goalId: string, goalName: string, phaseSize?: number) => {
     console.log('[addGoal] Adding goal:', { profileId, goalId, goalName });
+    console.log('[addGoal] Note: Add Goal UI is being rebuilt. New implementation coming soon.');
 
     try {
       // Validate profile ID is valid (not the default placeholder)
