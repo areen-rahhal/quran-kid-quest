@@ -154,19 +154,32 @@ const Login = () => {
 
       {/* Test Account Setup (Development Only) */}
       {import.meta.env.DEV && (
-        <div className="relative z-10 text-center mt-4 p-3 bg-yellow-100/20 rounded-lg border border-yellow-300/30">
-          <p className="text-xs text-yellow-700/80 mb-2">Development Mode</p>
+        <div className="relative z-10 text-center mt-4 p-4 bg-yellow-100/20 rounded-lg border border-yellow-300/30 space-y-3">
+          <p className="text-xs text-yellow-700/80 font-semibold">🔧 Development Mode - Test Credentials</p>
+
+          <div className="space-y-2 text-left text-xs text-yellow-700">
+            <p className="font-mono bg-black/20 p-2 rounded">
+              <span className="text-blue-300">areenrahhal@gmail.com</span> / <span className="text-green-300">password</span>
+            </p>
+            <p className="font-mono bg-black/20 p-2 rounded">
+              <span className="text-blue-300">aya@testmail.com</span> / <span className="text-green-300">123456</span>
+            </p>
+            <p className="font-mono bg-black/20 p-2 rounded">
+              <span className="text-blue-300">ahmad@testmail.com</span> / <span className="text-green-300">TestPass</span>
+            </p>
+            <p className="font-mono bg-black/20 p-2 rounded">
+              <span className="text-blue-300">myadmin@google.com</span> / <span className="text-green-300">123</span>
+            </p>
+          </div>
+
           <button
             type="button"
             onClick={handleSetupTestUsers}
             disabled={isSettingUpTestUsers}
-            className="text-xs font-semibold px-3 py-2 bg-yellow-400/30 hover:bg-yellow-400/40 text-yellow-900 rounded border border-yellow-400 disabled:opacity-50 transition-colors"
+            className="text-xs font-semibold px-3 py-2 bg-yellow-400/30 hover:bg-yellow-400/40 text-yellow-900 rounded border border-yellow-400 disabled:opacity-50 transition-colors w-full"
           >
-            {isSettingUpTestUsers ? 'Setting up test users...' : '📝 Setup Test Users'}
+            {isSettingUpTestUsers ? 'Setting up test users...' : '📝 Setup Real Supabase Auth Users'}
           </button>
-          <p className="text-xs text-yellow-700/70 mt-2">
-            Click above to create Supabase Auth test accounts
-          </p>
         </div>
       )}
 
