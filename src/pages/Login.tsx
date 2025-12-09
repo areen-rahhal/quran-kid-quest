@@ -136,41 +136,61 @@ const Login = () => {
         <div className="flex flex-col gap-2">
           <button
             type="button"
-            onClick={() => {
+            onClick={async () => {
               setEmail("areenrahhal@gmail.com");
               setPassword("password");
+              setLocalError("");
+              clearError();
+              await signIn("areenrahhal@gmail.com", "password");
+              navigate("/onboarding");
             }}
-            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors"
+            disabled={isSigningIn}
+            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors disabled:opacity-50"
           >
             Use Areen
           </button>
           <button
             type="button"
-            onClick={() => {
-              setEmail("Aya@testmail.com");
+            onClick={async () => {
+              setEmail("aya@testmail.com");
               setPassword("123456");
+              setLocalError("");
+              clearError();
+              await signIn("aya@testmail.com", "123456");
+              navigate("/goals");
             }}
-            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors"
+            disabled={isSigningIn}
+            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors disabled:opacity-50"
           >
             {t('login.testAccounts.parent')}
           </button>
           <button
             type="button"
-            onClick={() => {
-              setEmail("Ahmad@testmail.com");
+            onClick={async () => {
+              setEmail("ahmad@testmail.com");
               setPassword("TestPass");
+              setLocalError("");
+              clearError();
+              await signIn("ahmad@testmail.com", "TestPass");
+              navigate("/onboarding");
             }}
-            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors"
+            disabled={isSigningIn}
+            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors disabled:opacity-50"
           >
             {t('login.testAccounts.newUser')}
           </button>
           <button
             type="button"
-            onClick={() => {
-              setEmail("Myadmin@google.com");
+            onClick={async () => {
+              setEmail("myadmin@google.com");
               setPassword("123");
+              setLocalError("");
+              clearError();
+              await signIn("myadmin@google.com", "123");
+              navigate("/goals");
             }}
-            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors"
+            disabled={isSigningIn}
+            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors disabled:opacity-50"
           >
             {t('login.testAccounts.admin')}
           </button>
