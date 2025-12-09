@@ -223,6 +223,9 @@ export const authService = {
     try {
       console.log('[authService] Signing out user');
 
+      // Clear stored development session
+      clearStoredDevSession();
+
       const { error } = await supabase.auth.signOut();
 
       if (error) {
