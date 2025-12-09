@@ -144,6 +144,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
           // Find first parent from loaded profiles
           const firstParent = allProfiles.find(p => p.type === 'parent');
           const parentIdToLoad = firstParent?.id;
+          console.log('[ProfileProvider] First parent found:', firstParent?.name, 'ID:', parentIdToLoad);
 
           if (parentIdToLoad) {
             console.log('[ProfileProvider] Loading profiles for parent:', parentIdToLoad);
