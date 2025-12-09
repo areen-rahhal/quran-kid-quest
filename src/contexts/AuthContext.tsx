@@ -26,6 +26,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const initializeAuth = async () => {
       try {
         console.log('[AuthProvider] Initializing auth state');
+        if (import.meta.env.DEV) {
+          console.warn('[AuthProvider] 🔧 DEVELOPMENT MODE: Using fallback authentication. Create real Supabase Auth users for production.');
+        }
         setIsLoading(true);
 
         // Check if there's an existing session
