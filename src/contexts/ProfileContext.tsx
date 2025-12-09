@@ -55,6 +55,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 
         // TIER 2 OPTIMIZATION: Check localStorage first to avoid redundant loadProfiles() call
         const savedParentId = localStorage.getItem('currentParentId');
+        const loginEmail = localStorage.getItem('loginEmail');
 
         // Path 1: User has logged in before (savedParentId exists)
         if (savedParentId) {
@@ -88,7 +89,36 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
           }
         }
 
-        // Path 2: No savedParentId, need to load all profiles
+        // Path 1.5: User just logged in but hasn't registered yet (has loginEmail but no savedParentId)
+        if (loginEmail && !savedParentId) {
+          console.log('[ProfileProvider] User logged in with email:', loginEmail);
+          // Load all profiles to see if one matches this email
+          const allProfiles = await supabaseProfileService.loadProfiles();
+          console.log('[ProfileProvider] Loaded all profiles:', allProfiles.length);
+
+          // Find a parent profile matching the login email
+          const matchingParent = allProfiles.find(p => p.type === 'parent' && p.email === loginEmail);
+
+          if (matchingParent) {
+            console.log('[ProfileProvider] Found matching parent for email:', loginEmail);
+            // Load that parent and their children
+            const parentAndChildren = await supabaseProfileService.loadProfilesForParent(matchingParent.id);
+            const profilesWithGoals = await supabaseProfileService.loadProfilesWithGoals(parentAndChildren);
+
+            setCurrentParentId(matchingParent.id);
+            setProfiles(profilesWithGoals);
+            setCurrentProfile(profilesWithGoals[0]);
+            setParentProfile(matchingParent);
+            localStorage.setItem('currentParentId', matchingParent.id);
+            localStorage.setItem('parentProfile', JSON.stringify(matchingParent));
+            localStorage.setItem('isRegistrationComplete', 'true');
+
+            setIsLoading(false);
+            return;
+          }
+        }
+
+        // Path 2: No savedParentId or loginEmail, need to load all profiles
         console.log('[ProfileProvider] No saved parent ID, loading all profiles');
         const allProfiles = await supabaseProfileService.loadProfiles();
         console.log('[ProfileProvider] Loaded all profiles:', allProfiles.length);
