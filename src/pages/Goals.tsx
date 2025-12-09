@@ -10,7 +10,7 @@ import { useProfile } from "@/hooks/useProfile";
 import { useGoals } from "@/hooks/useGoals";
 import { BaseUnit } from "@/types/goals";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Target, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -103,17 +103,11 @@ const Goals = () => {
         goal => goal.name === currentProfile.currentGoal
       );
 
-      if (activeGoalIndex !== -1) {
-        setCurrentGoalIndex(activeGoalIndex);
-        console.log('[Goals] Set goal index to active goal:', activeGoalIndex);
-      } else {
-        setCurrentGoalIndex(0);
-        console.log('[Goals] No active goal, set to first goal (index 0)');
-      }
-    } else {
-      console.log('[Goals] Profile has no goals');
-    }
-  }, [currentProfile.id, currentProfile.goals?.length, hasAppliedUrlParams, searchParams]);
+    const newIndex = activeGoalIndex !== -1 ? activeGoalIndex : 0;
+    
+    // Only update if the index actually changed to prevent re-render loops
+    setCurrentGoalIndex(prev => prev === newIndex ? prev : newIndex);
+  }, [currentProfile.goals?.length, currentProfile.currentGoal, hasAppliedUrlParams, searchParams]);
 
 
   // Get achievements directly from current profile

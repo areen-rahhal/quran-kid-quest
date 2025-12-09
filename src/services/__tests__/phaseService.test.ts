@@ -146,7 +146,7 @@ describe('phaseService', () => {
           defaultPhaseSize: 3,
           supportsCustomPhaseSize: true,
         },
-        units: [mockUnit, { ...mockUnit, id: 2, versesCount: 7 }],
+        units: [mockUnit, { ...mockUnit, id: 2, name: 'Al-Fatiha 2', arabicName: 'الفاتحة ٢', versesCount: 7, startVerse: '1:1', endVerse: '1:7' }],
       };
 
       const phases = phaseService.generatePhasesForGoal(mockGoal, 3);
