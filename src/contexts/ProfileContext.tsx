@@ -56,11 +56,11 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
   useEffect(() => {
     const initializeProfiles = async () => {
       try {
-        console.log('[ProfileProvider] Initializing profiles from Supabase', 'User:', authenticatedUser?.email);
-        setIsLoading(true);
+        const userEmail = authenticatedUser?.email?.toLowerCase();
+        console.log('[ProfileProvider] Initializing profiles for user:', userEmail);
 
         // If no authenticated user, don't try to load profiles
-        if (!authenticatedUser) {
+        if (!authenticatedUser || !userEmail) {
           console.log('[ProfileProvider] No authenticated user, skipping profile load');
           setCurrentProfile(defaultEmptyProfile);
           setProfiles([]);
@@ -70,49 +70,93 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
           return;
         }
 
-        // Path 1: User is authenticated - load their profiles by email
-        const userEmail = authenticatedUser.email?.toLowerCase();
-        if (userEmail) {
-          console.log('[ProfileProvider] User authenticated with email:', userEmail);
+        // STEP 1: Restore cached profile data immediately (cache-first strategy)
+        const cachedParentId = localStorage.getItem('currentParentId');
+        const cachedParentProfile = localStorage.getItem('parentProfile');
 
-          // Load all profiles to find one matching this email
-          const allProfiles = await supabaseProfileService.loadProfiles();
-          console.log('[ProfileProvider] Loaded all profiles:', allProfiles.length);
+        if (cachedParentId && cachedParentProfile) {
+          try {
+            const parentProfile = JSON.parse(cachedParentProfile);
+            console.log('[ProfileProvider] ✅ Restored cached parent profile:', parentProfile.name, '(showing immediately)');
 
-          // Find a parent profile matching the authenticated user's email
-          const matchingParent = allProfiles.find(
-            p => p.type === 'parent' && p.email?.toLowerCase() === userEmail
-          );
-
-          if (matchingParent) {
-            console.log('[ProfileProvider] Found matching parent for authenticated user:', userEmail);
-            // Load that parent and their children
-            const parentAndChildren = await supabaseProfileService.loadProfilesForParent(matchingParent.id);
-            const profilesWithGoals = await supabaseProfileService.loadProfilesWithGoals(parentAndChildren);
-
-            setCurrentParentId(matchingParent.id);
-            setProfiles(profilesWithGoals);
-            setCurrentProfile(profilesWithGoals[0]);
-            setParentProfile(matchingParent);
-
-            // Cache the parent ID for quick access
-            localStorage.setItem('currentParentId', matchingParent.id);
-            localStorage.setItem('parentProfile', JSON.stringify(matchingParent));
-            localStorage.setItem('isRegistrationComplete', 'true');
-
-            console.log('[ProfileProvider] Profiles loaded successfully for:', userEmail);
+            setCurrentParentId(cachedParentId);
+            setParentProfile(parentProfile);
+            setCurrentProfile(parentProfile);
+            setProfiles([parentProfile]);
+            // Mark as done loading - we have cached data to show
             setIsLoading(false);
+
+            // STEP 2: Refresh data in background without blocking UI
+            console.log('[ProfileProvider] Refreshing profile data in background...');
+            try {
+              // Load parent and children in parallel for better performance
+              const parentAndChildren = await supabaseProfileService.loadProfilesForParent(cachedParentId);
+              if (parentAndChildren.length > 0) {
+                // Load goals for all profiles in parallel
+                const profilesWithGoals = await supabaseProfileService.loadProfilesWithGoals(parentAndChildren);
+
+                console.log('[ProfileProvider] ✅ Refreshed profile data from Supabase');
+                setProfiles(profilesWithGoals);
+                setCurrentProfile(profilesWithGoals[0]);
+
+                // Update cache
+                const updatedParent = profilesWithGoals.find(p => p.type === 'parent');
+                if (updatedParent) {
+                  localStorage.setItem('parentProfile', JSON.stringify(updatedParent));
+                }
+              }
+            } catch (error) {
+              console.warn('[ProfileProvider] Background refresh failed (keeping cached data):', error);
+              // This is OK - we already showed the cached data, let it stay
+            }
             return;
-          } else {
-            // No profile found for this authenticated user - they need to register
-            console.log('[ProfileProvider] No profile found for authenticated user:', userEmail, '- user needs to register');
-            setCurrentProfile(defaultEmptyProfile);
-            setProfiles([]);
-            setCurrentParentId(null);
-            setParentProfile(null);
-            setIsLoading(false);
-            return;
+          } catch (error) {
+            console.warn('[ProfileProvider] Failed to parse cached profile, will fetch fresh:', error);
+            // Fall through to fetch from Supabase
           }
+        }
+
+        // STEP 3: Fetch fresh data if no cache exists
+        console.log('[ProfileProvider] No cached data, fetching from Supabase...');
+        setIsLoading(true);
+
+        // Load all profiles to find one matching this email
+        const allProfiles = await supabaseProfileService.loadProfiles();
+        console.log('[ProfileProvider] Loaded all profiles:', allProfiles.length);
+
+        // Find a parent profile matching the authenticated user's email
+        const matchingParent = allProfiles.find(
+          p => p.type === 'parent' && p.email?.toLowerCase() === userEmail
+        );
+
+        if (matchingParent) {
+          console.log('[ProfileProvider] Found matching parent for authenticated user:', userEmail);
+          // Load that parent and their children in parallel with goals
+          const parentAndChildren = await supabaseProfileService.loadProfilesForParent(matchingParent.id);
+          const profilesWithGoals = await supabaseProfileService.loadProfilesWithGoals(parentAndChildren);
+
+          setCurrentParentId(matchingParent.id);
+          setProfiles(profilesWithGoals);
+          setCurrentProfile(profilesWithGoals[0]);
+          setParentProfile(matchingParent);
+
+          // Cache the parent ID for quick access
+          localStorage.setItem('currentParentId', matchingParent.id);
+          localStorage.setItem('parentProfile', JSON.stringify(matchingParent));
+          localStorage.setItem('isRegistrationComplete', 'true');
+
+          console.log('[ProfileProvider] ✅ Profiles loaded successfully for:', userEmail);
+          setIsLoading(false);
+          return;
+        } else {
+          // No profile found for this authenticated user - they need to register
+          console.log('[ProfileProvider] No profile found for authenticated user:', userEmail, '- user needs to register');
+          setCurrentProfile(defaultEmptyProfile);
+          setProfiles([]);
+          setCurrentParentId(null);
+          setParentProfile(null);
+          setIsLoading(false);
+          return;
         }
 
       } catch (error) {
