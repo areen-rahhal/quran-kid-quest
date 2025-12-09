@@ -24,6 +24,69 @@ const DEV_TEST_PASSWORDS: Record<string, string> = {
 const isDevelopment = import.meta.env.DEV;
 
 /**
+ * Development session storage key
+ */
+const DEV_SESSION_KEY = '__dev_auth_session__';
+
+/**
+ * Store development session in localStorage for persistence
+ */
+const storeDevSession = (user: any, session: any) => {
+  try {
+    const sessionData = {
+      user,
+      session: {
+        ...session,
+        // Don't store complex objects, just the essential data
+        access_token: session.access_token,
+        token_type: session.token_type,
+        expires_at: session.expires_at,
+      },
+    };
+    localStorage.setItem(DEV_SESSION_KEY, JSON.stringify(sessionData));
+    console.log('[authService] Development session stored in localStorage for:', user.email);
+  } catch (error) {
+    console.warn('[authService] Failed to store development session:', error);
+  }
+};
+
+/**
+ * Retrieve development session from localStorage
+ */
+const getStoredDevSession = () => {
+  try {
+    const stored = localStorage.getItem(DEV_SESSION_KEY);
+    if (stored) {
+      const data = JSON.parse(stored);
+      // Check if session is still valid (not expired)
+      if (data.session.expires_at > Math.floor(Date.now() / 1000)) {
+        console.log('[authService] Development session restored from localStorage for:', data.user.email);
+        return data;
+      } else {
+        // Session expired, remove it
+        localStorage.removeItem(DEV_SESSION_KEY);
+        console.log('[authService] Development session expired');
+      }
+    }
+  } catch (error) {
+    console.warn('[authService] Failed to retrieve development session:', error);
+  }
+  return null;
+};
+
+/**
+ * Clear development session from localStorage
+ */
+const clearStoredDevSession = () => {
+  try {
+    localStorage.removeItem(DEV_SESSION_KEY);
+    console.log('[authService] Development session cleared from localStorage');
+  } catch (error) {
+    console.warn('[authService] Failed to clear development session:', error);
+  }
+};
+
+/**
  * Authentication Service
  * Handles all Supabase Auth operations following proper security patterns
  */
