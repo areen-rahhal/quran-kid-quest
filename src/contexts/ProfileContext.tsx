@@ -56,6 +56,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         // TIER 2 OPTIMIZATION: Check localStorage first to avoid redundant loadProfiles() call
         const savedParentId = localStorage.getItem('currentParentId');
         const loginEmail = localStorage.getItem('loginEmail');
+        console.log('[ProfileProvider] Stored state:', { savedParentId, loginEmail });
 
         // Path 1: User has logged in before (savedParentId exists)
         if (savedParentId) {
@@ -70,19 +71,16 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
             setProfiles(profilesWithGoals);
             setCurrentProfile(profilesWithGoals[0]);
 
+            // Set parent profile
+            const loadedParent = profilesWithGoals.find(p => p.type === 'parent');
+            if (loadedParent) {
+              console.log('[ProfileProvider] Setting parent profile from loaded data:', loadedParent.name);
+              setParentProfile(loadedParent);
+            }
+
             // Load registration status
             const regStatus = localStorage.getItem('isRegistrationComplete') === 'true';
             setIsRegistrationComplete(regStatus);
-
-            // Load parent profile from localStorage
-            const parentData = localStorage.getItem('parentProfile');
-            if (parentData) {
-              try {
-                setParentProfile(JSON.parse(parentData));
-              } catch (e) {
-                console.error('Failed to parse parent profile', e);
-              }
-            }
 
             setIsLoading(false);
             return;
