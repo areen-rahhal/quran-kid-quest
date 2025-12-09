@@ -78,6 +78,51 @@ export const authService = {
 
       if (error) {
         console.error('[authService] Sign in error:', error.message);
+
+        // Development fallback: Allow testing with dev credentials when Supabase Auth users don't exist
+        if (isDevelopment && email.toLowerCase() in DEV_TEST_CREDENTIALS) {
+          const expectedPassword = DEV_TEST_CREDENTIALS[email.toLowerCase() as keyof typeof DEV_TEST_CREDENTIALS];
+
+          if (password === expectedPassword) {
+            console.log('[authService] Using development fallback for:', email);
+
+            // Create a mock user object for development
+            const mockUser = {
+              id: `dev-${Date.now()}`,
+              email: email.toLowerCase(),
+              aud: 'authenticated',
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+              is_super_admin: false,
+              role: 'authenticated',
+              user_metadata: { full_name: email.split('@')[0] },
+              app_metadata: { providers: ['email'] },
+              factors: [],
+              identities: [],
+            } as unknown as User;
+
+            console.log('[authService] Development mode: Signed in user:', email);
+
+            // Trigger auth state change to notify listeners
+            // In development mode, we're simulating the auth response
+            return {
+              success: true,
+              user: mockUser,
+              session: {
+                user: mockUser,
+                access_token: `dev-token-${Date.now()}`,
+                token_type: 'bearer',
+                expires_in: 3600,
+                expires_at: Math.floor(Date.now() / 1000) + 3600,
+                refresh_token: `dev-refresh-${Date.now()}`,
+              } as any,
+            };
+          } else {
+            console.error('[authService] Development fallback: Invalid password for:', email);
+            return { success: false, error: 'Invalid login credentials' };
+          }
+        }
+
         return { success: false, error: error.message };
       }
 
