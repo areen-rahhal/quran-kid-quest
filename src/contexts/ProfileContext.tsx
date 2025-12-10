@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { User } from '@supabase/supabase-js';
-import { Profile, RegistrationData, ProfileUpdate } from '@/lib/validation';
+import { Profile } from '@/types/profile';
+import { RegistrationData } from '@/lib/validation';
 import { profileService } from '@/services/profileService';
 import { supabaseProfileService } from '@/services/supabaseProfileService';
 import { getSupabaseHealth } from '@/lib/supabaseHealth';
@@ -15,7 +16,7 @@ interface ProfileContextType {
   addGoal: (profileId: string, goalId: string, goalName: string, phaseSize?: number) => void;
   addGoalWithPhaseSize: (profileId: string, goalId: string, goalName: string, phaseSize: number) => void;
   updateGoalPhaseSize: (profileId: string, goalId: string, newPhaseSize: number, unitId?: number) => void;
-  updateProfile: (profileId: string, updates: ProfileUpdate) => void;
+  updateProfile: (profileId: string, updates: Partial<Profile>) => void;
   deleteGoal: (profileId: string, goalId: string) => void;
   logout: () => void;
   isRegistrationComplete: boolean;
@@ -367,12 +368,12 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
     }
   }, [currentProfile]);
 
-  const updateProfile = useCallback(async (profileId: string, updates: ProfileUpdate) => {
+  const updateProfile = useCallback(async (profileId: string, updates: Partial<Profile>) => {
     console.log('[updateProfile] Updating profile:', profileId);
 
     try {
-      const success = await supabaseProfileService.updateProfile(profileId, updates);
-      if (success) {
+      const result = await supabaseProfileService.updateProfile(profileId, updates);
+      if (result) {
         // Reload profile
         const updatedProfile = await supabaseProfileService.loadProfileWithGoals(profileId);
         if (updatedProfile) {
@@ -456,6 +457,18 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
       {children}
     </ProfileContext.Provider>
   );
+}
+
+/**
+ * Hook to access profile context
+ * @throws Error if used outside ProfileProvider
+ */
+export function useProfile() {
+  const context = useContext(ProfileContext);
+  if (context === undefined) {
+    throw new Error('useProfile must be used within a ProfileProvider');
+  }
+  return context;
 }
 
 export { ProfileContext };
