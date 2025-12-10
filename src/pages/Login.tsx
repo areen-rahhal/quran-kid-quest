@@ -154,7 +154,7 @@ const Login = () => {
               clearError();
               const success = await signIn("areenrahhal@gmail.com", "password");
               if (success) {
-                navigate("/onboarding");
+                navigate("/post-login");
               }
             }}
             disabled={isSigningIn}
@@ -171,7 +171,7 @@ const Login = () => {
               clearError();
               const success = await signIn("aya@testmail.com", "123456");
               if (success) {
-                navigate("/goals");
+                navigate("/post-login");
               }
             }}
             disabled={isSigningIn}
