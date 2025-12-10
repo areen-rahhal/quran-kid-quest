@@ -1,58 +1,19 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ProfileProvider } from '@/contexts/ProfileContext';
-import { LanguageProvider } from '@/contexts/LanguageContext';
-import { AuthProvider } from '@/contexts/AuthContext';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import Login from '@/pages/Login';
-import PostLoginRouter from '@/pages/PostLoginRouter';
-import Onboarding from '@/pages/Onboarding';
-import Goals from '@/pages/Goals';
-import { authService } from '@/services/authService';
-import { supabaseProfileService } from '@/services/supabaseProfileService';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { isNewUser, calculateTotalGoals } from '@/lib/utils';
 
 /**
  * INTEGRATION TEST: Login and Post-Login Routing Flow
- * 
+ *
  * Scenario 1: Existing User (Areen)
  * - Email: areenrahhal@gmail.com
  * - Has 2 goals across all profiles
  * - Expected: Redirect to /goals
- * 
+ *
  * Scenario 2: New User (Ahmad)
  * - Email: ahmad@testmail.com
  * - Has 0 goals across all profiles
  * - Expected: Redirect to /onboarding
  */
-
-// Mock services
-vi.mock('@/services/authService');
-vi.mock('@/services/supabaseProfileService');
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: { retry: false },
-  },
-});
-
-const TestAppWrapper = ({ children }: { children: React.ReactNode }) => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <LanguageProvider>
-        <AuthProvider>
-          <ProfileProvider>
-            <BrowserRouter>
-              {children}
-            </BrowserRouter>
-          </ProfileProvider>
-        </AuthProvider>
-      </LanguageProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
 
 describe('Login and Post-Login Routing Integration Tests', () => {
   beforeEach(() => {
