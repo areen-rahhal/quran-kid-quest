@@ -15,6 +15,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import VerifyEmail from "./pages/VerifyEmail";
 import Onboarding from "./pages/Onboarding";
+import PostLoginRouter from "./pages/PostLoginRouter";
 import LearnersProfiles from "./pages/LearnersProfiles";
 import AddChildProfile from "./pages/AddChildProfile";
 import Learner from "./pages/Learner";
