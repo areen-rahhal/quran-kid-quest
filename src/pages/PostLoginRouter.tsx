@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProfile } from "@/hooks/useProfile";
 import { isNewUser } from "@/lib/utils";
-import { Spinner } from "@/components/ui/spinner";
+import { Progress } from "@/components/ui/progress";
 
 /**
  * PostLoginRouter is a component that handles post-login routing logic.
@@ -36,9 +36,12 @@ const PostLoginRouter = () => {
   // Show loading state while profiles are being loaded
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-soft islamic-pattern">
-      <div className="flex flex-col items-center gap-4">
-        <Spinner />
+      <div className="flex flex-col items-center gap-4 px-6">
+        <div className="w-24 h-24 rounded-full bg-gradient-primary animate-pulse" />
         <p className="text-muted-foreground text-lg">Loading your profile...</p>
+        <div className="w-48 mt-4">
+          <Progress value={75} />
+        </div>
       </div>
     </div>
   );
