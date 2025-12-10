@@ -15,6 +15,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import VerifyEmail from "./pages/VerifyEmail";
 import Onboarding from "./pages/Onboarding";
+import PostLoginRouter from "./pages/PostLoginRouter";
 import LearnersProfiles from "./pages/LearnersProfiles";
 import AddChildProfile from "./pages/AddChildProfile";
 import Learner from "./pages/Learner";
@@ -38,6 +39,7 @@ const AppContent = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/post-login" element={<PostLoginRouter />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/goals" element={<Goals />} />
           <Route path="/unit-path/:profileId/:goalId/:unitId" element={<UnitPath />} />

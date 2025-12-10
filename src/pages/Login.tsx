@@ -38,15 +38,8 @@ const Login = () => {
           description: `Logged in as ${newEmail}`,
         });
 
-        // Navigate based on user type
-        // Aya (parent with existing goals) goes to goals page
-        // The Goals page will automatically default to the parent profile
-        if (newEmail === "aya@testmail.com") {
-          navigate("/goals");
-        } else {
-          // Other users go to onboarding
-          navigate("/onboarding");
-        }
+        // Navigate to post-login router which will determine if user is new or existing
+        navigate("/post-login");
       } else {
         const errorMsg = error || t('login.failed') || 'Failed to sign in';
         setLocalError(errorMsg);
@@ -161,7 +154,7 @@ const Login = () => {
               clearError();
               const success = await signIn("areenrahhal@gmail.com", "password");
               if (success) {
-                navigate("/onboarding");
+                navigate("/post-login");
               }
             }}
             disabled={isSigningIn}
@@ -178,7 +171,7 @@ const Login = () => {
               clearError();
               const success = await signIn("aya@testmail.com", "123456");
               if (success) {
-                navigate("/goals");
+                navigate("/post-login");
               }
             }}
             disabled={isSigningIn}
