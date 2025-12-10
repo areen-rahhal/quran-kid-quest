@@ -17,6 +17,8 @@ A comprehensive review and reorganization of all .md files has been completed. C
 | `QUICK_REFERENCE.md` | `documentation/Login_Routing_Quick_Reference.md` | Quick reference guide |
 | `AUTH.DEVELOPMENT.MODE.md` | `documentation/Development_Authentication.md` | Development auth setup |
 | `Goals Screen UI.md` | `documentation/Goals_Screen_UI.md` | UI design documentation |
+| `Supabase.Assistance.md` | `documentation/Supabase.Assistance.md` | Supabase Realtime patterns |
+| `Supabase.RLS.Setup.md` | `documentation/Supabase.RLS.Setup.md` | RLS configuration |
 
 ### Current Active Documentation in Documentation Folder
 
@@ -29,7 +31,9 @@ documentation/
 ├── Login_Routing_Tests.md ✨ NEW
 ├── Login_Routing_Quick_Reference.md ✨ NEW
 ├── Development_Authentication.md ✨ NEW
-└── Goals_Screen_UI.md ✨ NEW
+├── Goals_Screen_UI.md ✨ NEW
+├── Supabase.Assistance.md ✨ MOVED
+└── Supabase.RLS.Setup.md ✨ MOVED
 ```
 
 ---
@@ -59,17 +63,10 @@ These files are **outdated** and should be **permanently removed**:
 
 **Reason:** Legacy status files from previous development phases. Current status documented in active files.
 
-### Old Database Files (2 files)
-```
-10. Supabase.Assistance.md
-11. Supabase.RLS.Setup.md
-```
-
-**Reason:** Initial setup notes, now incorporated into implementation. Can be archived if critical reference needed.
 
 ### Old Analysis Files (1 file)
 ```
-12. GOAL_CREATION_BUG_ANALYSIS.md
+10. GOAL_CREATION_BUG_ANALYSIS.md
 ```
 
 **Reason:** Analysis of completed bug fix. No longer relevant.

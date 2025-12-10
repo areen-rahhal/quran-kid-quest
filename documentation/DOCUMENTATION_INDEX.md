@@ -14,6 +14,13 @@
 | `Goals_Screen_UI.md` | UI design and layout documentation | ✅ Current |
 | `architecture.md` | Application architecture overview | ✅ Current |
 
+### Supabase Configuration
+
+| File | Purpose | Status |
+|------|---------|--------|
+| `Supabase.Assistance.md` | Supabase Realtime implementation patterns | ✅ Current |
+| `Supabase.RLS.Setup.md` | Row Level Security configuration guide | ✅ Current |
+
 ---
 
 ## Documentation Cleanup Summary
