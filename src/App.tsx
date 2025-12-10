@@ -39,6 +39,7 @@ const AppContent = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/post-login" element={<PostLoginRouter />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/goals" element={<Goals />} />
           <Route path="/unit-path/:profileId/:goalId/:unitId" element={<UnitPath />} />
