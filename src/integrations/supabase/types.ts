@@ -14,7 +14,124 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      goals: {
+        Row: {
+          completed_surahs: number | null
+          completion_date: string | null
+          created_at: string | null
+          current_unit_id: string | null
+          goal_id: string
+          id: string
+          name: string
+          phase_size: number | null
+          profile_id: string
+          status: string
+          total_surahs: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          completed_surahs?: number | null
+          completion_date?: string | null
+          created_at?: string | null
+          current_unit_id?: string | null
+          goal_id: string
+          id?: string
+          name: string
+          phase_size?: number | null
+          profile_id: string
+          status?: string
+          total_surahs?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          completed_surahs?: number | null
+          completion_date?: string | null
+          created_at?: string | null
+          current_unit_id?: string | null
+          goal_id?: string
+          id?: string
+          name?: string
+          phase_size?: number | null
+          profile_id?: string
+          status?: string
+          total_surahs?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goals_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          achievements: Json | null
+          age: number | null
+          arabic_accent: string | null
+          arabic_proficiency: boolean | null
+          avatar: string | null
+          created_at: string | null
+          current_goal: string | null
+          email: string | null
+          goals_count: number | null
+          id: string
+          name: string
+          parent_id: string | null
+          streak: number | null
+          tajweed_level: string | null
+          type: string
+          updated_at: string | null
+        }
+        Insert: {
+          achievements?: Json | null
+          age?: number | null
+          arabic_accent?: string | null
+          arabic_proficiency?: boolean | null
+          avatar?: string | null
+          created_at?: string | null
+          current_goal?: string | null
+          email?: string | null
+          goals_count?: number | null
+          id?: string
+          name: string
+          parent_id?: string | null
+          streak?: number | null
+          tajweed_level?: string | null
+          type: string
+          updated_at?: string | null
+        }
+        Update: {
+          achievements?: Json | null
+          age?: number | null
+          arabic_accent?: string | null
+          arabic_proficiency?: boolean | null
+          avatar?: string | null
+          created_at?: string | null
+          current_goal?: string | null
+          email?: string | null
+          goals_count?: number | null
+          id?: string
+          name?: string
+          parent_id?: string | null
+          streak?: number | null
+          tajweed_level?: string | null
+          type?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
