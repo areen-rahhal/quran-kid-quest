@@ -115,6 +115,8 @@ These files were part of earlier development phases and are no longer relevant:
 - **Login_Routing_Quick_Reference.md** - Quick reference
 - **Development_Authentication.md** - Development guide
 - **Goals_Screen_UI.md** - UI documentation
+- **Supabase.Assistance.md** - Supabase Realtime patterns
+- **Supabase.RLS.Setup.md** - RLS configuration
 
 ---
 
