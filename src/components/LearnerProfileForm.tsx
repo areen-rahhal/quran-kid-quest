@@ -190,15 +190,14 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
             })}
           </div>
 
-          {/* Add Goal Button - Coming Soon */}
+          {/* Add Goal Button */}
           <Button
-            disabled={true}
             variant="outline"
-            className="w-full gap-2 border-primary/30 hover:border-primary/60 text-primary hover:bg-primary/5 opacity-50 cursor-not-allowed"
-            title="Add Goal functionality is coming soon"
+            className="w-full gap-2 border-primary/30 hover:border-primary/60 text-primary hover:bg-primary/5"
+            onClick={() => setIsAddGoalModalOpen(true)}
           >
             <Plus className="w-4 h-4" />
-            {t('learnersProfiles.addGoal') || 'Add Goal'} (Coming Soon)
+            {t('learnersProfiles.addGoal') || 'Add Goal'}
           </Button>
         </Card>
       )}
