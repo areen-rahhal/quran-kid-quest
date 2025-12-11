@@ -132,8 +132,8 @@ These files were part of earlier development phases and are no longer relevant:
 ### Key Test Credentials
 | User | Email | Goals | Expected Route |
 |------|-------|-------|---|
-| Areen | areenrahhal@gmail.com | 2 | `/goals` |
-| Ahmad | ahmad@testmail.com | 0 | `/onboarding` |
+| Areen | areen.dev@example.test | 2 | `/goals` |
+| Ahmad | ahmad.dev@example.test | 0 | `/onboarding` |
 
 ### Important Code Files
 - `src/pages/PostLoginRouter.tsx` - Login routing component

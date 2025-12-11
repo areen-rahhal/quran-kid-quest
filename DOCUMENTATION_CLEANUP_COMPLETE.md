@@ -122,8 +122,8 @@ This file contains:
 ### Test Scenarios
 | User | Email | Goals | Expected Route |
 |------|-------|-------|---|
-| Areen (Existing) | areenrahhal@gmail.com | 2 | `/goals` ✅ |
-| Ahmad (New) | ahmad@testmail.com | 0 | `/onboarding` ✅ |
+| Areen (Existing) | areen.dev@example.test | 2 | `/goals` ✅ |
+| Ahmad (New) | ahmad.dev@example.test | 0 | `/onboarding` ✅ |
 
 ### Core Implementation Files
 - `src/pages/PostLoginRouter.tsx` - Smart routing component

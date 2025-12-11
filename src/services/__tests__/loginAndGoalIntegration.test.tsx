@@ -29,8 +29,8 @@ interface TestUser {
 // Simulate a login flow that would set the correct parent ID
 const MockLoginSimulator = ({ onUserSelected }: { onUserSelected: (profileId: string) => void }) => {
   const users: TestUser[] = [
-    { email: 'areenrahhal@gmail.com', password: 'test123', expectedProfileName: 'Areen' },
-    { email: 'aya@example.com', password: 'test456', expectedProfileName: 'Aya' },
+    { email: 'areen.dev@example.test', password: 'DevAreen!234', expectedProfileName: 'Areen' },
+    { email: 'aya.dev@example.test', password: 'DevAya!678', expectedProfileName: 'Aya' },
   ];
 
   return (
@@ -129,7 +129,7 @@ describe('Login and Goal Creation Integration', () => {
         )} />
       );
 
-      const loginButton = screen.getByTestId('login-areenrahhal@gmail.com');
+      const loginButton = screen.getByTestId('login-areen.dev@example.test');
       expect(loginButton).toBeInTheDocument();
     });
 

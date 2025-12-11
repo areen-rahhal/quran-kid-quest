@@ -7,8 +7,8 @@ import type { GoalProgress } from '@/types/goals';
  * UNIT TEST: Login and Post-Login Routing Flow
  * 
  * Test scenarios:
- * 1. Existing User (Areen): areenrahhal@gmail.com with 2 goals → redirect to /goals
- * 2. New User (Ahmad): ahmad@testmail.com with 0 goals → redirect to /onboarding
+ * 1. Existing User (Areen): areen.dev@example.test with 2 goals → redirect to /goals
+ * 2. New User (Ahmad): ahmad.dev@example.test with 0 goals → redirect to /onboarding
  */
 
 const createGoal = (overrides: Partial<GoalProgress> = {}): GoalProgress => ({
@@ -150,7 +150,7 @@ describe('Post-Login Routing Logic', () => {
         createProfile({
           id: 'de618e2e-092e-489e-899d-845824ebc358',
           name: 'Areen',
-          email: 'areenrahhal@gmail.com',
+          email: 'areen.dev@example.test',
           goals: [
             createGoal({ id: 'goal-1', name: 'Juz 30' }),
             createGoal({ id: 'goal-2', name: 'Surah Al-Bakarah' }),
@@ -168,7 +168,7 @@ describe('Post-Login Routing Logic', () => {
         createProfile({
           id: 'de618e2e-092e-489e-899d-845824ebc358',
           name: 'Areen',
-          email: 'areenrahhal@gmail.com',
+          email: 'areen.dev@example.test',
           goals: [
             createGoal({ id: 'goal-1', name: 'Juz 30' }),
             createGoal({ id: 'goal-2', name: 'Surah Al-Bakarah' }),
@@ -188,7 +188,7 @@ describe('Post-Login Routing Logic', () => {
         createProfile({
           id: 'ff5b5b17-3c26-4111-9a29-46c0dd0ee419',
           name: 'Ahmad',
-          email: 'ahmad@testmail.com',
+          email: 'ahmad.dev@example.test',
           goals: [],
           goalsCount: 0,
           avatar: 'avatar-bear',
@@ -204,7 +204,7 @@ describe('Post-Login Routing Logic', () => {
         createProfile({
           id: 'ff5b5b17-3c26-4111-9a29-46c0dd0ee419',
           name: 'Ahmad',
-          email: 'ahmad@testmail.com',
+          email: 'ahmad.dev@example.test',
           goals: [],
           goalsCount: 0,
           avatar: 'avatar-bear',
@@ -305,7 +305,7 @@ describe('Post-Login Routing Logic', () => {
         createProfile({
           id: 'de618e2e-092e-489e-899d-845824ebc358',
           name: 'Areen',
-          email: 'areenrahhal@gmail.com',
+          email: 'areen.dev@example.test',
           goalsCount: 2,
           goals: [],
         }),
@@ -320,7 +320,7 @@ describe('Post-Login Routing Logic', () => {
         createProfile({
           id: 'ff5b5b17-3c26-4111-9a29-46c0dd0ee419',
           name: 'Ahmad',
-          email: 'ahmad@testmail.com',
+          email: 'ahmad.dev@example.test',
           goalsCount: 0,
           goals: [],
           avatar: 'avatar-bear',

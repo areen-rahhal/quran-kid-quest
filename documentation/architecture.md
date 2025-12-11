@@ -123,7 +123,7 @@ USING (
 ```json
 {
   "id": "dev-{timestamp}",
-  "email": "areenrahhal@gmail.com",
+  "email": "areen.dev@example.test",
   "aud": "authenticated",
   "exp": {timestamp + 3600}
 }
@@ -145,7 +145,7 @@ USING (
 **Sign In Flow**:
 ```typescript
 // Frontend
-const { success, user } = await authService.signIn('areenrahhal@gmail.com', 'password');
+const { success, user } = await authService.signIn('areen.dev@example.test', 'DevAreen!234');
 // Returns { success: true, user: User, session: Session }
 
 // AuthContext listens for changes via onAuthStateChange()
@@ -405,7 +405,7 @@ try {
 **Adopted Pattern**:
 ```
 [ContextName] or [serviceName] {log message}
-Example: [ProfileProvider] Initialized profiles for user: areenrahhal@gmail.com
+Example: [ProfileProvider] Initialized profiles for user: areen.dev@example.test
 ```
 
 **Levels**:

@@ -14,8 +14,8 @@ export interface AuthResult {
  * This ensures: "Only profiles that exist in the Supabase profile table should be able to login"
  */
 const DEV_TEST_PASSWORDS: Record<string, string> = {
-  'areenrahhal@gmail.com': 'password',   // ✅ Areen exists in profiles table
-  'aya@testmail.com': '123456',          // ✅ Aya exists in profiles table
+  'areen.dev@example.test': 'DevAreen!234', // ✅ Placeholder profile seeded in dev DB
+  'aya.dev@example.test': 'DevAya!678',     // ✅ Placeholder profile seeded in dev DB
 };
 
 /**

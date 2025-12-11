@@ -25,8 +25,8 @@ User Login
 ## Test Scenarios
 
 ### Scenario 1: Existing User (Areen)
-**User**: `areenrahhal@gmail.com`  
-**Password**: `password` (dev password) or actual password in production  
+**User**: `areen.dev@example.test`  
+**Password**: `DevAreen!234` (dev password) or actual password in production  
 **Goals**: 2 (exists across all profiles)  
 **Expected Route**: `/goals`
 
@@ -36,8 +36,8 @@ User Login
 ✅ Does NOT route to `/onboarding` page
 
 ### Scenario 2: New User (Ahmad)
-**User**: `ahmad@testmail.com`  
-**Password**: `111111`  
+**User**: `ahmad.dev@example.test`  
+**Password**: `DevAhmad!890`  
 **Goals**: 0 (no goals across all profiles)  
 **Expected Route**: `/onboarding`
 
@@ -96,7 +96,7 @@ Tests covered:
 {
   "id": "de618e2e-092e-489e-899d-845824ebc358",
   "name": "Areen",
-  "email": "areenrahhal@gmail.com",
+  "email": "areen.dev@example.test",
   "type": "parent",
   "goal_count": 2
 }
@@ -109,7 +109,7 @@ Tests covered:
 {
   "id": "ff5b5b17-3c26-4111-9a29-46c0dd0ee419",
   "name": "Ahmad",
-  "email": "ahmad@testmail.com",
+  "email": "ahmad.dev@example.test",
   "type": "parent",
   "goals_count": 0
 }
@@ -149,7 +149,7 @@ INSERT INTO profiles (id, name, email, type, avatar, achievements, goals_count)
 VALUES (
   'ff5b5b17-3c26-4111-9a29-46c0dd0ee419',
   'Ahmad',
-  'ahmad@testmail.com',
+  'ahmad.dev@example.test',
   'parent',
   'avatar-bear',
   jsonb_build_object('stars', 0, 'streak', 0, 'recitations', 0, 'goalsCompleted', 0),
@@ -157,8 +157,8 @@ VALUES (
 )
 ```
 
-- **Email**: ahmad@testmail.com
-- **Password**: 111111
+- **Email**: ahmad.dev@example.test
+- **Password**: DevAhmad!890
 - **Initial Goals**: 0 (new user)
 - **Profile ID**: ff5b5b17-3c26-4111-9a29-46c0dd0ee419
 

@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.log('[AuthProvider] Initializing auth state');
         if (import.meta.env.DEV) {
           console.info('[AuthProvider] 🔧 DEVELOPMENT MODE: Using mock authentication fallback for testing');
-          console.info('[AuthProvider] Valid test credentials: areenrahhal@gmail.com / password, aya@testmail.com / 123456');
+          console.info('[AuthProvider] Valid test credentials: areen.dev@example.test / DevAreen!234, aya.dev@example.test / DevAya!678');
           console.info('[AuthProvider] See AUTH.DEVELOPMENT.MODE.md for details on moving to production.');
         }
         setIsLoading(true);
