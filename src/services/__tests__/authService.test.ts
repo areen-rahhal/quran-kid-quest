@@ -115,7 +115,7 @@ describe('authService', () => {
     it('CRITICAL: DEV_TEST_PASSWORDS should NOT work if not in development', async () => {
       // This test ensures dev credentials don't work in production
       if (!import.meta.env.DEV) {
-        const result = await authService.signIn('areenrahhal@gmail.com', 'password');
+        const result = await authService.signIn('areen.dev@example.test', 'DevAreen!234');
         // In production, dev password should fail (Supabase mock returns error)
         expect(result.success).toBeDefined();
       }
@@ -124,14 +124,14 @@ describe('authService', () => {
     it('should use dev fallback only in development mode', async () => {
       if (import.meta.env.DEV) {
         // If in dev mode, dev credentials might work via fallback
-        const result = await authService.signIn('areenrahhal@gmail.com', 'password');
+        const result = await authService.signIn('areen.dev@example.test', 'DevAreen!234');
         expect(typeof result.success === 'boolean').toBe(true);
       }
     });
 
     it('should log when using development fallback', async () => {
       const consoleSpy = vi.spyOn(console, 'log');
-      await authService.signIn('areenrahhal@gmail.com', 'password');
+      await authService.signIn('areen.dev@example.test', 'DevAreen!234');
       // If dev fallback is used, should log about it
       expect(consoleSpy).toHaveBeenCalled();
       consoleSpy.mockRestore();
@@ -139,7 +139,7 @@ describe('authService', () => {
 
     it('should store dev session in localStorage only in dev mode', async () => {
       if (import.meta.env.DEV) {
-        await authService.signIn('areenrahhal@gmail.com', 'password');
+        await authService.signIn('areen.dev@example.test', 'DevAreen!234');
         const storedSession = localStorage.getItem('__dev_auth_session__');
         // Dev session may or may not exist depending on mode
         expect(typeof storedSession === 'string' || storedSession === null).toBe(true);

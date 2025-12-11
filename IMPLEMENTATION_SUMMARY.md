@@ -16,8 +16,8 @@
 - ✅ Edge case coverage
 
 ### 3. Supabase Setup
-- ✅ Created test user Ahmad (ahmad@testmail.com) with 0 goals
-- ✅ Verified Areen (areenrahhal@gmail.com) has 2 goals
+- ✅ Created test user Ahmad (ahmad.dev@example.test) with 0 goals
+- ✅ Verified Areen (areen.dev@example.test) has 2 goals
 - ✅ Ready for production authentication
 
 ## Implementation Details
@@ -52,7 +52,7 @@ export function isNewUser(profiles: Profile[]): boolean
 ```
 
 #### 2. `src/pages/Login.tsx`
-- Removed email-based routing (if areenrahhal → /goals)
+- Removed email-based routing (if areen.dev@example.test → /goals)
 - All successful logins now navigate to `/post-login`
 - Applied to both main login form and quick login buttons
 
@@ -117,14 +117,14 @@ Check total goals across ALL profiles
 ## Test Credentials
 
 ### Existing User (Areen)
-- **Email**: areenrahhal@gmail.com
-- **Password**: password (dev) | actual password in production
+- **Email**: areen.dev@example.test
+- **Password**: DevAreen!234 (dev) | actual password in production
 - **Expected Route**: /goals
 - **Reason**: Has 2 goals in Supabase
 
 ### New User (Ahmad)
-- **Email**: ahmad@testmail.com
-- **Password**: 111111
+- **Email**: ahmad.dev@example.test
+- **Password**: DevAhmad!890
 - **Expected Route**: /onboarding
 - **Reason**: Has 0 goals in Supabase
 
@@ -177,12 +177,12 @@ To manually test the routing:
 
 1. **Test as Areen (Existing User)**:
    - Navigate to login page
-   - Enter: areenrahhal@gmail.com / password
+   - Enter: areen.dev@example.test / DevAreen!234
    - Expected: Redirected to /goals
 
 2. **Test as Ahmad (New User)**:
    - Navigate to login page
-   - Enter: ahmad@testmail.com / 111111
+   - Enter: ahmad.dev@example.test / DevAhmad!890
    - Expected: Redirected to /onboarding
 
 3. **Test as New User (Create one)**:

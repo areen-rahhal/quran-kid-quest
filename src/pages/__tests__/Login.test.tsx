@@ -132,7 +132,7 @@ describe('Login Page', () => {
       await user.click(ayaButton);
 
       const emailInput = screen.getByPlaceholderText(/Email/i) as HTMLInputElement;
-      expect(emailInput.value).toBe('Aya@testmail.com');
+      expect(emailInput.value).toBe('aya.dev@example.test');
     });
 
     it('should pre-fill Aya password when clicking Use Aya button', async () => {
@@ -147,10 +147,10 @@ describe('Login Page', () => {
       await user.click(ayaButton);
 
       const passwordInput = screen.getByPlaceholderText(/Password/i) as HTMLInputElement;
-      expect(passwordInput.value).toBe('123456');
+      expect(passwordInput.value).toBe('DevAya!678');
     });
 
-    it('should have correct Aya credentials (email: Aya@testmail.com, password: 123456)', async () => {
+    it('should have correct Aya credentials (email: aya.dev@example.test, password: DevAya!678)', async () => {
       const user = userEvent.setup();
       renderWithRouter();
 
@@ -164,8 +164,8 @@ describe('Login Page', () => {
       const emailInput = screen.getByPlaceholderText(/Email/i) as HTMLInputElement;
       const passwordInput = screen.getByPlaceholderText(/Password/i) as HTMLInputElement;
 
-      expect(emailInput.value).toBe('Aya@testmail.com');
-      expect(passwordInput.value).toBe('123456');
+      expect(emailInput.value).toBe('aya.dev@example.test');
+      expect(passwordInput.value).toBe('DevAya!678');
     });
   });
 
@@ -182,7 +182,7 @@ describe('Login Page', () => {
       await user.click(ahmadButton);
 
       const emailInput = screen.getByPlaceholderText(/Email/i) as HTMLInputElement;
-      expect(emailInput.value).toBe('Ahmad@testmail.com');
+      expect(emailInput.value).toBe('ahmad.dev@example.test');
     });
 
     it('should pre-fill Ahmad password when clicking Use Ahmad button', async () => {
@@ -197,10 +197,10 @@ describe('Login Page', () => {
       await user.click(ahmadButton);
 
       const passwordInput = screen.getByPlaceholderText(/Password/i) as HTMLInputElement;
-      expect(passwordInput.value).toBe('TestPass');
+      expect(passwordInput.value).toBe('DevAhmad!890');
     });
 
-    it('should have correct Ahmad credentials (email: Ahmad@testmail.com, password: TestPass)', async () => {
+    it('should have correct Ahmad credentials (email: ahmad.dev@example.test, password: DevAhmad!890)', async () => {
       const user = userEvent.setup();
       renderWithRouter();
 
@@ -214,8 +214,8 @@ describe('Login Page', () => {
       const emailInput = screen.getByPlaceholderText(/Email/i) as HTMLInputElement;
       const passwordInput = screen.getByPlaceholderText(/Password/i) as HTMLInputElement;
 
-      expect(emailInput.value).toBe('Ahmad@testmail.com');
-      expect(passwordInput.value).toBe('TestPass');
+      expect(emailInput.value).toBe('ahmad.dev@example.test');
+      expect(passwordInput.value).toBe('DevAhmad!890');
     });
   });
 
@@ -232,7 +232,7 @@ describe('Login Page', () => {
       await user.click(adminButton);
 
       const emailInput = screen.getByPlaceholderText(/Email/i) as HTMLInputElement;
-      expect(emailInput.value).toBe('Myadmin@google.com');
+      expect(emailInput.value).toBe('admin.dev@example.test');
     });
 
     it('should pre-fill admin password when clicking Use Admin Account button', async () => {
@@ -247,10 +247,10 @@ describe('Login Page', () => {
       await user.click(adminButton);
 
       const passwordInput = screen.getByPlaceholderText(/Password/i) as HTMLInputElement;
-      expect(passwordInput.value).toBe('123');
+      expect(passwordInput.value).toBe('AdminDev!456');
     });
 
-    it('should have correct admin credentials (email: Myadmin@google.com, password: 123)', async () => {
+    it('should have correct admin credentials (email: admin.dev@example.test, password: AdminDev!456)', async () => {
       const user = userEvent.setup();
       renderWithRouter();
 
@@ -264,8 +264,8 @@ describe('Login Page', () => {
       const emailInput = screen.getByPlaceholderText(/Email/i) as HTMLInputElement;
       const passwordInput = screen.getByPlaceholderText(/Password/i) as HTMLInputElement;
 
-      expect(emailInput.value).toBe('Myadmin@google.com');
-      expect(passwordInput.value).toBe('123');
+      expect(emailInput.value).toBe('admin.dev@example.test');
+      expect(passwordInput.value).toBe('AdminDev!456');
     });
   });
 
@@ -285,19 +285,19 @@ describe('Login Page', () => {
 
       // Click Aya
       await user.click(ayaButton);
-      expect(emailInput.value).toBe('Aya@testmail.com');
+      expect(emailInput.value).toBe('aya.dev@example.test');
 
       // Switch to Ahmad
       await user.click(ahmadButton);
-      expect(emailInput.value).toBe('Ahmad@testmail.com');
+      expect(emailInput.value).toBe('ahmad.dev@example.test');
 
       // Switch to Admin
       await user.click(adminButton);
-      expect(emailInput.value).toBe('Myadmin@google.com');
+      expect(emailInput.value).toBe('admin.dev@example.test');
 
       // Switch back to Aya
       await user.click(ayaButton);
-      expect(emailInput.value).toBe('Aya@testmail.com');
+      expect(emailInput.value).toBe('aya.dev@example.test');
     });
   });
 
@@ -354,8 +354,8 @@ describe('Login Page', () => {
       const emailInput = screen.getByPlaceholderText(/Email/i);
       const passwordInput = screen.getByPlaceholderText(/Password/i);
 
-      await user.type(emailInput, 'Aya@testmail.com');
-      await user.type(passwordInput, '123456');
+      await user.type(emailInput, 'aya.dev@example.test');
+      await user.type(passwordInput, 'DevAya!678');
 
       const signInButton = screen.getByRole('button', { name: /Sign In/i });
       await user.click(signInButton);
@@ -372,8 +372,8 @@ describe('Login Page', () => {
       const emailInput = screen.getByPlaceholderText(/Email/i);
       const passwordInput = screen.getByPlaceholderText(/Password/i);
 
-      await user.type(emailInput, 'Ahmad@testmail.com');
-      await user.type(passwordInput, 'TestPass');
+      await user.type(emailInput, 'ahmad.dev@example.test');
+      await user.type(passwordInput, 'DevAhmad!890');
 
       const signInButton = screen.getByRole('button', { name: /Sign In/i });
       await user.click(signInButton);
@@ -408,7 +408,7 @@ describe('Login Page', () => {
       const emailInput = screen.getByPlaceholderText(/Email/i);
       const passwordInput = screen.getByPlaceholderText(/Password/i);
 
-      await user.type(emailInput, 'aya@testmail.com');
+      await user.type(emailInput, 'aya.dev@example.test');
       await user.type(passwordInput, 'password');
 
       const signInButton = screen.getByRole('button', { name: /Sign In/i });

@@ -188,7 +188,7 @@ ON public.profiles(email, type);
 
 ### Test 1: Users can only see their own profile
 ```sql
--- As authenticated user with email 'areenrahhal@gmail.com'
+-- As authenticated user with email 'areen.dev@example.test'
 SELECT * FROM profiles 
 WHERE type = 'parent';
 -- Should return only Areen's profile

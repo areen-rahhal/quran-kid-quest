@@ -45,12 +45,12 @@ Comprehensive unit test suite for login routing and post-login user flow. Tests 
 
 | Test Name | Verification | Expected Result | Status |
 |-----------|--------------|-----------------|--------|
-| Identify as existing user | areenrahhal@gmail.com with 2 goals | Not new user | ✅ |
+| Identify as existing user | areen.dev@example.test with 2 goals | Not new user | ✅ |
 | Route to /goals | User navigation path | Routes to /goals | ✅ |
 | Prevent /onboarding route | Should NOT go to onboarding | No routing to /onboarding | ✅ |
 
 **Details**:
-- Email: `areenrahhal@gmail.com`
+- Email: `areen.dev@example.test`
 - Total Goals: 2
 - Expected Route: `/goals`
 - Reason: User has existing goals in Supabase
@@ -63,13 +63,13 @@ Comprehensive unit test suite for login routing and post-login user flow. Tests 
 
 | Test Name | Verification | Expected Result | Status |
 |-----------|--------------|-----------------|--------|
-| Identify as new user | ahmad@testmail.com with 0 goals | New user | ✅ |
+| Identify as new user | ahmad.dev@example.test with 0 goals | New user | ✅ |
 | Route to /onboarding | User navigation path | Routes to /onboarding | ✅ |
 | Prevent /goals route | Should NOT go to goals page | No routing to /goals | ✅ |
 
 **Details**:
-- Email: `ahmad@testmail.com`
-- Password: `111111`
+- Email: `ahmad.dev@example.test`
+- Password: `DevAhmad!890`
 - Total Goals: 0
 - Expected Route: `/onboarding`
 - Reason: User has no goals (first time user)
@@ -97,14 +97,14 @@ Comprehensive unit test suite for login routing and post-login user flow. Tests 
 **Areen (Supabase)**:
 - Profile ID: `de618e2e-092e-489e-899d-845824ebc358`
 - Name: Areen
-- Email: `areenrahhal@gmail.com`
+- Email: `areen.dev@example.test`
 - Type: parent
 - Goal Count: 2
 
 **Ahmad (Supabase)**:
 - Profile ID: `ff5b5b17-3c26-4111-9a29-46c0dd0ee419`
 - Name: Ahmad
-- Email: `ahmad@testmail.com`
+- Email: `ahmad.dev@example.test`
 - Type: parent
 - Goal Count: 0
 

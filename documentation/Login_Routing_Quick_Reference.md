@@ -10,8 +10,8 @@
 
 ```
 ✓ 17 tests passing
-✓ Areen (areenrahhal@gmail.com) → /goals
-✓ Ahmad (ahmad@testmail.com) → /onboarding
+✓ Areen (areen.dev@example.test) → /goals
+✓ Ahmad (ahmad.dev@example.test) → /onboarding
 ```
 
 ## Run Tests
@@ -25,7 +25,7 @@ npm test -- src/pages/__tests__/login-routing.test.tsx --run
 ### Test 1: Areen (Existing User)
 | Property | Value |
 |----------|-------|
-| Email | areenrahhal@gmail.com |
+| Email | areen.dev@example.test |
 | Goals | 2 |
 | Route | `/goals` ✅ |
 | Test Status | PASS |
@@ -33,8 +33,8 @@ npm test -- src/pages/__tests__/login-routing.test.tsx --run
 ### Test 2: Ahmad (New User)
 | Property | Value |
 |----------|-------|
-| Email | ahmad@testmail.com |
-| Password | 111111 |
+| Email | ahmad.dev@example.test |
+| Password | DevAhmad!890 |
 | Goals | 0 |
 | Route | `/onboarding` ✅ |
 | Test Status | PASS |
@@ -94,8 +94,8 @@ if (isNew) {
 
 ### Manual Testing
 1. Go to login page
-2. Try Areen: `areenrahhal@gmail.com` / `password` → should show `/goals`
-3. Try Ahmad: `ahmad@testmail.com` / `111111` → should show `/onboarding`
+2. Try Areen: `areen.dev@example.test` / `DevAreen!234` → should show `/goals`
+3. Try Ahmad: `ahmad.dev@example.test` / `DevAhmad!890` → should show `/onboarding`
 
 ### Automated Testing
 ```bash

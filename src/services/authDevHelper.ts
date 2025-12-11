@@ -72,10 +72,10 @@ export const authDevHelper = {
    */
   async setupAllTestUsers(): Promise<void> {
     const testUsers = [
-      { email: 'areenrahhal@gmail.com', password: 'password', name: 'Areen' },
-      { email: 'aya@testmail.com', password: '123456', name: 'Aya' },
-      { email: 'ahmad@testmail.com', password: 'TestPass', name: 'Ahmad' },
-      { email: 'myadmin@google.com', password: '123', name: 'Admin' },
+      { email: 'areen.dev@example.test', password: 'DevAreen!234', name: 'Areen' },
+      { email: 'aya.dev@example.test', password: 'DevAya!678', name: 'Aya' },
+      { email: 'ahmad.dev@example.test', password: 'DevAhmad!890', name: 'Ahmad' },
+      { email: 'admin.dev@example.test', password: 'AdminDev!456', name: 'Admin' },
     ];
 
     console.log('[authDevHelper] Setting up test users...');

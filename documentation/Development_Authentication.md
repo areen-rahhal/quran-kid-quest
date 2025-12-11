@@ -36,8 +36,8 @@ User is logged in
 These credentials work in development mode because they have **matching profiles** in the Supabase database:
 
 ```
-areenrahhal@gmail.com / password   ✅ Works (Areen profile exists)
-aya@testmail.com / 123456          ✅ Works (Aya profile exists)
+areen.dev@example.test / DevAreen!234   ✅ Works (Areen profile exists)
+aya.dev@example.test / DevAya!678          ✅ Works (Aya profile exists)
 ```
 
 ## Why This Approach?
@@ -58,12 +58,12 @@ aya@testmail.com / 123456          ✅ Works (Aya profile exists)
 
 ### Option 1: Click Quick Login Buttons (Easiest)
 1. Open Login page
-2. Click **"Use Areen"** → Logs in as areenrahhal@gmail.com
-3. Click **"Use Aya (Parent)"** → Logs in as aya@testmail.com
+2. Click **"Use Areen"** → Logs in as areen.dev@example.test
+3. Click **"Use Aya (Parent)"** → Logs in as aya.dev@example.test
 
 ### Option 2: Manual Entry
-1. Email: `areenrahhal@gmail.com`
-2. Password: `password`
+1. Email: `areen.dev@example.test`
+2. Password: `DevAreen!234`
 3. Click "Sign In"
 
 Both should show "Welcome [Name]" on the onboarding screen after login.
@@ -74,8 +74,8 @@ Both should show "Welcome [Name]" on the onboarding screen after login.
 ```
 🔧 Development Mode - Test with Mock Auth
 
-areenrahhal@gmail.com / password
-aya@testmail.com / 123456
+areen.dev@example.test / DevAreen!234
+aya.dev@example.test / DevAya!678
 
 These use development fallback auth (mock users for testing)
 ```
@@ -83,8 +83,8 @@ These use development fallback auth (mock users for testing)
 ### Browser Console Shows
 ```
 [AuthProvider] 🔧 DEVELOPMENT MODE: Using fallback authentication...
-[authService] Using development fallback for: areenrahhal@gmail.com
-[authService] Development mode: Signed in user: areenrahhal@gmail.com
+[authService] Using development fallback for: areen.dev@example.test
+[authService] Development mode: Signed in user: areen.dev@example.test
 ```
 
 ## Moving to Production
@@ -93,8 +93,8 @@ When ready to use real Supabase Auth:
 
 ### Step 1: Create Auth Users
 In Supabase Dashboard → Authentication → Users:
-1. Create user: `areenrahhal@gmail.com` / `[secure-password]`
-2. Create user: `aya@testmail.com` / `[secure-password]`
+1. Create user: `areen.dev@example.test` / `[secure-password]`
+2. Create user: `aya.dev@example.test` / `[secure-password]`
 3. Mark as "Email Confirmed"
 
 ### Step 2: Ensure Profiles Exist
@@ -104,8 +104,8 @@ SELECT email, name FROM profiles WHERE type = 'parent';
 ```
 
 Should return:
-- areenrahhal@gmail.com - Areen
-- aya@testmail.com - Aya
+- areen.dev@example.test - Areen
+- aya.dev@example.test - Aya
 
 ### Step 3: Remove Development Credentials
 In `src/services/authService.ts`, remove/comment out:
@@ -123,7 +123,7 @@ Database-level security requires RLS (Row Level Security) policies for protectio
 
 ### Error: "Invalid login credentials"
 - **In Development**: Email doesn't have a profile in database
-- **Solution**: Only use `areenrahhal@gmail.com` or `aya@testmail.com`
+- **Solution**: Only use `areen.dev@example.test` or `aya.dev@example.test`
 
 ### Error: "Email not confirmed"
 - **In Development**: Shouldn't happen (mock auth ignores this)
