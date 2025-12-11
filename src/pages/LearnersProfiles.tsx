@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Card } from "@/components/ui/card";
@@ -5,12 +6,15 @@ import { useProfile } from "@/hooks/useProfile";
 import { ChevronLeft, UserPlus, Plus, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProfileCard } from "@/components/ProfileCard";
+import { AddGoalModal } from "@/components/AddGoalModal";
 import { Badge } from "@/components/ui/badge";
 
 const LearnersProfiles = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { profiles, currentParentId, logout } = useProfile();
+  const [isAddGoalModalOpen, setIsAddGoalModalOpen] = useState(false);
+  const [selectedProfileId, setSelectedProfileId] = useState<string>('');
 
   // Sort profiles by streak (descending) - most active first
   const sortedProfiles = [...profiles].sort((a, b) => {
