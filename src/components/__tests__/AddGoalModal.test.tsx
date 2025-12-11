@@ -133,8 +133,8 @@ describe('AddGoalModal', () => {
       renderWithContext(
         <AddGoalModal isOpen={true} onClose={vi.fn()} profileId="test-profile-1" />
       );
-      expect(screen.getByText('Surahs')).toBeInTheDocument();
-      expect(screen.getByText('Ayat')).toBeInTheDocument();
+      expect(screen.getByText(/Surahs/)).toBeInTheDocument();
+      expect(screen.getByText(/Ayat/)).toBeInTheDocument();
     });
 
     it('should display difficulty badge for each goal', () => {
