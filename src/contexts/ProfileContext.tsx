@@ -91,12 +91,17 @@ const normalizeProfileData = (rawProfile: any): Profile => {
     tajweedLevel: rawProfile.tajweedLevel ?? rawProfile.tajweed_level,
     currentGoal: rawProfile.currentGoal ?? rawProfile.current_goal,
     goals: normalizedGoals,
-    goalsCount:
-      typeof rawProfile.goalsCount === 'number'
-        ? rawProfile.goalsCount
-        : typeof rawProfile.goals_count === 'number'
-          ? toNumber(rawProfile.goals_count)
-          : normalizedGoals.length,
+    goalsCount: (() => {
+      if (rawProfile.goalsCount !== undefined && rawProfile.goalsCount !== null) {
+        return toNumber(rawProfile.goalsCount);
+      }
+
+      if (rawProfile.goals_count !== undefined && rawProfile.goals_count !== null) {
+        return toNumber(rawProfile.goals_count);
+      }
+
+      return normalizedGoals.length;
+    })(),
     streak: toNumber(rawProfile.streak),
     achievements: normalizeAchievements(rawProfile.achievements),
   };
