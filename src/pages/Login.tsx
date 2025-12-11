@@ -34,10 +34,6 @@ const Login = () => {
 
       if (success) {
         console.log('[Login] Sign in successful, redirecting...');
-        toast({
-          title: t('login.success') || 'Welcome back!',
-          description: `Logged in as ${normalizedEmail}`,
-        });
         navigate("/onboarding");
       } else {
         const errorMsg = error || t('login.failed') || 'Failed to sign in';
