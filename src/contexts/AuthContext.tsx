@@ -8,7 +8,7 @@ interface AuthContextType {
   isSigningIn: boolean;
   error: string | null;
   signIn: (email: string, password: string) => Promise<boolean>;
-  signUp: (email: string, password: string, fullName?: string) => Promise<boolean>;
+  signUp: (email: string, password: string, fullName?: string, avatar?: string) => Promise<boolean>;
   signOut: () => Promise<void>;
   clearError: () => void;
 }
@@ -95,13 +95,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const signUp = useCallback(async (email: string, password: string, fullName?: string): Promise<boolean> => {
+  const signUp = useCallback(async (email: string, password: string, fullName?: string, avatar?: string): Promise<boolean> => {
     try {
       console.log('[AuthProvider] Signing up user:', email);
       setIsSigningIn(true);
       setError(null);
 
-      const result = await authService.signUp(email, password, fullName);
+      const result = await authService.signUp(email, password, fullName, avatar);
 
       if (result.success && result.user) {
         console.log('[AuthProvider] Sign up successful for:', email);
