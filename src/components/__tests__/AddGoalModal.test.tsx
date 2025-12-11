@@ -112,7 +112,7 @@ describe('AddGoalModal', () => {
       renderWithContext(
         <AddGoalModal isOpen={true} onClose={vi.fn()} profileId="test-profile-1" />
       );
-      expect(screen.getByText('learnersProfiles.selectGoal')).toBeInTheDocument();
+      expect(screen.getByText('Select a Goal')).toBeInTheDocument();
     });
 
     it('should not render the modal when isOpen is false', () => {
