@@ -79,7 +79,12 @@
     "juz29": "Juz' 29 (Tabaarak)",
     "surahBakarah": "Surah Al Bakarah",
     "opening": "Opening {{name}}",
-    "learningDesc": "Let's learn {{arabicName}}!"
+    "learningDesc": "Let's learn {{arabicName}}!",
+    "difficulty": {
+      "short": "Short",
+      "medium": "Medium",
+      "long": "Long"
+    }
   },
   "profileSwitcher": {
     "title": "Switch Profile",
