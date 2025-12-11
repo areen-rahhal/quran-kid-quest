@@ -103,9 +103,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const result = await authService.signUp(email, password, fullName, avatar);
 
-      if (result.success && result.user) {
+      // Note: When email confirmation is enabled, result.user may be null until confirmed
+      // We check only result.success to determine if signup was successful
+      if (result.success) {
         console.log('[AuthProvider] Sign up successful for:', email);
-        setUser(result.user);
+        if (result.user) {
+          setUser(result.user);
+        }
         return true;
       } else {
         const errorMsg = result.error || 'Sign up failed';
