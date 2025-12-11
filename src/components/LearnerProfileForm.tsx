@@ -253,6 +253,13 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
         onSelectAvatar={handleAvatarSelect}
         currentAvatarId={selectedAvatar}
       />
+
+      {/* Add Goal Modal */}
+      <AddGoalModal
+        isOpen={isAddGoalModalOpen}
+        onClose={() => setIsAddGoalModalOpen(false)}
+        profileId={profile.id}
+      />
     </div>
   );
 };
