@@ -209,12 +209,11 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
             {t('learnersProfiles.noGoals') || 'No goals added yet'}
           </p>
           <Button
-            disabled={true}
-            className="w-full gap-2 bg-primary hover:bg-primary/90 opacity-50 cursor-not-allowed"
-            title="Add Goal functionality is coming soon"
+            className="w-full gap-2 bg-primary hover:bg-primary/90"
+            onClick={() => setIsAddGoalModalOpen(true)}
           >
             <Plus className="w-4 h-4" />
-            {t('learnersProfiles.addFirstGoal')} (Coming Soon)
+            {t('learnersProfiles.addFirstGoal')}
           </Button>
         </Card>
       )}
