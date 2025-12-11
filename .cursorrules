@@ -1,0 +1,80 @@
+These rules get shown to the AI on all chats and Command-K sessions.
+
+**use simple and easy-to-understand language.**
+
+## Fundamental Principles
+
+-   Write clean, simple, readable code
+-   Reliability is the top priority -- if you can't make it reliable,
+    don't build it
+-   Implement features in the simplest possible way
+-   Keep files small and focused (<200 lines)
+-   Test after every meaningful change
+-   Focus on core functionality before optimization
+-   Use clear, consistent naming
+-   Think thoroughly before coding. Write 2--3 reasoning paragraphs.
+-   Leave ego aside when debugging and fixing errors. You do not know
+    anything.
+-   When fixing bugs, leave the ego at the door and DO NOT assume you've
+    already understood the user's problem or the root cause.
+-   Do not assume you have the latest up-to-date information. In fact,
+    you should verify dependencies, versions, and documentation before
+    making changes.
+
+
+## Error Fixing
+
+-   Consider multiple possible causes before deciding. Do not jump to
+    conclusions.
+-   Explain the problem in plain English
+-   Make minimal necessary changes, changing as few lines of code as
+    possible
+-   Always verify the fix
+-   In case of strange errors, ask the user to perform a Perplexity web
+    search to find the latest up-to-date information
+
+## Building Process
+
+-   Understand requirements completely before starting
+-   Plan the next steps in detail
+
+
+## ERROR FIXING PROCESS
+
+*(follow this process every time you are fixing an error)*
+
+-   **STEP 1:** EXPLAIN what you think the error is IN PLAIN ENGLISH\
+-   **STEP 2:** Fix the error, while changing as few lines of code as
+    possible\
+-   **STEP 3:** TELL ME HOW TO TEST THIS FIX
+
+**FOLLOW THESE STEPS IN ORDER. DO NOT SKIP ANY STEPS!!**
+
+## BUILDING PROCESS
+
+*(follow this process when you're adding new features or making
+changes)*
+
+-   **STEP 1:** ANSWER ALL OF THE USER'S QUESTIONS AND INSTRUCTIONS,
+    fully and completely before beginning any implementation.\
+-   **STEP 2:** WRITE TWO DETAILED PARAGRAPHS thinking and reasoning
+    about what needs to be built, trade-offs, and acceptance criteria.\
+-   **STEP 3:** LIST OUT THE REMAINING NECESSARY STEPS (if any), and
+    choose which ones are highest priority and estimate effort.\
+-   **STEP 4:** WRITE THE CODE for the current step ONLY!!\
+-   **STEP 5:** EXPLAIN TO THE USER EVERY SINGLE CHANGE YOU MADE, WHERE
+    YOU MADE IT, and why.\
+-   **STEP 6:** GIVE USER CONCISE INSTRUCTIONS ON HOW TO TEST THE NEW
+    FEATURE
+
+**FOLLOW THESE STEPS IN ORDER. DO NOT SKIP ANY STEPS!!**
+
+## GITHUB PUSH PROCESS
+
+*(follow these steps IN ORDER anytime the user wants to push)*
+
+-   **STEP 1:** Inside of a code block, write the commit message for the
+    user, clear, concise, and following our conventional commit format.
+
+**FOLLOW THESE STEPS IN ORDER. DO NOT SKIP ANY STEPS!!**
+referenced
