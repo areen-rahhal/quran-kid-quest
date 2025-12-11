@@ -93,8 +93,9 @@ const clearStoredDevSession = () => {
 export const authService = {
   /**
    * Sign up a new user with email and password
+   * Profile is automatically created by database trigger (create_profile_on_auth_signup)
    */
-  async signUp(email: string, password: string, fullName?: string): Promise<AuthResult> {
+  async signUp(email: string, password: string, fullName?: string, avatar?: string): Promise<AuthResult> {
     try {
       console.log('[authService] Signing up user:', email);
       
@@ -104,7 +105,9 @@ export const authService = {
         options: {
           data: {
             full_name: fullName,
+            avatar: avatar || 'avatar-1',
           },
+          emailRedirectTo: `${window.location.origin}/`,
         },
       });
 

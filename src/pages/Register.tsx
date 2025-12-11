@@ -4,17 +4,16 @@ import { useTranslation } from 'react-i18next';
 import { BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useProfile } from '@/hooks/useProfile';
+import { useAuth } from '@/contexts/AuthContext';
 import { AVATAR_OPTIONS } from '@/utils/avatars';
 import { useToast } from '@/hooks/use-toast';
 
 const Register = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { registerParent } = useProfile();
+  const { signUp, error: authError } = useAuth();
   const { toast } = useToast();
 
-  
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -68,23 +67,30 @@ const Register = () => {
 
     try {
       setIsLoading(true);
-      // Simulate registration delay
-      await new Promise(resolve => setTimeout(resolve, 800));
 
-      await registerParent({
-        email: formData.email,
-        password: formData.password,
-        parentName: formData.parentName,
-        avatar: formData.avatar,
-      });
+      // Use Supabase Auth signup - profile will be created by database trigger
+      const success = await signUp(
+        formData.email,
+        formData.password,
+        formData.parentName,
+        formData.avatar
+      );
 
-      toast({
-        title: t('register.success'),
-        description: t('register.successDesc'),
-      });
+      if (success) {
+        toast({
+          title: t('register.success'),
+          description: t('register.successDesc'),
+        });
 
-      // Navigate to email verification
-      navigate('/verify-email');
+        // Navigate to email verification
+        navigate('/verify-email');
+      } else {
+        toast({
+          title: t('register.error'),
+          description: authError || t('register.errorDesc'),
+          variant: 'destructive',
+        });
+      }
     } catch (error) {
       toast({
         title: t('register.error'),
