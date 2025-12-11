@@ -85,6 +85,7 @@ export type Database = {
           tajweed_level: string | null
           type: string
           updated_at: string | null
+          user_id: string | null
         }
         Insert: {
           achievements?: Json | null
@@ -103,6 +104,7 @@ export type Database = {
           tajweed_level?: string | null
           type: string
           updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
           achievements?: Json | null
@@ -121,6 +123,7 @@ export type Database = {
           tajweed_level?: string | null
           type?: string
           updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
