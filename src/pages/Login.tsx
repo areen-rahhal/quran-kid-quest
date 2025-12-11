@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BookOpen } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-
 const Login = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -18,27 +17,29 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const normalizedEmail = email.toLowerCase().trim();
+    const newEmail = email.toLowerCase();
 
-    if (!normalizedEmail || !password) {
+    if (!newEmail || !password) {
       setLocalError(t('login.validation.required') || 'Email and password are required');
       return;
     }
 
-    console.log('[Login] User attempting login:', normalizedEmail);
+    console.log('[Login] User attempting login:', newEmail);
     setLocalError("");
     clearError();
 
     try {
-      const success = await signIn(normalizedEmail, password);
+      const success = await signIn(newEmail, password);
 
       if (success) {
         console.log('[Login] Sign in successful, redirecting...');
         toast({
           title: t('login.success') || 'Welcome back!',
-          description: `Logged in as ${normalizedEmail}`,
+          description: `Logged in as ${newEmail}`,
         });
-        navigate("/onboarding");
+
+        // Navigate to post-login router which will determine if user is new or existing
+        navigate("/post-login");
       } else {
         const errorMsg = error || t('login.failed') || 'Failed to sign in';
         setLocalError(errorMsg);
@@ -119,19 +120,20 @@ const Login = () => {
             {isSigningIn ? t('login.signingIn') || 'Signing In...' : t('login.signIn')}
           </Button>
         </form>
+      </div>
 
-        {/* Register Link */}
-        <div className="relative z-10 text-center mt-8">
-          <p className="text-sm text-primary-foreground/80">
-            {t('login.noAccount') || "Don't have an account?"}{' '}
-            <Link 
-              to="/register" 
-              className="text-primary-foreground font-semibold underline underline-offset-2 hover:text-white transition-colors"
-            >
-              {t('login.signUp') || 'Sign up'}
-            </Link>
-          </p>
-        </div>
+      {/* Sign Up Link */}
+      <div className="relative z-10 text-center mt-8">
+        <p className="text-sm text-primary-foreground/80">
+          {t('login.noAccount') || "Don't have an account?"}{' '}
+          <button
+            type="button"
+            onClick={() => navigate("/register")}
+            className="text-primary-foreground underline underline-offset-2 hover:text-primary-foreground/80 transition-colors font-medium"
+          >
+            {t('login.signUp') || 'Sign Up'}
+          </button>
+        </p>
       </div>
     </div>
   );

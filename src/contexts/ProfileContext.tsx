@@ -78,49 +78,61 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
           console.warn('[ProfileProvider] Supabase is not reachable - will continue with cached data only');
         }
 
-        // STEP 1: Restore cached profile data immediately (cache-first strategy)
+        // STEP 1: Check if cached profile belongs to the current authenticated user
         const cachedParentId = localStorage.getItem('currentParentId');
         const cachedParentProfile = localStorage.getItem('parentProfile');
 
         if (cachedParentId && cachedParentProfile) {
           try {
-            const parentProfile = JSON.parse(cachedParentProfile);
-            console.log('[ProfileProvider] ✅ Restored cached parent profile:', parentProfile.name, '(showing immediately)');
+            const cachedProfile = JSON.parse(cachedParentProfile);
+            
+            // CRITICAL: Validate cached profile belongs to the authenticated user
+            const cachedEmail = cachedProfile.email?.toLowerCase();
+            if (cachedEmail !== userEmail) {
+              console.log('[ProfileProvider] ⚠️ Cached profile email mismatch:', cachedEmail, 'vs', userEmail, '- clearing stale cache');
+              // Clear stale cache from different user
+              localStorage.removeItem('currentParentId');
+              localStorage.removeItem('parentProfile');
+              // Fall through to fetch fresh data
+            } else {
+              console.log('[ProfileProvider] ✅ Restored cached parent profile:', cachedProfile.name, '(showing immediately)');
 
-            setCurrentParentId(cachedParentId);
-            setParentProfile(parentProfile);
-            setCurrentProfile(parentProfile);
-            setProfiles([parentProfile]);
-            // Mark as done loading - we have cached data to show
-            setIsLoading(false);
+              setCurrentParentId(cachedParentId);
+              setParentProfile(cachedProfile);
+              setCurrentProfile(cachedProfile);
+              setProfiles([cachedProfile]);
+              // Mark as done loading - we have cached data to show
+              setIsLoading(false);
 
-            // STEP 2: Refresh data in background without blocking UI
-            console.log('[ProfileProvider] Refreshing profile data in background...');
-            try {
-              // Load parent and children in parallel for better performance
-              const parentAndChildren = await supabaseProfileService.loadProfilesForParent(cachedParentId);
-              if (parentAndChildren.length > 0) {
-                // Load goals for all profiles in parallel
-                const profilesWithGoals = await supabaseProfileService.loadProfilesWithGoals(parentAndChildren);
+              // STEP 2: Refresh data in background without blocking UI
+              console.log('[ProfileProvider] Refreshing profile data in background...');
+              try {
+                // Load parent and children in parallel for better performance
+                const parentAndChildren = await supabaseProfileService.loadProfilesForParent(cachedParentId);
+                if (parentAndChildren.length > 0) {
+                  // Load goals for all profiles in parallel
+                  const profilesWithGoals = await supabaseProfileService.loadProfilesWithGoals(parentAndChildren);
 
-                console.log('[ProfileProvider] ✅ Refreshed profile data from Supabase');
-                setProfiles(profilesWithGoals);
-                setCurrentProfile(profilesWithGoals[0]);
+                  console.log('[ProfileProvider] ✅ Refreshed profile data from Supabase');
+                  setProfiles(profilesWithGoals);
+                  setCurrentProfile(profilesWithGoals[0]);
 
-                // Update cache
-                const updatedParent = profilesWithGoals.find(p => p.type === 'parent');
-                if (updatedParent) {
-                  localStorage.setItem('parentProfile', JSON.stringify(updatedParent));
+                  // Update cache
+                  const updatedParent = profilesWithGoals.find(p => p.type === 'parent');
+                  if (updatedParent) {
+                    localStorage.setItem('parentProfile', JSON.stringify(updatedParent));
+                  }
                 }
+              } catch (error) {
+                console.warn('[ProfileProvider] Background refresh failed (keeping cached data):', error);
               }
-            } catch (error) {
-              console.warn('[ProfileProvider] Background refresh failed (keeping cached data):', error);
-              // This is OK - we already showed the cached data, let it stay
+              return;
             }
-            return;
           } catch (error) {
             console.warn('[ProfileProvider] Failed to parse cached profile, will fetch fresh:', error);
-            // Fall through to fetch from Supabase
+            // Clear corrupted cache
+            localStorage.removeItem('currentParentId');
+            localStorage.removeItem('parentProfile');
           }
         }
 
