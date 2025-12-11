@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useProfile } from '@/hooks/useProfile';
 import { useGoals } from '@/hooks/useGoals';
 import { AvatarSelectionModal } from './AvatarSelectionModal';
+import { AddGoalModal } from './AddGoalModal';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,6 +35,7 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
   const [selectedAvatar, setSelectedAvatar] = useState(profile.avatar || 'avatar-waleed');
   const [dob, setDob] = useState(profile.age ? new Date(new Date().getFullYear() - profile.age, 0, 1).toISOString().split('T')[0] : '');
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+  const [isAddGoalModalOpen, setIsAddGoalModalOpen] = useState(false);
   const [goalToDelete, setGoalToDelete] = useState<string | null>(null);
 
   const handleSave = () => {
