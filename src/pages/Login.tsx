@@ -122,64 +122,18 @@ const Login = () => {
         </form>
       </div>
 
-      {/* Test Account Info (Development Only) */}
-      {import.meta.env.DEV && (
-        <div className="relative z-10 text-center mt-4 p-4 bg-blue-100/20 rounded-lg border border-blue-300/30 space-y-2">
-          <p className="text-xs text-blue-700/80 font-semibold">🔧 Development Mode - Test with Mock Auth</p>
-
-          <div className="space-y-2 text-left text-xs text-blue-700">
-            <p className="font-mono bg-black/20 p-2 rounded">
-              <span className="text-green-300">areenrahhal@gmail.com</span> / <span className="text-yellow-300">password</span>
-            </p>
-            <p className="font-mono bg-black/20 p-2 rounded">
-              <span className="text-green-300">aya@testmail.com</span> / <span className="text-yellow-300">123456</span>
-            </p>
-          </div>
-          <p className="text-xs text-blue-700/60">
-            These use development fallback auth (mock users for testing)
-          </p>
-        </div>
-      )}
-
-      {/* Test Account CTA */}
-      <div className="relative z-10 text-center mt-8 space-y-3">
-        <p className="text-sm text-primary-foreground/80 mb-3">{t('login.quickLogin')}</p>
-        <div className="flex flex-col gap-2">
+      {/* Sign Up Link */}
+      <div className="relative z-10 text-center mt-8">
+        <p className="text-sm text-primary-foreground/80">
+          {t('login.noAccount') || "Don't have an account?"}{' '}
           <button
             type="button"
-            onClick={async () => {
-              setEmail("areenrahhal@gmail.com");
-              setPassword("password");
-              setLocalError("");
-              clearError();
-              const success = await signIn("areenrahhal@gmail.com", "password");
-              if (success) {
-                navigate("/post-login");
-              }
-            }}
-            disabled={isSigningIn}
-            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors disabled:opacity-50"
+            onClick={() => navigate("/register")}
+            className="text-primary-foreground underline underline-offset-2 hover:text-primary-foreground/80 transition-colors font-medium"
           >
-            Use Areen
+            {t('login.signUp') || 'Sign Up'}
           </button>
-          <button
-            type="button"
-            onClick={async () => {
-              setEmail("aya@testmail.com");
-              setPassword("123456");
-              setLocalError("");
-              clearError();
-              const success = await signIn("aya@testmail.com", "123456");
-              if (success) {
-                navigate("/post-login");
-              }
-            }}
-            disabled={isSigningIn}
-            className="text-sm text-primary-foreground/90 underline underline-offset-2 hover:text-primary-foreground transition-colors disabled:opacity-50"
-          >
-            {t('login.testAccounts.parent')}
-          </button>
-        </div>
+        </p>
       </div>
     </div>
   );
