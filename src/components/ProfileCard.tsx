@@ -122,12 +122,15 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
                 </Card>
               ))}
 
-              {/* Add Goal Button - Coming Soon */}
+              {/* Add Goal Button */}
               <Button
-                disabled={true}
                 size="icon"
-                className="h-auto aspect-square bg-primary/10 text-primary hover:bg-primary/20 opacity-50 cursor-not-allowed"
-                title="Add Goal functionality is coming soon"
+                className="h-auto aspect-square bg-primary/10 text-primary hover:bg-primary/20"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onAddGoal?.(profile.id);
+                }}
+                aria-label="Add a goal"
               >
                 <Plus className="h-5 w-5" />
               </Button>
