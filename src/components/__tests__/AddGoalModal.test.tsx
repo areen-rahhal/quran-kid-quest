@@ -137,8 +137,8 @@ describe('AddGoalModal', () => {
       renderWithContext(
         <AddGoalModal isOpen={true} onClose={vi.fn()} profileId="test-profile-1" />
       );
-      expect(screen.getByText(/Surahs/i)).toBeInTheDocument();
-      expect(screen.getByText(/Ayat/i)).toBeInTheDocument();
+      expect(screen.getByText('Surahs')).toBeInTheDocument();
+      expect(screen.getByText('Ayat')).toBeInTheDocument();
     });
 
     it('should display difficulty badge for each goal', () => {
@@ -153,8 +153,8 @@ describe('AddGoalModal', () => {
       renderWithContext(
         <AddGoalModal isOpen={true} onClose={vi.fn()} profileId="test-profile-1" />
       );
-      expect(screen.getByText('common.cancel')).toBeInTheDocument();
-      expect(screen.getByText('learnersProfiles.addGoal')).toBeInTheDocument();
+      expect(screen.getByText('Cancel')).toBeInTheDocument();
+      expect(screen.getByText('Add Goal')).toBeInTheDocument();
     });
   });
 
