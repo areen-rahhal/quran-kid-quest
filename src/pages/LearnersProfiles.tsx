@@ -28,7 +28,8 @@ const LearnersProfiles = () => {
   };
 
   const handleAddGoal = (profileId: string) => {
-    navigate(`/goals?profileId=${profileId}`);
+    setSelectedProfileId(profileId);
+    setIsAddGoalModalOpen(true);
   };
 
   const handleGoalClick = (profileId: string, goalId: string) => {
