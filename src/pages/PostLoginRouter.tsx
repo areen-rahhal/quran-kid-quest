@@ -12,11 +12,14 @@ import { Progress } from "@/components/ui/progress";
  */
 const PostLoginRouter = () => {
   const navigate = useNavigate();
-  const { profiles, isLoading } = useProfile();
+  const { profiles, isLoading, hasHydratedProfiles } = useProfile();
+  const loadingMessage = hasHydratedProfiles
+    ? "Loading your profile..."
+    : "Checking your goals...";
 
   useEffect(() => {
-    // Wait for profiles to load
-    if (isLoading) {
+    // Wait for profiles to finish hydrating from Supabase before routing
+    if (isLoading || !hasHydratedProfiles) {
       return;
     }
 
@@ -31,14 +34,14 @@ const PostLoginRouter = () => {
       console.log('[PostLoginRouter] Routing to /goals (existing user)');
       navigate("/goals", { replace: true });
     }
-  }, [isLoading, profiles, navigate]);
+  }, [isLoading, hasHydratedProfiles, profiles, navigate]);
 
   // Show loading state while profiles are being loaded
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-soft islamic-pattern">
       <div className="flex flex-col items-center gap-4 px-6">
         <div className="w-24 h-24 rounded-full bg-gradient-primary animate-pulse" />
-        <p className="text-muted-foreground text-lg">Loading your profile...</p>
+        <p className="text-muted-foreground text-lg">{loadingMessage}</p>
         <div className="w-48 mt-4">
           <Progress value={75} />
         </div>

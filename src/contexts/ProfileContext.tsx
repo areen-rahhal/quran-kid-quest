@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { User } from '@supabase/supabase-js';
-import { Profile } from '@/types/profile';
+import { Profile, Achievements } from '@/types/profile';
 import { RegistrationData } from '@/lib/validation';
 import { profileService } from '@/services/profileService';
 import { supabaseProfileService } from '@/services/supabaseProfileService';
@@ -22,9 +22,17 @@ interface ProfileContextType {
   isRegistrationComplete: boolean;
   parentProfile: Profile | null;
   isLoading: boolean;
+  hasHydratedProfiles: boolean;
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
+
+const createDefaultAchievements = (): Achievements => ({
+  stars: 0,
+  streak: 0,
+  recitations: 0,
+  goalsCompleted: 0,
+});
 
 // Default empty profile
 const defaultEmptyProfile: Profile = {
@@ -33,12 +41,71 @@ const defaultEmptyProfile: Profile = {
   type: 'child',
   goals: [],
   goalsCount: 0,
-  achievements: {
-    stars: 0,
-    streak: 0,
-    recitations: 0,
-    goalsCompleted: 0,
-  },
+  achievements: createDefaultAchievements(),
+};
+
+const normalizeProfileData = (rawProfile: any): Profile => {
+  if (!rawProfile) {
+    return { ...defaultEmptyProfile };
+  }
+
+  const toNumber = (value: unknown): number => {
+    const num = typeof value === 'string' && value.trim() === '' ? NaN : Number(value);
+    return Number.isFinite(num) ? num : 0;
+  };
+
+  const normalizeAchievements = (rawAchievements: unknown): Achievements => {
+    if (!rawAchievements) {
+      return createDefaultAchievements();
+    }
+
+    let parsed = rawAchievements;
+    if (typeof rawAchievements === 'string') {
+      try {
+        parsed = JSON.parse(rawAchievements);
+      } catch {
+        return createDefaultAchievements();
+      }
+    }
+
+    return {
+      stars: toNumber((parsed as Achievements).stars),
+      streak: toNumber((parsed as Achievements).streak),
+      recitations: toNumber((parsed as Achievements).recitations),
+      goalsCompleted: toNumber((parsed as Achievements).goalsCompleted),
+    };
+  };
+
+  const normalizedGoals = Array.isArray(rawProfile.goals) ? rawProfile.goals : [];
+
+  return {
+    id: rawProfile.id ?? defaultEmptyProfile.id,
+    name: rawProfile.name ?? defaultEmptyProfile.name,
+    type: rawProfile.type === 'child' ? 'child' : 'parent',
+    parentId: rawProfile.parentId ?? rawProfile.parent_id ?? null,
+    avatar: rawProfile.avatar,
+    email: rawProfile.email,
+    age: rawProfile.age ?? null,
+    arabicProficiency: rawProfile.arabicProficiency ?? rawProfile.arabic_proficiency ?? false,
+    arabicAccent: rawProfile.arabicAccent ?? rawProfile.arabic_accent,
+    tajweedLevel: rawProfile.tajweedLevel ?? rawProfile.tajweed_level,
+    currentGoal: rawProfile.currentGoal ?? rawProfile.current_goal,
+    goals: normalizedGoals,
+    goalsCount:
+      typeof rawProfile.goalsCount === 'number'
+        ? rawProfile.goalsCount
+        : typeof rawProfile.goals_count === 'number'
+          ? toNumber(rawProfile.goals_count)
+          : normalizedGoals.length,
+    streak: toNumber(rawProfile.streak),
+    achievements: normalizeAchievements(rawProfile.achievements),
+  };
+};
+
+const persistParentProfile = (profile: Profile | any) => {
+  const normalizedProfile = normalizeProfileData(profile);
+  localStorage.setItem('parentProfile', JSON.stringify(normalizedProfile));
+  return normalizedProfile;
 };
 
 interface ProfileProviderProps {
@@ -53,6 +120,7 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
   const [isRegistrationComplete, setIsRegistrationComplete] = useState<boolean>(false);
   const [parentProfile, setParentProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasHydratedProfiles, setHasHydratedProfiles] = useState(false);
 
   // Initialize profiles from Supabase
   useEffect(() => {
@@ -68,9 +136,13 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
           setProfiles([]);
           setCurrentParentId(null);
           setParentProfile(null);
+          setIsRegistrationComplete(false);
           setIsLoading(false);
+          setHasHydratedProfiles(false);
           return;
         }
+
+        setHasHydratedProfiles(false);
 
         // Check if Supabase is reachable
         const isSupabaseHealthy = await getSupabaseHealth();
@@ -84,8 +156,8 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
 
         if (cachedParentId && cachedParentProfile) {
           try {
-            const cachedProfile = JSON.parse(cachedParentProfile);
-            
+            const cachedProfile = normalizeProfileData(JSON.parse(cachedParentProfile));
+
             // CRITICAL: Validate cached profile belongs to the authenticated user
             const cachedEmail = cachedProfile.email?.toLowerCase();
             if (cachedEmail !== userEmail) {
@@ -117,14 +189,18 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
                   setProfiles(profilesWithGoals);
                   setCurrentProfile(profilesWithGoals[0]);
 
-                  // Update cache
+                  // Update cache + parent profile state
                   const updatedParent = profilesWithGoals.find(p => p.type === 'parent');
                   if (updatedParent) {
-                    localStorage.setItem('parentProfile', JSON.stringify(updatedParent));
+                    const normalizedParent = normalizeProfileData(updatedParent);
+                    setParentProfile(normalizedParent);
+                    persistParentProfile(normalizedParent);
                   }
                 }
               } catch (error) {
                 console.warn('[ProfileProvider] Background refresh failed (keeping cached data):', error);
+              } finally {
+                setHasHydratedProfiles(true);
               }
               return;
             }
@@ -169,15 +245,20 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
             setCurrentParentId(matchingParent.id);
             setProfiles(profilesWithGoals);
             setCurrentProfile(profilesWithGoals[0]);
-            setParentProfile(matchingParent);
+
+            const parentProfileToStore =
+              profilesWithGoals.find(p => p.type === 'parent') || matchingParent;
+            const normalizedParentProfile = normalizeProfileData(parentProfileToStore);
+            setParentProfile(normalizedParentProfile);
 
             // Cache the parent ID for quick access
             localStorage.setItem('currentParentId', matchingParent.id);
-            localStorage.setItem('parentProfile', JSON.stringify(matchingParent));
+            persistParentProfile(normalizedParentProfile);
             localStorage.setItem('isRegistrationComplete', 'true');
 
             console.log('[ProfileProvider] ✅ Profiles loaded successfully for:', userEmail);
             setIsLoading(false);
+            setHasHydratedProfiles(true);
             return;
           } else {
             // No profile found for this authenticated user - they need to register
@@ -187,6 +268,7 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
             setCurrentParentId(null);
             setParentProfile(null);
             setIsLoading(false);
+            setHasHydratedProfiles(true);
             return;
           }
         } catch (fetchError) {
@@ -197,12 +279,14 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
           setCurrentParentId(null);
           setParentProfile(null);
           setIsLoading(false);
+          setHasHydratedProfiles(true);
           return;
         }
 
       } catch (error) {
         console.error('[ProfileProvider] Error initializing profiles:', error);
         setIsLoading(false);
+        setHasHydratedProfiles(true);
       }
     };
 
@@ -232,37 +316,39 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
 
   const registerParent = useCallback(async (data: RegistrationData): Promise<Profile> => {
     console.log('[registerParent] Registering parent:', data.parentName);
-    const { profile, updatedProfiles } = profileService.registerParent(data, profiles);
+    const { profile } = profileService.registerParent(data, profiles);
 
     // Save parent profile to Supabase (no parentId for parent profiles)
     const savedProfile = await supabaseProfileService.saveProfile(profile);
 
     if (savedProfile) {
       // Use the profile from Supabase (has correct UUID)
-      localStorage.setItem('parentProfile', JSON.stringify(savedProfile));
+      const normalizedSavedProfile = persistParentProfile(savedProfile);
       localStorage.setItem('isRegistrationComplete', 'true');
-      localStorage.setItem('currentParentId', savedProfile.id);
+      localStorage.setItem('currentParentId', normalizedSavedProfile.id);
 
-      setParentProfile(savedProfile);
-      setCurrentParentId(savedProfile.id);
-      setProfiles(prev => [...prev, savedProfile]);
-      setCurrentProfile(savedProfile);
+      setParentProfile(normalizedSavedProfile);
+      setCurrentParentId(normalizedSavedProfile.id);
+      setProfiles(prev => [...prev, normalizedSavedProfile]);
+      setCurrentProfile(normalizedSavedProfile);
       setIsRegistrationComplete(true);
+      setHasHydratedProfiles(true);
       console.log('[registerParent] Parent profile saved successfully:', savedProfile.id);
-      return savedProfile;
+      return normalizedSavedProfile;
     } else {
       // Fallback to local profile if Supabase save fails
       console.error('[registerParent] Failed to save to Supabase, using local profile');
-      localStorage.setItem('parentProfile', JSON.stringify(profile));
+      const normalizedProfile = persistParentProfile(profile);
       localStorage.setItem('isRegistrationComplete', 'true');
-      localStorage.setItem('currentParentId', profile.id);
+      localStorage.setItem('currentParentId', normalizedProfile.id);
 
-      setParentProfile(profile);
-      setCurrentParentId(profile.id);
-      setProfiles(prev => [...prev, profile]);
-      setCurrentProfile(profile);
+      setParentProfile(normalizedProfile);
+      setCurrentParentId(normalizedProfile.id);
+      setProfiles(prev => [...prev, normalizedProfile]);
+      setCurrentProfile(normalizedProfile);
       setIsRegistrationComplete(true);
-      return profile;
+      setHasHydratedProfiles(true);
+      return normalizedProfile;
     }
   }, [profiles]);
 
@@ -399,7 +485,7 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
           // Update cache if this is the parent profile
           if (updatedProfile.type === 'parent') {
             console.log('[updateProfile] Updating cached parent profile');
-            localStorage.setItem('parentProfile', JSON.stringify(updatedProfile));
+            persistParentProfile(updatedProfile);
           }
         }
       }
@@ -438,6 +524,7 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
     setCurrentParentId(null);
     setParentProfile(null);
     setIsRegistrationComplete(false);
+    setHasHydratedProfiles(false);
 
     // Clear localStorage
     localStorage.removeItem('parentProfile');
@@ -464,6 +551,7 @@ export function ProfileProvider({ children, authenticatedUser }: ProfileProvider
         isRegistrationComplete,
         parentProfile,
         isLoading,
+        hasHydratedProfiles,
       }}
     >
       {children}
