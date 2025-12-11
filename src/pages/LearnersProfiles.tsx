@@ -142,6 +142,14 @@ const LearnersProfiles = () => {
           </Card>
         )}
       </div>
+
+      {/* Add Goal Modal */}
+      <AddGoalModal
+        isOpen={isAddGoalModalOpen}
+        onClose={() => setIsAddGoalModalOpen(false)}
+        profileId={selectedProfileId}
+        returnTo="/learners-profiles"
+      />
     </div>
   );
 };
