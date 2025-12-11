@@ -14,8 +14,8 @@ const PostLoginRouter = () => {
   const navigate = useNavigate();
   const { profiles, isLoading, hasHydratedProfiles } = useProfile();
   const loadingMessage = hasHydratedProfiles
-    ? "Loading your profile..."
-    : "Checking your goals...";
+    ? "Checking your goals..."
+    : "Loading your profile...";
 
   useEffect(() => {
     // Wait for profiles to finish hydrating from Supabase before routing
