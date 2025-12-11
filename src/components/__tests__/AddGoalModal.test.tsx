@@ -274,8 +274,8 @@ describe('AddGoalModal', () => {
     it('should show empty state when all goals are added', () => {
       const allGoalsProfile: Profile = {
         ...mockProfile,
-        goals: Array.from({ length: 35 }, (_, i) => ({
-          id: `goal-${i}`,
+        goals: Array.from({ length: 40 }, (_, i) => ({
+          id: `surah-${i}`,
           name: `Goal ${i}`,
           status: 'in-progress',
         })) as any,
@@ -289,7 +289,7 @@ describe('AddGoalModal', () => {
         <AddGoalModal isOpen={true} onClose={vi.fn()} profileId="test-profile-1" />,
         contextWithAllGoals
       );
-      expect(screen.getByText('All goals have been added')).toBeInTheDocument();
+      expect(screen.getByText(/All goals have been added/)).toBeInTheDocument();
     });
 
     it('should use ID-based matching for filtering', () => {
