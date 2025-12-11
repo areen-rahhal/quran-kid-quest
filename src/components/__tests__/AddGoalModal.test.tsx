@@ -5,10 +5,24 @@ import { ProfileContext } from '@/contexts/ProfileContext';
 import { Profile } from '@/types/profile';
 import i18next from 'i18next';
 
-// Mock i18next
+// Mock i18next - with proper translation fallbacks
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string, fallback?: string) => fallback || key,
+    t: (key: string, fallback?: string) => {
+      const translations: Record<string, string> = {
+        'learnersProfiles.selectGoal': 'Select a Goal',
+        'learnersProfiles.addGoal': 'Add Goal',
+        'learnersProfiles.adding': 'Adding...',
+        'learnersProfiles.noAvailableGoals': 'All goals have been added',
+        'common.cancel': 'Cancel',
+        'goals.surahCount': 'Surahs',
+        'goals.ayatCount': 'Ayat',
+        'goals.difficulty.short': 'short',
+        'goals.difficulty.medium': 'medium',
+        'goals.difficulty.long': 'long',
+      };
+      return translations[key] || fallback || key;
+    },
   }),
 }));
 
