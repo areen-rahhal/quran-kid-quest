@@ -7,7 +7,10 @@ interface ProgressTrackerProps {
 }
 
 export const ProgressTracker = ({ completed, total }: ProgressTrackerProps) => {
-  const percentage = (completed / total) * 100;
+  const safeTotal = Math.max(total, 0);
+  const ratio = safeTotal > 0 ? completed / safeTotal : 0;
+  const clampedPercentage = Math.min(100, Math.max(0, ratio * 100));
+  const roundedPercentage = Math.round(clampedPercentage);
   
   return (
     <div className="bg-card rounded-2xl p-6 mb-6 shadow-soft">
@@ -24,10 +27,10 @@ export const ProgressTracker = ({ completed, total }: ProgressTrackerProps) => {
       </div>
       
       <div className="relative">
-        <Progress value={percentage} className="h-3" />
+        <Progress value={clampedPercentage} className="h-3" />
         <div className="mt-2 text-center">
           <span className="text-sm font-semibold text-primary">
-            {Math.round(percentage)}%
+            {roundedPercentage}%
           </span>
         </div>
       </div>

@@ -37,6 +37,7 @@ const Login = () => {
           title: t('login.success') || 'Welcome back!',
           description: `Logged in as ${newEmail}`,
         });
+        // Let PostLoginRouter decide whether to send the user to onboarding or goals
 
         // Navigate to post-login router which will determine if user is new or existing
         navigate("/post-login");

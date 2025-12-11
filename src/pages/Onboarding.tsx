@@ -160,7 +160,7 @@ const Onboarding = () => {
             {/* Add Child Profile Card */}
             <Card
               className="cursor-pointer transition-all hover:shadow-strong hover:scale-105 border-2 hover:border-primary"
-              onClick={() => navigate("/goals")}
+              onClick={() => navigate("/add-child-profile")}
             >
               <CardHeader className="text-center space-y-4">
                 <div className="mx-auto w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center">
