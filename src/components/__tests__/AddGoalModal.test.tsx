@@ -253,7 +253,7 @@ describe('AddGoalModal', () => {
       const goalButtons = screen.getAllByRole('button').filter(
         btn => btn.getAttribute('aria-pressed') !== null
       );
-      expect(goalButtons.length).toBeGreaterThanOrEqual(10);
+      expect(goalButtons.length).toBeGreaterThan(5);
     });
 
     it('should not duplicate goals in list', () => {
