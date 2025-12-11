@@ -38,7 +38,8 @@ const Login = () => {
           title: t('login.success') || 'Welcome back!',
           description: `Logged in as ${normalizedEmail}`,
         });
-        navigate("/onboarding");
+        // Let PostLoginRouter decide whether to send the user to onboarding or goals
+        navigate("/post-login");
       } else {
         const errorMsg = error || t('login.failed') || 'Failed to sign in';
         setLocalError(errorMsg);
