@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useProfile } from '@/hooks/useProfile';
 import { useGoals } from '@/hooks/useGoals';
 import { AvatarSelectionModal } from './AvatarSelectionModal';
+import { AddGoalModal } from './AddGoalModal';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,6 +35,7 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
   const [selectedAvatar, setSelectedAvatar] = useState(profile.avatar || 'avatar-waleed');
   const [dob, setDob] = useState(profile.age ? new Date(new Date().getFullYear() - profile.age, 0, 1).toISOString().split('T')[0] : '');
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+  const [isAddGoalModalOpen, setIsAddGoalModalOpen] = useState(false);
   const [goalToDelete, setGoalToDelete] = useState<string | null>(null);
 
   const handleSave = () => {
@@ -188,15 +190,14 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
             })}
           </div>
 
-          {/* Add Goal Button - Coming Soon */}
+          {/* Add Goal Button */}
           <Button
-            disabled={true}
             variant="outline"
-            className="w-full gap-2 border-primary/30 hover:border-primary/60 text-primary hover:bg-primary/5 opacity-50 cursor-not-allowed"
-            title="Add Goal functionality is coming soon"
+            className="w-full gap-2 border-primary/30 hover:border-primary/60 text-primary hover:bg-primary/5"
+            onClick={() => setIsAddGoalModalOpen(true)}
           >
             <Plus className="w-4 h-4" />
-            {t('learnersProfiles.addGoal') || 'Add Goal'} (Coming Soon)
+            {t('learnersProfiles.addGoal') || 'Add Goal'}
           </Button>
         </Card>
       )}
@@ -208,12 +209,11 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
             {t('learnersProfiles.noGoals') || 'No goals added yet'}
           </p>
           <Button
-            disabled={true}
-            className="w-full gap-2 bg-primary hover:bg-primary/90 opacity-50 cursor-not-allowed"
-            title="Add Goal functionality is coming soon"
+            className="w-full gap-2 bg-primary hover:bg-primary/90"
+            onClick={() => setIsAddGoalModalOpen(true)}
           >
             <Plus className="w-4 h-4" />
-            {t('learnersProfiles.addFirstGoal')} (Coming Soon)
+            {t('learnersProfiles.addFirstGoal')}
           </Button>
         </Card>
       )}
@@ -252,6 +252,13 @@ export const LearnerProfileForm = ({ profile }: LearnerProfileFormProps) => {
         onClose={() => setIsAvatarModalOpen(false)}
         onSelectAvatar={handleAvatarSelect}
         currentAvatarId={selectedAvatar}
+      />
+
+      {/* Add Goal Modal */}
+      <AddGoalModal
+        isOpen={isAddGoalModalOpen}
+        onClose={() => setIsAddGoalModalOpen(false)}
+        profileId={profile.id}
       />
     </div>
   );

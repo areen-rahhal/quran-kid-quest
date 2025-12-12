@@ -122,12 +122,15 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
                 </Card>
               ))}
 
-              {/* Add Goal Button - Coming Soon */}
+              {/* Add Goal Button */}
               <Button
-                disabled={true}
                 size="icon"
-                className="h-auto aspect-square bg-primary/10 text-primary hover:bg-primary/20 opacity-50 cursor-not-allowed"
-                title="Add Goal functionality is coming soon"
+                className="h-auto aspect-square bg-primary/10 text-primary hover:bg-primary/20"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onAddGoal?.(profile.id);
+                }}
+                aria-label="Add a goal"
               >
                 <Plus className="h-5 w-5" />
               </Button>
@@ -140,13 +143,15 @@ export const ProfileCard = ({ profile, onNavigate, onAddGoal, onGoalClick }: Pro
               <p className="text-xs text-muted-foreground mb-2">{t('learnersProfiles.setupFirstGoal')}</p>
             )}
             <Button
-              disabled={true}
               variant="outline"
-              className="gap-2 border-2 hover:border-primary/50 hover:bg-accent opacity-50 cursor-not-allowed"
-              title="Add Goal functionality is coming soon"
+              className="gap-2 border-2 hover:border-primary/50 hover:bg-accent"
+              onClick={(e) => {
+                e.stopPropagation();
+                onAddGoal?.(profile.id);
+              }}
             >
               <Plus className="h-4 w-4" />
-              {t('learnersProfiles.addFirstGoal')} (Coming Soon)
+              {t('learnersProfiles.addFirstGoal')}
             </Button>
           </div>
         )}

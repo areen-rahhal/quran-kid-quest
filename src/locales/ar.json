@@ -3,7 +3,7 @@
     "appName": "قرآن الأطفال",
     "language": "عربي",
     "switchLanguage": "التبديل إلى الإنجليزية",
-    "email": "البريد الإلكترون��",
+    "email": "البريد الإلكتروني",
     "password": "كلمة المرور",
     "confirmPassword": "تأكيد كلمة المرور",
     "name": "الاسم",
@@ -34,7 +34,7 @@
     "signIn": "تسجيل الدخول",
     "quickLogin": "تسجيل سريع:",
     "testAccounts": {
-      "parent": "استخدم أيا (الوالد��)",
+      "parent": "استخدم أيا (الوالد)",
       "newUser": "استخدم أحمد (مستخدم جديد)",
       "admin": "استخدم حساب المسؤول"
     }
@@ -65,7 +65,7 @@
   },
   "goals": {
     "startJourney": "ابدأ رحلتك",
-    "selectGoal": "اختر هدفك ال��عليمي الأول",
+    "selectGoal": "اختر هدفك التعليمي الأول",
     "chooseGoal": "اختر هدفاً:",
     "chooseGoalLabel": "اختر هدفاً",
     "startLearning": "ابدأ التعلم",
@@ -79,7 +79,12 @@
     "juz29": "جزء تبارك",
     "surahBakarah": "سورة البقرة",
     "opening": "جاري فتح {{name}}",
-    "learningDesc": "دعنا نتعلم {{arabicName}}!"
+    "learningDesc": "دعنا نتعلم {{arabicName}}!",
+    "difficulty": {
+      "short": "قصير",
+      "medium": "متوسط",
+      "long": "طويل"
+    }
   },
   "profileSwitcher": {
     "title": "تبديل الملف الشخصي",
@@ -112,6 +117,13 @@
     "deleteGoal": "حذف الهدف؟",
     "deleteGoalConfirm": "لا يمكن التراجع عن هذا الإجراء. سيتم فقدان جميع التقدم في هذا الهدف.",
     "createProfile": "إنشاء ملف شخصي لطفل آخر",
-    "editProfile": "تحرير الملف الشخ��ي"
+    "editProfile": "تحرير الملف الشخصي",
+    "adding": "جاري الإضافة...",
+    "error": "خطأ",
+    "errorSelectGoal": "يرجى اختيار هدفاً",
+    "goalNotFound": "لم يتم العثور على الهدف",
+    "errorAddingGoal": "فشل في إضافة الهدف. يرجى المحاولة مرة أخرى.",
+    "noAvailableGoals": "تمت إضافة جميع الأهداف",
+    "goalAdded": "تمت إضافة الهدف"
   }
 }
