@@ -274,11 +274,17 @@ describe('AddGoalModal', () => {
     it('should show empty state when all goals are added', () => {
       const allGoalsProfile: Profile = {
         ...mockProfile,
-        goals: Array.from({ length: 40 }, (_, i) => ({
-          id: `surah-${i}`,
-          name: `Goal ${i}`,
-          status: 'in-progress',
-        })) as any,
+        goals: [
+          { id: 'surah-fatiha', name: 'Surah Al-Fatiha', status: 'in-progress', completedSurahs: 0, totalSurahs: 1, phaseSize: 3, phases: null },
+          { id: 'surah-bakarah', name: 'Surah Al-Bakarah', status: 'in-progress', completedSurahs: 0, totalSurahs: 1, phaseSize: 10, phases: null },
+          { id: 'surah-imran', name: 'Surah Aal-e-Imran', status: 'in-progress', completedSurahs: 0, totalSurahs: 1, phaseSize: 10, phases: null },
+          { id: 'surah-kaaf', name: 'Surah Al-Kaaf', status: 'in-progress', completedSurahs: 0, totalSurahs: 1, phaseSize: 8, phases: null },
+          { id: 'surah-rahman', name: 'Surah Al-Rahman', status: 'in-progress', completedSurahs: 0, totalSurahs: 1, phaseSize: 8, phases: null },
+          { id: 'surah-waqiah', name: 'Surah Al-Waqiah', status: 'in-progress', completedSurahs: 0, totalSurahs: 1, phaseSize: 8, phases: null },
+          { id: 'short-surahs', name: 'Short Surahs', status: 'in-progress', completedSurahs: 0, totalSurahs: 9, phaseSize: 3, phases: null },
+          { id: 'juz-30', name: "Juz' 30", status: 'in-progress', completedSurahs: 0, totalSurahs: 37, phaseSize: 3, phases: null },
+          { id: 'juz-29', name: "Juz' 29", status: 'in-progress', completedSurahs: 0, totalSurahs: 11, phaseSize: 5, phases: null },
+        ] as any,
       };
       const contextWithAllGoals = {
         ...mockProfileContextValue,
