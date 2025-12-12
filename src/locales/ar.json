@@ -1,16 +1,29 @@
 {
-  "common": {
+"common": {
     "appName": "قرآن الأطفال",
     "language": "عربي",
     "switchLanguage": "التبديل إلى الإنجليزية",
     "email": "البريد الإلكتروني",
     "password": "كلمة المرور",
     "confirmPassword": "تأكيد كلمة المرور",
-    "name": "الاسم",
+    "name": "اسم الطفل",
+    "enterName": "أدخل اسم طفلك",
     "required": "مطلوب",
     "backToLogin": "العودة إلى تسجيل الدخول",
     "cancel": "إلغاء",
-    "delete": "حذف"
+    "delete": "حذف",
+    "create": "إضافة طفل",
+    "creating": "جاري الإضافة...",
+    "error": "خطأ",
+    "selectGoals": "هدف التعلم",
+    "selectGoal": "اختر هدفاً تعليمياً",
+    "optional": "اختياري",
+    "validation": {
+      "nameRequired": "يرجى إدخال اسم طفلك",
+      "nameMin": "يجب أن يكون الاسم حرفين على الأقل",
+      "nameMax": "يجب ألا يتجاوز الاسم 20 حرفاً",
+      "dobInvalid": "يرجى إدخال تاريخ ميلاد صحيح"
+    }
   },
   "index": {
     "title": "قرآن الأطفال",

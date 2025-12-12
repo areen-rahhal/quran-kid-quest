@@ -134,7 +134,7 @@ export const ChildProfileForm = ({ onSubmit, onCancel, isLoading = false }: Chil
       {/* Date of Birth Input */}
       <div className="space-y-2">
         <Label htmlFor="dob" className="text-sm font-medium">
-          {t('learnersProfiles.dateOfBirth') || 'Date of Birth'} <span className="text-muted-foreground text-xs">(Optional)</span>
+          {t('learnersProfiles.dateOfBirth')} <span className="text-muted-foreground text-xs">({t('common.optional')})</span>
         </Label>
         <input
           id="dob"
@@ -145,7 +145,7 @@ export const ChildProfileForm = ({ onSubmit, onCancel, isLoading = false }: Chil
         />
         {displayAge !== null && (
           <p className="text-xs text-muted-foreground">
-            {displayAge} {displayAge === 1 ? 'year' : 'years'} old
+            {t('learnersProfiles.age')}: {displayAge} {displayAge === 1 ? 'year' : 'years'}
           </p>
         )}
         {errors.dob && <p className="text-xs text-destructive">{errors.dob}</p>}
@@ -154,11 +154,11 @@ export const ChildProfileForm = ({ onSubmit, onCancel, isLoading = false }: Chil
       {/* Goals Selection Dropdown */}
       <div className="space-y-2">
         <Label htmlFor="goal-select" className="text-sm font-medium">
-          {t('common.selectGoals') || 'Select Goal'} <span className="text-muted-foreground text-xs">(Optional)</span>
+          {t('common.selectGoals')} <span className="text-muted-foreground text-xs">({t('common.optional')})</span>
         </Label>
         <Select value={formData.selectedGoal} onValueChange={(value) => setFormData(prev => ({ ...prev, selectedGoal: value }))}>
           <SelectTrigger id="goal-select" className="h-10">
-            <SelectValue placeholder={t('common.selectGoal') || 'Select a goal'} />
+            <SelectValue placeholder={t('common.selectGoal')} />
           </SelectTrigger>
           <SelectContent>
             {getAllGoals().map((goal) => (

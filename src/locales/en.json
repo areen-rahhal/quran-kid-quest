@@ -1,16 +1,29 @@
 {
-  "common": {
+"common": {
     "appName": "Children's Quran",
     "language": "EN",
     "switchLanguage": "Switch to Arabic",
     "email": "Email",
     "password": "Password",
     "confirmPassword": "Confirm Password",
-    "name": "Name",
+    "name": "Child's Name",
+    "enterName": "Enter your child's name",
     "required": "Required",
     "backToLogin": "Back to Login",
     "cancel": "Cancel",
-    "delete": "Delete"
+    "delete": "Delete",
+    "create": "Add Child",
+    "creating": "Adding...",
+    "error": "Error",
+    "selectGoals": "Learning Goal",
+    "selectGoal": "Choose a learning goal",
+    "optional": "Optional",
+    "validation": {
+      "nameRequired": "Please enter your child's name",
+      "nameMin": "Name should be at least 2 characters",
+      "nameMax": "Name should not exceed 20 characters",
+      "dobInvalid": "Please enter a valid date of birth"
+    }
   },
   "index": {
     "title": "Children's Quran",
