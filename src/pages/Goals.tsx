@@ -67,9 +67,6 @@ const Goals = () => {
         console.log('[Goals] Switching to profile:', selectedProfileId, selectedProfile.name, selectedProfile.type);
         switchProfile(selectedProfileId);
         setHasAppliedUrlParams(true);
-
-        // Clean up URL parameters so menu switches work properly
-        navigate('/goals', { replace: true });
       } else {
         console.warn('[Goals] Could not find profile with ID:', selectedProfileId);
       }
