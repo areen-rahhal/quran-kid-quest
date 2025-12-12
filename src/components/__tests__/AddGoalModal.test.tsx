@@ -304,9 +304,9 @@ describe('AddGoalModal', () => {
         profiles: [{
           ...mockProfile,
           goals: [
-            { id: 'surah-fatiha', name: 'Surah Al-Fatiha', status: 'in-progress' },
-            { id: 'surah-bakarah', name: 'Surah Al-Bakarah', status: 'in-progress' },
-          ],
+            { id: 'surah-fatiha', name: 'Surah Al-Fatiha', status: 'in-progress', completedSurahs: 0, totalSurahs: 1, phaseSize: 3, phases: null },
+            { id: 'surah-bakarah', name: 'Surah Al-Bakarah', status: 'in-progress', completedSurahs: 0, totalSurahs: 1, phaseSize: 10, phases: null },
+          ] as any,
           goalsCount: 2,
         }],
       };
@@ -317,7 +317,7 @@ describe('AddGoalModal', () => {
       const availableGoals = screen.getAllByRole('button').filter(
         btn => btn.getAttribute('aria-pressed') !== null
       );
-      expect(availableGoals.length).toBeGreaterThan(5);
+      expect(availableGoals.length).toBeGreaterThanOrEqual(7);
     });
   });
 
